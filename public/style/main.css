@@ -1,0 +1,52 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+h1,
+h2 {
+  margin-bottom: 1rem;
+}
+div {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form-container {
+  margin-top: 100px;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  width: 70vw;
+  gap: 1rem;
+}
+input {
+  height: 50px;
+}
+textarea {
+  height: 200px;
+}
+footer {
+  display: flex;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  color: grey;
+}
+ul {
+  display: flex;
+  justify-content: flex-end;
+}
+ul li {
+  list-style: none;
+  padding: 2rem;
+}
+a {
+  text-decoration: none;
+  color: black;
+}

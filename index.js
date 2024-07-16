@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 
 const app = express();
 const port = 3000;
+const posts = [];
 
 //access body content of form input
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -10,16 +11,22 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  res.render("newsFeed.ejs");
+  res.render("newsFeed.ejs", { posts });
 });
+
 app.get("/create-post", (req, res) => {
-  res.render("create-post.ejs");
+  res.render("create-post.ejs", { posts: posts });
 });
-app.post("/", (req, res) => {
-  console.log(req.body);
-  res.render("newsFeed.ejs", {
-    title: req.body["title"],
-    body: req.body["body"],
+app.post("/my-posts", (req, res) => {
+  posts.push(req.body);
+  res.render("my-posts.ejs", {
+    posts,
+  });
+});
+
+app.get("/my-posts", (req, res) => {
+  res.render("my-posts.ejs", {
+    posts,
   });
 });
 

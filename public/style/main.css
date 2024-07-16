@@ -4,7 +4,8 @@
 }
 
 h1,
-h2 {
+h2,
+h3 {
   margin-bottom: 1rem;
 }
 div {
@@ -28,6 +29,12 @@ input {
 textarea {
   height: 200px;
 }
+body {
+  min-height: 100vh;
+  margin: 0;
+  position: relative;
+}
+
 footer {
   display: flex;
   height: 50px;
@@ -49,4 +56,23 @@ ul li {
 a {
   text-decoration: none;
   color: black;
+}
+.my-post-wrapper {
+  margin-top: 5rem;
+  display: flex;
+  justify-content: center;
+}
+.post-container {
+  margin-top: 7rem;
+  margin-bottom: 7rem;
+  padding: 2rem;
+  box-shadow: 0 0 20px black;
+  width: 500px;
+  height: 200px;
+  border-radius: 10px;
+}
+.btn-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }

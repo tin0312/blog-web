@@ -1,9 +1,7 @@
-<header>
-    <%- include("partials/header.ejs") %>
-</header>
-<div>
-    <h1>News Feed</h1>
-    <% if(locals.posts){ %>
+<header><%- include("partials/header.ejs") %></header>
+<% if(locals.posts){ %>
+    <div class="my-post-wrapper">
+        <h1>Your blog timelines</h1>
         <% posts.forEach(post=>{ %>
             <div class="post-container">
                 <div>
@@ -14,13 +12,15 @@
                         <%= post.body %>
                     </p>
                 </div>
+                <div class="btn-container">
+                    <button>Remove</button>
+                    <button>Update</button>
+                </div>
+
             </div>
             <% }) %>
                 <% } else { %>
                     <h1>No posts available</h1>
                     <% } %>
-</div>
-<footer>
-    <%- include("partials/footer.ejs") %>
-</footer>
-</body>
+    </div>
+    <footer><%- include("partials/footer") %></footer>

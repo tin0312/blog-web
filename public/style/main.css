@@ -73,6 +73,20 @@ a {
 }
 .btn-container {
   display: flex;
-  width: 100%;
-  justify-content: space-between;
+  flex-direction: row;
+  gap: 1rem;
+}
+button {
+  background-color: #199319;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 10px;
+  transition: all 0.5s;
+}
+button:hover {
+  cursor: pointer;
+  padding: 15px 25px;
+  color: #199319;
+  background-color: white;
 }

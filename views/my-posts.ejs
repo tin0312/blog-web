@@ -2,8 +2,8 @@
 <% if(locals.posts){ %>
     <div class="my-post-wrapper">
         <h1>Your blog timelines</h1>
-        <% posts.forEach(post=>{ %>
-            <div class="post-container">
+        <% posts.map(post=>{ %>
+            <div key="<%= post.id %>" class="post-container">
                 <div>
                     <h3>
                         <%= post.title %>
@@ -13,14 +13,32 @@
                     </p>
                 </div>
                 <div class="btn-container">
-                    <button>Remove</button>
+                    <button onclick="handleDelete('<%= post.id%>', this)">Remove</button>
                     <button>Update</button>
                 </div>
-
             </div>
             <% }) %>
-                <% } else { %>
-                    <h1>No posts available</h1>
-                    <% } %>
     </div>
-    <footer><%- include("partials/footer") %></footer>
+    <% } else { %>
+        <h1>No posts available</h1>
+        <% } %>
+            <footer><%- include("partials/footer") %></footer>
+
+            <script>
+                function handleDelete(postId, buttonElement) {
+                    fetch(`/delete/${postId}`, {
+                        method: 'DELETE'
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Remove the post element from the DOM
+                                const postContainer = buttonElement.closest('.post-container');
+                                postContainer.remove();
+                            } else {
+                                console.error('Failed to delete the post');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                }
+            </script>

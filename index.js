@@ -1,9 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
+import { nanoid } from "nanoid";
 
 const app = express();
 const port = 3000;
-const posts = [];
+let posts = [];
 
 //access body content of form input
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,10 +16,14 @@ app.get("/", (req, res) => {
 });
 
 app.get("/create-post", (req, res) => {
-  res.render("create-post.ejs", { posts: posts });
+  res.render("create-post.ejs", { posts });
 });
 app.post("/my-posts", (req, res) => {
-  posts.push(req.body);
+  posts.push({
+    id: nanoid(),
+    title: req.body.title,
+    body: req.body.body,
+  });
   res.render("my-posts.ejs", {
     posts,
   });
@@ -28,6 +33,12 @@ app.get("/my-posts", (req, res) => {
   res.render("my-posts.ejs", {
     posts,
   });
+});
+app.delete("/delete/:id", (req, res) => {
+  const id = req.params.id;
+  console.log("Delete request received for post ID:", id);
+  posts = posts.filter((post) => post.id !== id);
+  res.json({ success: true });
 });
 
 app.listen(port, () => {

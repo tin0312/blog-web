@@ -17,6 +17,10 @@ div {
 .form-container {
   margin-top: 100px;
 }
+input,
+textarea {
+  padding: 0.5rem;
+}
 form {
   display: flex;
   flex-direction: column;

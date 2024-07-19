@@ -14,7 +14,7 @@
                 </div>
                 <div class="btn-container">
                     <button onclick="handleDelete('<%= post.id%>', this)">Remove</button>
-                    <button>Update</button>
+                    <button onclick="startUpdate('<%= post.id %>', this)">Update</button>
                 </div>
             </div>
             <% }) %>
@@ -23,22 +23,3 @@
         <h1>No posts available</h1>
         <% } %>
             <footer><%- include("partials/footer") %></footer>
-
-            <script>
-                function handleDelete(postId, buttonElement) {
-                    fetch(`/delete/${postId}`, {
-                        method: 'DELETE'
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                // Remove the post element from the DOM
-                                const postContainer = buttonElement.closest('.post-container');
-                                postContainer.remove();
-                            } else {
-                                console.error('Failed to delete the post');
-                            }
-                        })
-                        .catch(error => console.error('Error:', error));
-                }
-            </script>

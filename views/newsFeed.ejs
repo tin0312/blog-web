@@ -1,24 +1,28 @@
 <header>
     <%- include("partials/header.ejs") %>
 </header>
-<div>
+<div class="page-title">
     <h1>News Feed</h1>
-    <% if(locals.posts){ %>
-        <% posts.forEach(post=>{ %>
-            <div class="post-container">
-                <div>
-                    <h3>
-                        <%= post.title %>
-                    </h3>
-                    <p>
-                        <%= post.body %>
-                    </p>
+</div>
+<div>
+    <div class="posts-wrapper">
+        <% if(locals.posts){ %>
+            <% posts.forEach(post=>{ %>
+                <div class="post-container">
+                    <div>
+                        <h3>
+                            <%= post.title %>
+                        </h3>
+                        <p>
+                            <%= post.body %>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <% }) %>
-                <% } else { %>
-                    <h1>No posts available</h1>
-                    <% } %>
+                <% }) %>
+                    <% } else { %>
+                        <h1>No posts available</h1>
+                        <% } %>
+    </div>
 </div>
 <footer>
     <%- include("partials/footer.ejs") %>

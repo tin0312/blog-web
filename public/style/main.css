@@ -27,10 +27,12 @@ body,
 div {
   font-family: "Gilroy", sans-serif;
 }
-h1,
 h2,
 h3 {
   margin-bottom: 1rem;
+}
+h1 {
+  margin-top: 3rem;
 }
 div {
   margin-top: 1rem;
@@ -85,18 +87,24 @@ a {
   text-decoration: none;
   color: black;
 }
-.my-post-wrapper {
-  margin-top: 5rem;
+.page-title {
+  text-align: center;
+}
+.posts-wrapper {
+  width: 80%;
   display: flex;
+  gap: 8.5rem;
+  flex-wrap: wrap;
+  flex-direction: row;
   justify-content: center;
+  margin-bottom: 4rem;
 }
 .post-container {
-  margin-top: 7rem;
-  margin-bottom: 7rem;
-  padding: 2rem;
-  box-shadow: 0 0 20px black;
-  width: 500px;
-  height: 200px;
+  margin: 7rem 0;
+  padding: 0.5rem;
+  box-shadow: 0 0 20px #6098a9;
+  width: 400px;
+  height: 180px;
   border-radius: 10px;
 }
 .btn-container {

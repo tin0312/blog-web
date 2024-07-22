@@ -1,23 +1,27 @@
 <header><%- include("partials/header.ejs") %></header>
 <% if(locals.posts){ %>
-    <div class="my-post-wrapper">
+    <div class="page-title">
         <h1>Your blog timelines</h1>
-        <% posts.map(post=>{ %>
-            <div key="<%= post.id %>" class="post-container">
-                <div>
-                    <h3>
-                        <%= post.title %>
-                    </h3>
-                    <p>
-                        <%= post.body %>
-                    </p>
+    </div>
+    <div>
+        <div class="posts-wrapper">
+            <% posts.map(post=>{ %>
+                <div key="<%= post.id %>" class="post-container">
+                    <div>
+                        <h3>
+                            <%= post.title %>
+                        </h3>
+                        <p>
+                            <%= post.body %>
+                        </p>
+                    </div>
+                    <div class="btn-container">
+                        <button onclick="handleDelete('<%= post.id%>', this)">Remove</button>
+                        <button onclick="startUpdate('<%= post.id %>', this)">Update</button>
+                    </div>
                 </div>
-                <div class="btn-container">
-                    <button onclick="handleDelete('<%= post.id%>', this)">Remove</button>
-                    <button onclick="startUpdate('<%= post.id %>', this)">Update</button>
-                </div>
-            </div>
-            <% }) %>
+                <% }) %>
+        </div>
     </div>
     <% } else { %>
         <h1>No posts available</h1>

@@ -90,6 +90,10 @@ a {
 .page-title {
   text-align: center;
 }
+.post-display-message {
+  padding: 2rem;
+  color: grey;
+}
 .posts-wrapper {
   width: 80%;
   display: flex;

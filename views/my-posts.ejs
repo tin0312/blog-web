@@ -1,8 +1,8 @@
 <header><%- include("partials/header.ejs") %></header>
-<% if(locals.posts){ %>
-    <div class="page-title">
-        <h1>Your blog timelines</h1>
-    </div>
+<div class="page-title">
+    <h1>Your blog timelines</h1>
+</div>
+<% if(locals.posts.length !==0){ %>
     <div>
         <div class="posts-wrapper">
             <% posts.map(post=>{ %>
@@ -24,6 +24,6 @@
         </div>
     </div>
     <% } else { %>
-        <h1>No posts available</h1>
+        <p class="post-display-message">No post available</p>
         <% } %>
             <footer><%- include("partials/footer") %></footer>

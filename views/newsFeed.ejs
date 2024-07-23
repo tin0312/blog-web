@@ -4,11 +4,11 @@
 <div class="page-title">
     <h1>News Feed</h1>
 </div>
-<div>
-    <div class="posts-wrapper">
-        <% if(locals.posts){ %>
-            <% posts.forEach(post=>{ %>
-                <div class="post-container">
+<% if(locals.posts.length){ %>
+    <div>
+        <div class="posts-wrapper">
+            <% posts.map(post=>{ %>
+                <div key="<%= post.id %> " class="post-container">
                     <div>
                         <h3>
                             <%= post.title %>
@@ -19,12 +19,12 @@
                     </div>
                 </div>
                 <% }) %>
-                    <% } else { %>
-                        <h1>No posts available</h1>
-                        <% } %>
+        </div>
     </div>
-</div>
-<footer>
-    <%- include("partials/footer.ejs") %>
-</footer>
-</body>
+    <% } else { %>
+        <p class="post-display-message">No post available</p>
+        <% } %>
+            <footer>
+                <%- include("partials/footer.ejs") %>
+            </footer>
+            </body>

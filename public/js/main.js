@@ -1,3 +1,4 @@
+// handle update and delete posts
 function handleDelete(postId, buttonElement) {
   fetch(`/delete/${postId}`, {
     method: "DELETE",
@@ -58,3 +59,12 @@ function handleUpdate(postId, buttonElement) {
     })
     .catch((error) => console.error("Error:", error));
 }
+
+// handle active link
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".nav-link").forEach((link) => {
+    if (link.href === window.location.href) {
+      link.classList.add("active-link");
+    }
+  });
+});

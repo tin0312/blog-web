@@ -75,6 +75,7 @@ footer {
   bottom: 0;
   color: grey;
 }
+/* Navigation */
 ul {
   display: flex;
   justify-content: flex-end;
@@ -86,6 +87,27 @@ ul li {
 a {
   text-decoration: none;
   color: black;
+  transition: all 0.5s;
+  letter-spacing: 0.17rem;
+  font-size: 1rem;
+  padding: 0.8rem;
+}
+a:hover {
+  border-radius: 0.5rem;
+  box-shadow: 10px 5px 5px #a2d5d5;
+}
+.active-link {
+  color: #f9ab40;
+}
+.create-post-btn {
+  padding: 0.8rem 1rem;
+  border: 1px solid #a2d5d5;
+  border-radius: 1rem;
+  transition: all 0.5s;
+}
+.create-post-btn:hover {
+  background-color: #a2d5d5;
+  color: white;
 }
 .page-title {
   text-align: center;
@@ -94,6 +116,7 @@ a {
   padding: 2rem;
   color: grey;
 }
+
 .posts-wrapper {
   width: 80%;
   display: flex;

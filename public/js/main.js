@@ -62,7 +62,9 @@ function handleUpdate(postId, buttonElement) {
 
 // handle active link
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".nav-link").forEach((link) => {
+  const navLinks = document.querySelectorAll(".nav-link");
+  navLinks.forEach((link, index) => {
+    if (index === navLinks.length - 1) return;
     if (link.href === window.location.href) {
       link.classList.add("active-link");
     }

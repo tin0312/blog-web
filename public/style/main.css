@@ -27,6 +27,7 @@ body,
 div {
   font-family: "Gilroy", sans-serif;
   background-image: url("../images/blog-bg.png");
+  background-repeat: no-repeat;
 }
 h2,
 h3 {
@@ -36,6 +37,9 @@ h1 {
   width: 70vw;
   margin-top: 2rem;
   text-align: left;
+  font-weight: 400;
+  letter-spacing: 0.5rem;
+  font-size: 3rem;
 }
 div {
   margin-top: 1rem;
@@ -47,6 +51,7 @@ div {
   margin-top: 3rem;
 }
 label {
+  font-weight: 700;
   font-size: 1.3rem;
 }
 input:not(:last-of-type),
@@ -121,23 +126,23 @@ a {
   transition: all 0.5s;
   letter-spacing: 0.17rem;
   font-size: 1.2rem;
-  padding: 0.8rem;
+  padding: 0.8rem 0;
 }
 a:hover {
   border-radius: 0.5rem;
-  box-shadow: 10px 5px 5px #a2d5d5;
+  box-shadow: 10px 5px 5px white;
+  padding-right: 0.8rem;
 }
 .active-link {
-  color: #f9ab40;
+  border-bottom: 1px solid white;
 }
 .create-post-btn {
   padding: 0.8rem 1rem;
-  border: 1px solid #6098a9;
+  border: 1px solid white;
   border-radius: 1rem;
   transition: all 0.5s;
 }
 .create-post-btn:hover {
-  background-color: #a2d5d5;
   color: white;
 }
 .page-title {

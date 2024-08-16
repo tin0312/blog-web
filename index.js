@@ -1,6 +1,5 @@
 import express from "express";
 import bodyParser from "body-parser";
-import { nanoid } from "nanoid";
 import "dotenv/config";
 import pg from "pg";
 
@@ -16,31 +15,47 @@ const db = new pg.Client({
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
 });
-// Access body content of form input and JSON data
+
+db.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json()); // Add this line to parse JSON data
-// Use static files
+app.use(bodyParser.json());
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-  res.render("newsFeed.ejs", { posts });
+async function getAllPosts() {
+  try {
+    const posts = [];
+    const result = await db.query("SELECT * FROM posts");
+    result.rows.forEach((post) => {
+      posts.push(post);
+    });
+    return posts;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+app.get("/", async (req, res) => {
+  const posts = await getAllPosts();
+  res.render("newsFeed.ejs", { posts: posts });
 });
 
+app.get("/my-posts", async (req, res) => {
+  const posts = await getAllPosts();
+  res.render("my-posts.ejs", { posts: posts });
+});
 app.get("/create-post", (req, res) => {
   res.render("create-post.ejs", { posts });
 });
 
-app.post("/my-posts", async (req, res) => {
-  // posts.push({
-  //   id: nanoid(),
-  //   title: req.body.title,
-  //   body: req.body.body,
-  // });
+app.post("/add-post", async (req, res) => {
   const { title, body } = req.body;
-  try{
-    db.query("INSERT INTO ")
-  } catch(error){
-
+  try {
+    db.query("INSERT INTO posts (title, content) VALUES ($1, $2)", [
+      title,
+      body,
+    ]);
+  } catch (error) {
+    console.error(error);
   }
   res.render("my-posts.ejs", { posts });
 });

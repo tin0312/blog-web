@@ -27,6 +27,7 @@ body {
   font-family: "Gilroy", sans-serif;
   background-image: url("../images/blog-bg.png");
   background-repeat: no-repeat;
+  background-size: cover;
 }
 h2,
 h3 {
@@ -40,12 +41,10 @@ h1 {
   letter-spacing: 0.5rem;
   font-size: 3rem;
 }
-.form-container {
-  margin-top: 3rem;
-}
+
 label {
-  font-weight: 700;
   font-size: 1.3rem;
+  color: black;
 }
 input:not(:last-of-type),
 textarea {
@@ -143,15 +142,21 @@ a:hover {
   color: grey;
 }
 
-.posts-wrapper {
+.posts-wrapper,
+.form-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .posts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.posts-container,
+.form-container {
   width: 70vw;
-  gap: 8.5rem;
   margin-bottom: 4rem;
 }
 .post-container {

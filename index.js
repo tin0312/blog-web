@@ -48,16 +48,17 @@ app.get("/create-post", (req, res) => {
 });
 
 app.post("/add-post", async (req, res) => {
+  const posts = await getAllPosts();
   const { title, body } = req.body;
   try {
     db.query("INSERT INTO posts (title, content) VALUES ($1, $2)", [
       title,
       body,
     ]);
+    res.render("my-posts.ejs", { posts: posts });
   } catch (error) {
     console.error(error);
   }
-  res.render("my-posts.ejs", { posts });
 });
 
 app.get("/my-posts", (req, res) => {

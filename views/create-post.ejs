@@ -1,14 +1,16 @@
 <header><%- include("partials/header.ejs") %></header>
 
-<div class="form-container">
-    <h1>New Blog</h1>
-    <form method="POST" action="/add-post">
-        <label for="title">Title</label>
-        <input type="text" id="title" name="title" />
-        <label for="body">Body</label>
-        <textarea id="body" name="body"></textarea>
-        <input type="submit" value="POST" />
-    </form>
+<div class="form-wrapper">
+    <div class="form-container">
+        <h1>New Blog</h1>
+        <form method="POST" action="/add-post">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" />
+            <label for="body">Body</label>
+            <textarea id="body" name="body"></textarea>
+            <input type="submit" value="POST" />
+        </form>
+    </div>
 </div>
 </body>
 <footer><%- include("partials/footer") %></footer>

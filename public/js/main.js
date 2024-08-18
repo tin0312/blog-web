@@ -60,9 +60,7 @@ function handleUpdate(postId, buttonElement) {
     .catch((error) => console.error("Error:", error));
 }
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   handleStickyNavBar();
-// });
+// handle active links
 const navLinks = document.querySelectorAll(".nav-link");
 navLinks.forEach((link, index) => {
   if (index === navLinks.length - 1) return;
@@ -71,7 +69,7 @@ navLinks.forEach((link, index) => {
   }
 });
 
-// handle navbar sticky
+// handle sticky navbar
 window.addEventListener("load", () => {
   const navbar = document.querySelector("ul");
   let top = navbar.offsetTop;

@@ -60,13 +60,28 @@ function handleUpdate(postId, buttonElement) {
     .catch((error) => console.error("Error:", error));
 }
 
-// handle active link
-document.addEventListener("DOMContentLoaded", () => {
-  const navLinks = document.querySelectorAll(".nav-link");
-  navLinks.forEach((link, index) => {
-    if (index === navLinks.length - 1) return;
-    if (link.href === window.location.href) {
-      link.classList.add("active-link");
+// document.addEventListener("DOMContentLoaded", () => {
+//   handleStickyNavBar();
+// });
+const navLinks = document.querySelectorAll(".nav-link");
+navLinks.forEach((link, index) => {
+  if (index === navLinks.length - 1) return;
+  if (link.href === window.location.href) {
+    link.classList.add("active-link");
+  }
+});
+
+// handle navbar sticky
+window.addEventListener("load", () => {
+  const navbar = document.querySelector("ul");
+  let top = navbar.offsetTop;
+  function stickyNavbar() {
+    if (window.scrollY > top) {
+      navbar.classList.add("sticky");
+    } else {
+      navbar.classList.remove("sticky");
     }
-  });
+  }
+
+  window.addEventListener("scroll", stickyNavbar);
 });

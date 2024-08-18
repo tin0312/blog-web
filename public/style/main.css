@@ -107,6 +107,14 @@ footer {
 ul {
   display: flex;
   justify-content: flex-end;
+  transition: all 1s;
+}
+.sticky {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  background-color: bisque;
+  transition: all 1s;
 }
 ul li {
   list-style: none;

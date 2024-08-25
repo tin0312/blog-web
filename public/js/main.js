@@ -83,3 +83,17 @@ window.addEventListener("load", () => {
 
   window.addEventListener("scroll", stickyNavbar);
 });
+
+// /posts/:id to open the post
+
+const post = $(".post-container");
+post.on("click", async function () {
+  try {
+    const postId = $(this).attr("data-id");
+    console.log(postId);
+    const response = await fetch(`/posts/${postId}`);
+    console.log("The response data is :", response);
+  } catch (error) {
+    console.log("Error requesting postID page ", error);
+  }
+});

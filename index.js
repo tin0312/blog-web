@@ -36,6 +36,7 @@ async function getAllPosts() {
 
 app.get("/", async (req, res) => {
   const posts = await getAllPosts();
+  console.log("All posts: ", posts);
   res.render("newsFeed.ejs", { posts: posts });
 });
 
@@ -48,14 +49,13 @@ app.get("/create-post", (req, res) => {
 });
 
 app.post("/add-post", async (req, res) => {
-  const posts = await getAllPosts();
   const { title, body } = req.body;
   try {
     db.query("INSERT INTO posts (title, content) VALUES ($1, $2)", [
       title,
       body,
     ]);
-    res.render("my-posts.ejs", { posts: posts });
+    res.redirect("/");
   } catch (error) {
     console.error(error);
   }
@@ -82,6 +82,17 @@ app.put("/update/:id", (req, res) => {
   } else {
     res.json({ success: false });
   }
+});
+app.get("/posts/:postID", async (req, res) => {
+  const postID = req.params.postID;
+  try {
+    const result = await db.query("SELECT * FROM posts WHERE id = ($1)", [
+      postID,
+    ]);
+    const post = result.rows[0];
+    console.log("Post searched content: ", post);
+  } catch (error) {}
+  console.log("Server got ID of ", postID);
 });
 
 app.listen(port, () => {

@@ -168,10 +168,11 @@ a:hover {
   margin-bottom: 4rem;
 }
 .post-container {
-  box-shadow: 0 0 10px white;
+  box-shadow: 0 0 10px #c3c2c0;
   width: 100%;
   border-radius: 10px;
-  padding: 5rem 0;
+  padding: 3rem 0 0 2rem;
+  background-color: #c1ae95;
 }
 .btn-container {
   display: flex;
@@ -191,4 +192,8 @@ button:hover {
   padding: 15px 25px;
   color: #199319;
   background-color: white;
+}
+.post-metadata {
+  padding: 2rem 0 1rem 0rem;
+  opacity: 0.5;
 }

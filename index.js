@@ -85,14 +85,17 @@ app.put("/update/:id", (req, res) => {
 });
 app.get("/posts/:postID", async (req, res) => {
   const postID = req.params.postID;
+  console.log("PostID in params ", postID);
   try {
-    const result = await db.query("SELECT * FROM posts WHERE id = ($1)", [
+    const result = await db.query("SELECT * FROM posts WHERE id = $1", [
       postID,
     ]);
     const post = result.rows[0];
     console.log("Post searched content: ", post);
-  } catch (error) {}
-  console.log("Server got ID of ", postID);
+    res.render("post.ejs", { post: post });
+  } catch (error) {
+    res.json(error);
+  }
 });
 
 app.listen(port, () => {

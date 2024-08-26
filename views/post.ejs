@@ -4,18 +4,28 @@
 
 
 
-<div>
-
+<div class="post-container">
+    <% if(locals.post) {%>
+        <div>
+            <h1>
+                <%= post.title %>
+            </h1>
+            <p>
+                <%= post.content %>
+            </p>
+            <p></p>
+        </div>
+        <div class="post-metadata">
+            <p>Created At: <span>
+                    <%= post.created_at %>
+                </span></p>
+            <p>Updated At: <span>
+                    <%= post.created_at %>
+                </span></p>
+        </div>
+        <%} else {%>
+            <p>Error loading page </p>
+            <% } %>
 </div>
-
-
-
-
-
-
-
-
-<footer>
-    <%- include("partials/footer.ejs") %>
-</footer>
+<footer><%- include("partials/footer") %></footer>
 </body>

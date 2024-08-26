@@ -44,18 +44,25 @@ h1 {
 }
 
 label {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   color: black;
+  background-color: #c1ae95;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 70px;
 }
+
 input:not(:last-of-type),
 textarea {
   padding: 0.5rem;
   border: none;
-  border-bottom: 1px solid #6098a9;
-  opacity: 0.5;
+  opacity: 0.7;
   border-radius: 0.5rem;
   font-size: 18px;
   color: black;
+  width: 100%;
 }
 input:focus,
 textarea:focus {
@@ -108,7 +115,10 @@ footer {
 ul {
   display: flex;
   justify-content: flex-end;
-  transition: all 1s;
+  align-items: center;
+  transition: all 1s ease-in-out;
+  height: 180px;
+  /* margin-bottom: 50px; */
 }
 .sticky {
   position: fixed;
@@ -157,6 +167,11 @@ a:hover {
   flex-direction: column;
   align-items: center;
 }
+.form-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 .posts-container {
   display: flex;
@@ -181,6 +196,11 @@ a:hover {
 .post-container:hover {
   border: 6px solid whitesmoke;
   cursor: pointer;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
 }
 .btn-container {
   display: flex;

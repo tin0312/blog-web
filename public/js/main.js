@@ -92,7 +92,12 @@ post.on("click", async function () {
     const postId = $(this).attr("data-id");
     console.log(postId);
     const response = await fetch(`/posts/${postId}`);
-    console.log("The response data is :", response);
+    if (response.ok) {
+      const postHTML = await response.text();
+      $("body").html(postHTML);
+    } else {
+      console.error("Error loading content from Express server");
+    }
   } catch (error) {
     console.log("Error requesting postID page ", error);
   }

@@ -21,6 +21,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 html,
 body {
@@ -160,7 +161,7 @@ a:hover {
 .posts-container {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 3rem;
 }
 .posts-container,
 .form-container {
@@ -173,6 +174,13 @@ a:hover {
   border-radius: 10px;
   padding: 3rem 0 0 2rem;
   background-color: #c1ae95;
+  transition: all 0.2s ease-in-out;
+  border: 0 solid transparent;
+  height: 200px;
+}
+.post-container:hover {
+  border: 6px solid whitesmoke;
+  cursor: pointer;
 }
 .btn-container {
   display: flex;

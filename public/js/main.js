@@ -74,6 +74,8 @@ window.addEventListener("load", () => {
   const navbar = document.querySelector("ul");
   let top = navbar.offsetTop;
   function stickyNavbar() {
+    console.log("scroll Y :", window.screenY);
+    console.log("offsetTop: ", top);
     if (window.scrollY > top) {
       navbar.classList.add("sticky");
     } else {
@@ -82,23 +84,4 @@ window.addEventListener("load", () => {
   }
 
   window.addEventListener("scroll", stickyNavbar);
-});
-
-// /posts/:id to open the post
-
-const post = $(".post-container");
-post.on("click", async function () {
-  try {
-    const postId = $(this).attr("data-id");
-    console.log(postId);
-    const response = await fetch(`/posts/${postId}`);
-    if (response.ok) {
-      const postHTML = await response.text();
-      $("body").html(postHTML);
-    } else {
-      console.error("Error loading content from Express server");
-    }
-  } catch (error) {
-    console.log("Error requesting postID page ", error);
-  }
 });

@@ -2,30 +2,32 @@
     <%- include("partials/header.ejs") %>
 </header>
 
-
-
-<div class="post-container">
-    <% if(locals.post) {%>
-        <div>
-            <h1>
-                <%= post.title %>
-            </h1>
-            <p>
-                <%= post.content %>
-            </p>
-            <p></p>
-        </div>
-        <div class="post-metadata">
-            <p>Created At: <span>
-                    <%= post.created_at %>
-                </span></p>
-            <p>Updated At: <span>
-                    <%= post.created_at %>
-                </span></p>
-        </div>
-        <%} else {%>
-            <p>Error loading page </p>
-            <% } %>
+<div class="posts-wrapper">
+    <div class="posts-container">
+        <% if(locals.post) {%>
+            <div class="post post-<%= post.id %>">
+                <div>
+                    <h1>
+                        <%= post.title %>
+                    </h1>
+                    <p>
+                        <%= post.content %>
+                    </p>
+                </div>
+                <div class="post-metadata">
+                    <p>Created At: <span>
+                            <%= post.created_at %>
+                        </span></p>
+                    <p>Updated At: <span>
+                            <%= post.created_at %>
+                        </span></p>
+                </div>
+            </div>
+            <%} else {%>
+                <p>Error loading page </p>
+                <% } %>
+    </div>
 </div>
+
 <footer><%- include("partials/footer") %></footer>
 </body>

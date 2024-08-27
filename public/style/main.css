@@ -29,11 +29,13 @@ body {
   background-image: url("../images/blog-bg.png");
   background-repeat: no-repeat;
   background-size: cover;
-}
 h2,
 h3 {
   margin-bottom: 1rem;
 }
+  body {
+    position: relative;
+  }
 h1 {
   width: 70vw;
   margin: 4rem 0;
@@ -93,11 +95,6 @@ input {
 textarea {
   height: 200px;
 }
-body {
-  min-height: 100vh;
-  margin: 0;
-  position: relative;
-}
 
 footer {
   display: flex;
@@ -112,20 +109,25 @@ footer {
   mix-blend-mode: darken;
 }
 /* Navigation */
+nav{
+  display: flex;
+  justify-content: center;
+}
 ul {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: row;
   align-items: center;
   transition: all 1s ease-in-out;
-  height: 180px;
-  /* margin-bottom: 50px; */
+  height:80px;
+  border-radius: 4rem;
+  margin: 2rem 0;
 }
 .sticky {
   position: fixed;
-  width: 100%;
   top: 0;
-  background-color: bisque;
+  background-color: #797A71;
   transition: all 1s;
+  z-index: 1;
 }
 ul li {
   list-style: none;
@@ -139,7 +141,7 @@ a {
   font-size: 1.2rem;
   padding: 0.8rem 0;
 }
-a:hover {
+.nav-link:hover {
   border-radius: 0.5rem;
   box-shadow: 10px 5px 5px white;
   padding-right: 0.8rem;
@@ -179,7 +181,8 @@ a:hover {
   gap: 3rem;
 }
 .posts-container,
-.form-container {
+.form-container
+ {
   width: 70vw;
   margin-bottom: 4rem;
 }
@@ -191,11 +194,18 @@ a:hover {
   background-color: #c1ae95;
   transition: all 0.2s ease-in-out;
   border: 0 solid transparent;
-  height: 200px;
+  height: 250px;
 }
 .post-container:hover {
   border: 6px solid whitesmoke;
   cursor: pointer;
+}
+.post{
+  /* background-color: #797A71; */
+  padding: 2rem;
+  height: 100vh;
+  margin-top: 3rem;
+  color:white;
 }
 form {
   display: flex;

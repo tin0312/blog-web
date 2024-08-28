@@ -2,12 +2,14 @@
     <%- include("partials/header.ejs") %>
 </header>
 <div class="posts-wrapper">
+    
     <h1>News Feed</h1>
     <% if(locals.posts.length){ %>
         <div class="posts-container">
             <% posts.map(post=>{ %>
-                <a href="/posts/<%= post.id %>">
-                    <div data-id="<%= post.id %> " class="post-container">
+
+                <div data-id="<%= post.id %> " class="post-container">
+                    <a href="/posts/<%= post.id %>">
                         <div>
                             <h2>
                                 <%= post.title %>
@@ -24,8 +26,9 @@
                                     <%= post.created_at %>
                                 </span></p>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </div>
+
                 <% }) %>
         </div>
         <% } else { %>

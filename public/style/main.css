@@ -37,18 +37,20 @@ h3 {
     position: relative;
   }
 h1 {
-  width: 70vw;
+  width: 90%;
   margin: 4rem 0;
   text-align: left;
   font-weight: 400;
   letter-spacing: 0.5rem;
-  font-size: 3rem;
+  font-size: 3rem; 
+  float: left;
+  text-decoration: #797A71 wavy underline;
 }
-
+ 
 label {
   font-size: 1.2rem;
   color: black;
-  background-color: #c1ae95;
+  background-color: white;
   width: 70px;
   height: 70px;
   border-radius: 50%;
@@ -72,15 +74,15 @@ textarea:focus {
 }
 input[type="submit"] {
   border: none;
-  background-color: #6098a9;
   width: 6rem;
   border-radius: 1rem;
+  background-color: #797A71;
+  color: white;
 }
 input[type="submit"]:hover {
   cursor: pointer;
-  border-color: 1px solid #a2d5d5;
-  background-color: transparent;
-  color: #6098a9;
+  background-color: #c1ae95;
+  transition: all 0.5s ease-in;
 }
 form {
   margin-top: 5rem;
@@ -88,6 +90,12 @@ form {
   flex-direction: column;
   width: 70vw;
   gap: 2rem;
+  border: 5px solid #797A71;
+  padding: 2rem;
+  border-radius: 2rem;
+}
+.form-title{
+  width: 70vw;
 }
 input {
   height: 50px;
@@ -98,15 +106,16 @@ textarea {
 
 footer {
   display: flex;
+  margin-top: 100px;
   height: 50px;
   justify-content: center;
   align-items: center;
   position: absolute;
   width: 100%;
   bottom: 0;
-  color: black;
+  color: white;
   font-size: 1.2rem;
-  mix-blend-mode: darken;
+  background-color: #797A71;
 }
 /* Navigation */
 nav{
@@ -177,40 +186,43 @@ a {
 
 .posts-container {
   display: flex;
-  flex-direction: column;
-  gap: 3rem;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  gap: 6.67rem;
+  align-content: space-around;
 }
+
 .posts-container,
 .form-container
  {
-  width: 70vw;
+  width: 90%;
   margin-bottom: 4rem;
 }
 .post-container {
   box-shadow: 0 0 10px #c3c2c0;
-  width: 100%;
+  width: 30%;
   border-radius: 10px;
   padding: 3rem 0 0 2rem;
   background-color: #c1ae95;
   transition: all 0.2s ease-in-out;
   border: 0 solid transparent;
-  height: 250px;
+  height: 300px;
 }
 .post-container:hover {
   border: 6px solid whitesmoke;
   cursor: pointer;
 }
 .post{
-  /* background-color: #797A71; */
-  padding: 2rem;
-  height: 100vh;
-  margin-top: 3rem;
-  color:white;
-}
-form {
   display: flex;
   flex-direction: column;
   align-items: start;
+  background-color: white;
+  padding: 2rem;
+  margin-top: 10rem;
+  color:black;
+  border-radius: 2rem;
+  min-height: 600px;
+  justify-content: space-between;
 }
 .btn-container {
   display: flex;

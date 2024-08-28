@@ -2,11 +2,11 @@
 
 <div class="form-wrapper">
     <div class="form-container">
-        <h1>New Post</h1>
+        <h1 class="form-title">New Post</h1>
         <form method="POST" action="/add-post">
-            <label for="title">Title</label>
+            <label for="title" aria-placeholder="hehe">Title</label>
             <input type="text" id="title" name="title" />
-            <label for="body">Body</label>
+            <label for="body" aria-placeholder="sads">Body</label>
             <textarea id="body" name="body"></textarea>
             <input type="submit" value="POST" />
         </form>

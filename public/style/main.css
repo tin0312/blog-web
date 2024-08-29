@@ -85,7 +85,6 @@ input[type="submit"]:hover {
   transition: all 0.5s ease-in;
 }
 form {
-  margin-top: 5rem;
   display: flex;
   flex-direction: column;
   width: 70vw;
@@ -182,13 +181,14 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 }
 
 .posts-container {
   display: flex;
   flex-wrap: wrap;
   min-height: 100vh;
-  gap: 6.67rem;
+  justify-content: space-between;
   align-content: space-around;
 }
 
@@ -196,7 +196,7 @@ a {
 .form-container
  {
   width: 90%;
-  margin-bottom: 4rem;
+  margin-bottom: 18rem;
 }
 .post-container {
   box-shadow: 0 0 10px #c3c2c0;

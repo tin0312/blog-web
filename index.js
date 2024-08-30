@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import "dotenv/config";
 import pg from "pg";
+import methodOverride from "method-override";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -20,6 +21,8 @@ db.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
+// use middleware method override to support PUT & DELETE where client doesnt support it
+app.use(methodOverride("_method"));
 
 async function getAllPosts() {
   try {
@@ -36,7 +39,6 @@ async function getAllPosts() {
 
 app.get("/", async (req, res) => {
   const posts = await getAllPosts();
-  console.log("All posts: ", posts);
   res.render("newsFeed.ejs", { posts: posts });
 });
 
@@ -65,33 +67,32 @@ app.get("/my-posts", (req, res) => {
   res.render("my-posts.ejs", { posts });
 });
 
-app.delete("/delete/:id", (req, res) => {
+app.delete("/delete/:id", async (req, res) => {
+  const posts = await getAllPosts();
   const id = req.params.id;
-  console.log("Delete request received for post ID:", id);
-  posts = posts.filter((post) => post.id !== id);
-  res.json({ success: true });
+  console.log("hitting post delete route");
+  try {
+    const result = await db.query(
+      "DELETE FROM posts WHERE id = $1 RETURNING*",
+      [id]
+    );
+    res.redirect("/my-posts");
+  } catch (error) {
+    console.log("Error deleting posts");
+  }
 });
 
-app.put("/update/:id", (req, res) => {
+app.patch("/edit/:id", (req, res) => {
   const id = req.params.id;
-  const index = posts.findIndex((post) => post.id === id);
-  if (index !== -1) {
-    posts[index].title = req.body.title;
-    posts[index].body = req.body.body;
-    res.json({ success: true });
-  } else {
-    res.json({ success: false });
-  }
+  console.log("hitting post edit route");
 });
 app.get("/posts/:postID", async (req, res) => {
   const postID = req.params.postID;
-  console.log("PostID in params ", postID);
   try {
     const result = await db.query("SELECT * FROM posts WHERE id = $1", [
       postID,
     ]);
     const post = result.rows[0];
-    console.log("Post searched content: ", post);
     res.render("post.ejs", { post: post });
   } catch (error) {
     res.json(error);

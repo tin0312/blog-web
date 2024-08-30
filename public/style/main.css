@@ -84,7 +84,7 @@ input[type="submit"]:hover {
   background-color: #c1ae95;
   transition: all 0.5s ease-in;
 }
-form {
+.form-container form{
   display: flex;
   flex-direction: column;
   width: 70vw;

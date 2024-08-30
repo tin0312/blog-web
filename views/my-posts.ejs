@@ -14,8 +14,12 @@
                         </p>
                     </div>
                     <div class="btn-container">
-                        <button onclick="handleDelete('<%= post.id%>', this)">Remove</button>
-                        <button onclick="startUpdate('<%= post.id %>', this)">Update</button>
+                        <form method="POST" action="/delete/<%= post.id %>/?_method=DELETE">
+                            <input type="submit" value="Delete" />
+                        </form>
+                        <form method="POST" action="/edit/<%= post.id %>/?_method=PATCH">
+                            <input type="submit" value="Edit">
+                        </form>
                     </div>
                 </div>
                 <% }) %>

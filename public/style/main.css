@@ -23,30 +23,29 @@
   padding: 0;
   box-sizing: border-box;
 }
-html,
 body {
   font-family: "Gilroy", sans-serif;
   background-image: url("../images/blog-bg.png");
   background-repeat: no-repeat;
   background-size: cover;
+  position: relative;
+}
+
 h2,
 h3 {
   margin-bottom: 1rem;
 }
-  body {
-    position: relative;
-  }
-h1 {
+.section-title {
   width: 90%;
   margin: 4rem 0;
   text-align: left;
   font-weight: 400;
   letter-spacing: 0.5rem;
-  font-size: 3rem; 
+  font-size: 3rem;
   float: left;
-  text-decoration: #797A71 wavy underline;
+  text-decoration: #797a71 wavy underline;
 }
- 
+
 label {
   font-size: 1.2rem;
   color: black;
@@ -76,7 +75,7 @@ input[type="submit"] {
   border: none;
   width: 6rem;
   border-radius: 1rem;
-  background-color: #797A71;
+  background-color: #797a71;
   color: white;
 }
 input[type="submit"]:hover {
@@ -84,16 +83,16 @@ input[type="submit"]:hover {
   background-color: #c1ae95;
   transition: all 0.5s ease-in;
 }
-.form-container form{
+.form-container form {
   display: flex;
   flex-direction: column;
   width: 70vw;
   gap: 2rem;
-  border: 5px solid #797A71;
+  border: 5px solid #797a71;
   padding: 2rem;
   border-radius: 2rem;
 }
-.form-title{
+.form-title {
   width: 70vw;
 }
 input {
@@ -114,10 +113,10 @@ footer {
   bottom: 0;
   color: white;
   font-size: 1.2rem;
-  background-color: #797A71;
+  background-color: #797a71;
 }
 /* Navigation */
-nav{
+nav {
   display: flex;
   justify-content: center;
 }
@@ -126,16 +125,16 @@ ul {
   flex-direction: row;
   align-items: center;
   transition: all 1s ease-in-out;
-  height:80px;
+  height: 80px;
   border-radius: 4rem;
   margin: 2rem 0;
 }
 .sticky {
   position: fixed;
   top: 0;
-  background-color: #797A71;
+  background-color: #797a71;
   transition: all 1s;
-  z-index: 1;
+  z-index: 100000;
 }
 ul li {
   list-style: none;
@@ -185,22 +184,20 @@ a {
 }
 
 .posts-container {
-  display: flex;
-  flex-wrap: wrap;
-  min-height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(3, 25%);
+  grid-row-gap: 8rem;
   justify-content: space-between;
-  align-content: space-around;
+  padding-bottom: 10rem;
 }
 
 .posts-container,
-.form-container
- {
+.form-container {
   width: 90%;
   margin-bottom: 18rem;
 }
 .post-container {
   box-shadow: 0 0 10px #c3c2c0;
-  width: 30%;
   border-radius: 10px;
   padding: 3rem 0 0 2rem;
   background-color: #c1ae95;
@@ -212,14 +209,15 @@ a {
   border: 6px solid whitesmoke;
   cursor: pointer;
 }
-.post{
+.post {
   display: flex;
+  width: 50vw;
   flex-direction: column;
   align-items: start;
   background-color: white;
   padding: 2rem;
   margin-top: 10rem;
-  color:black;
+  color: black;
   border-radius: 2rem;
   min-height: 600px;
   justify-content: space-between;

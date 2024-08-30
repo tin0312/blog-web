@@ -70,7 +70,6 @@ app.get("/my-posts", (req, res) => {
 app.delete("/delete/:id", async (req, res) => {
   const posts = await getAllPosts();
   const id = req.params.id;
-  console.log("hitting post delete route");
   try {
     const result = await db.query(
       "DELETE FROM posts WHERE id = $1 RETURNING*",
@@ -82,9 +81,39 @@ app.delete("/delete/:id", async (req, res) => {
   }
 });
 
-app.patch("/edit/:id", (req, res) => {
+app.get("/edit/:id", async (req, res) => {
   const id = req.params.id;
-  console.log("hitting post edit route");
+  try {
+    const result = await db.query("SELECT * FROM posts WHERE id = $1", [id]);
+    res.render("editPost.ejs", {
+      post: result.rows[0],
+    });
+  } catch (error) {
+    console.log("Error fetching post");
+  }
+});
+app.patch("/update/:id", async (req, res) => {
+  const { title, body } = req.body;
+  const id = req.params.id;
+  try {
+    const result = await db.query("SELECT * FROM posts WHERE id = $1", [id]);
+    const post = result.rows[0];
+    const newPostContent = {
+      title: title || post.title,
+      body: body || post.body,
+    };
+    try {
+      const result = await db.query(
+        "UPDATE posts SET title = $1, content = $2 WHERE id =$3",
+        [newPostContent.title, newPostContent.body, id]
+      );
+      res.redirect("/");
+    } catch (error) {
+      console.log("Error saving post");
+    }
+  } catch (error) {
+    console.log("Error locating selected post");
+  }
 });
 app.get("/posts/:postID", async (req, res) => {
   const postID = req.params.postID;

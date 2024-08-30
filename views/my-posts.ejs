@@ -1,6 +1,6 @@
 <header><%- include("partials/header.ejs") %></header>
 <div class="posts-wrapper">
-    <h1>Your blog timelines</h1>
+    <h1 class="section-title">Your blog timelines</h1>
     <% if(locals.posts.length !==0){ %>
         <div class="posts-container">
             <% posts.map(post=>{ %>
@@ -17,7 +17,7 @@
                         <form method="POST" action="/delete/<%= post.id %>/?_method=DELETE">
                             <input type="submit" value="Delete" />
                         </form>
-                        <form method="POST" action="/edit/<%= post.id %>/?_method=PATCH">
+                        <form method="GET" action="/edit/<%= post.id %>">
                             <input type="submit" value="Edit">
                         </form>
                     </div>

@@ -1,0 +1,24 @@
+<header>
+    <%- include("partials/header.ejs") %>
+</header>
+
+<div>
+    <div class="posts-wrapper">
+        <% if(locals.post) {%>
+            <div class="post post-<%= post.id %>">
+                <form action="/update/<%= post.id %>/?_method=PATCH" method="POST">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" placeholder="<%= post.title %>" />
+                    <label for="body">Body</label>
+                    <textarea id="body" name="body" placeholder="<%= post.content %>"></textarea>
+                    <input type="submit" value="Save" />
+                </form>
+                <!-- <input type="button" value="Cancel" /> -->
+            </div>
+            <%} else{ %>
+                <p>No post found</p>
+                <%}%>
+    </div>
+
+    <footer><%- include("partials/footer") %></footer>
+    </body>

@@ -77,8 +77,6 @@ window.addEventListener("load", () => {
   const navbar = document.querySelector("ul");
   let top = navbar.offsetTop;
   function stickyNavbar() {
-    console.log("scroll Y :", window.screenY);
-    console.log("offsetTop: ", top);
     if (window.scrollY > top) {
       navbar.classList.add("sticky");
     } else {

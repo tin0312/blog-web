@@ -89,20 +89,8 @@ window.addEventListener("load", () => {
 
 // responsive navigation bar
 const mobileNav = document.querySelector(".mobile-nav");
-const openMenuBar = document.querySelector("#open-menu-bar");
-const closeMenuBar = document.querySelector("#close-menu-bar");
-
-// Open mobile nav bar
-openMenuBar.addEventListener("click", () => {
-  openMenuBar.style.display = "none";
-  closeMenuBar.style.display = "block";
-  mobileNav.classList.toggle("hide");
-});
-
-// Close mobile nav bar
-closeMenuBar.addEventListener("click", () => {
-  console.log("Close button was clicked");
-  closeMenuBar.style.display = "none";
-  openMenuBar.style.display = "block";
+const navIcon = document.querySelector(".nav-icon");
+navIcon.addEventListener("click", () => {
+  navIcon.classList.toggle("active");
   mobileNav.classList.toggle("hide");
 });

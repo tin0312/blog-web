@@ -61,7 +61,7 @@
 //       }
 //     })
 //     .catch((error) => console.error("Error:", error));
-// }
+// };
 
 // handle active links
 const navLinks = document.querySelectorAll(".nav-link");
@@ -72,9 +72,9 @@ navLinks.forEach((link, index) => {
   }
 });
 
+const navbar = document.querySelector("ul");
 // handle sticky navbar
 window.addEventListener("load", () => {
-  const navbar = document.querySelector("ul");
   let top = navbar.offsetTop;
   function stickyNavbar() {
     if (window.scrollY > top) {
@@ -85,4 +85,12 @@ window.addEventListener("load", () => {
   }
 
   window.addEventListener("scroll", stickyNavbar);
+});
+
+// responsive navigation bar
+const mobileNav = document.querySelector(".mobile-nav");
+const navIcon = document.querySelector(".nav-icon");
+navIcon.addEventListener("click", () => {
+  navIcon.classList.toggle("active");
+  mobileNav.classList.toggle("hide");
 });

@@ -144,8 +144,12 @@ nav {
   width: 100vw;
   gap: 1rem;
   z-index: 500; /* Lower z-index to stay behind the icons */
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
 }
-
+.mobile-nav.show {
+  transform: translateX(0);
+}
 /* animate nav menu icon */
 .nav-icon {
   width: 10vw;

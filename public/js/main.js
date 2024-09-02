@@ -93,4 +93,11 @@ const navIcon = document.querySelector(".nav-icon");
 navIcon.addEventListener("click", () => {
   navIcon.classList.toggle("active");
   mobileNav.classList.toggle("hide");
+  if (mobileNav.classList.contains("show")) {
+    mobileNav.classList.remove("show");
+    setTimeout(() => mobileNav.classList.add("hide"), 300); // Hide after transition ends
+  } else {
+    mobileNav.classList.remove("hide");
+    setTimeout(() => mobileNav.classList.add("show"), 10); // Allow time for hide class to be removed
+  }
 });

@@ -3,7 +3,7 @@
 </header>
 
 <div>
-    <div class="posts-wrapper">
+    <div class="post-wrapper">
         <% if(locals.post) {%>
             <div class="post post-<%= post.id %>">
                 <div>
@@ -15,9 +15,9 @@
                     </p>
                 </div>
                 <div class="post-metadata">
-                    <p> <strong>On: </strong> 
-                            <%= new Date(post.created_at).toLocaleDateString()%>
-                        </p>
+                    <p>Created At: <span>
+                            <%= post.created_at %>
+                        </span></p>
                 </div>
             </div>
             <%} else {%>

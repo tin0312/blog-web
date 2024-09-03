@@ -35,6 +35,15 @@ h2,
 h3 {
   margin-bottom: 1rem;
 }
+@media only screen and (max-width: 480px) {
+  h2,
+  h3 {
+    font-size: 2rem;
+  }
+  p {
+    font-size: 1rem;
+  }
+}
 .section-title {
   width: 90%;
   margin: 4rem 0;
@@ -45,7 +54,14 @@ h3 {
   float: left;
   text-decoration: #797a71 wavy underline;
 }
-
+@media only screen and (max-width: 480px) {
+  .section-title {
+    font-size: 2rem;
+    padding: 3rem;
+    padding-left: 0;
+    font-weight: 700;
+  }
+}
 label {
   font-size: 1.2rem;
   color: black;
@@ -414,6 +430,7 @@ a {
   flex-direction: column;
   align-items: center;
 }
+
 .form-container {
   display: flex;
   flex-direction: column;
@@ -426,13 +443,19 @@ a {
   grid-template-columns: repeat(3, 25%);
   grid-row-gap: 8rem;
   justify-content: space-between;
-  padding-bottom: 10rem;
+  margin-bottom: 10rem;
 }
-
+@media only screen and (max-width: 480px) {
+  .posts-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-bottom: 10rem;
+  }
+}
 .posts-container,
 .form-container {
   width: 90%;
-  margin-bottom: 18rem;
 }
 .post-container {
   box-shadow: 0 0 10px #c3c2c0;
@@ -442,6 +465,11 @@ a {
   transition: all 0.2s ease-in-out;
   border: 0 solid transparent;
   height: 300px;
+}
+@media only screen and (max-width: 480px) {
+  .post-container {
+    height: auto;
+  }
 }
 .post-container:hover {
   border: 6px solid whitesmoke;
@@ -482,4 +510,9 @@ button:hover {
 .post-metadata {
   padding: 2rem 0 1rem 0rem;
   opacity: 0.5;
+}
+@media only screen and (max-width: 480px) {
+  .post-metadata {
+    font-size: 0.8rem;
+  }
 }

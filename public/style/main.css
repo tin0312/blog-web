@@ -488,6 +488,11 @@ a {
   min-height: 600px;
   justify-content: space-between;
 }
+@media only screen and (max-width: 480px) {
+  .post {
+    width: 90%;
+  }
+}
 .btn-container {
   display: flex;
   flex-direction: row;
@@ -508,6 +513,9 @@ button:hover {
   background-color: white;
 }
 .post-metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   padding: 2rem 0 1rem 0rem;
   opacity: 0.5;
 }

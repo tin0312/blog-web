@@ -38,7 +38,7 @@ h3 {
 @media only screen and (max-width: 480px) {
   h2,
   h3 {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
   p {
     font-size: 1rem;
@@ -443,7 +443,7 @@ a {
   grid-template-columns: repeat(3, 25%);
   grid-row-gap: 8rem;
   justify-content: space-between;
-  margin-bottom: 10rem;
+  padding-bottom: 10rem;
 }
 @media only screen and (max-width: 480px) {
   .posts-container {
@@ -458,6 +458,9 @@ a {
   width: 90%;
 }
 .post-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   box-shadow: 0 0 10px #c3c2c0;
   border-radius: 10px;
   padding: 3rem 0 0 2rem;
@@ -482,10 +485,11 @@ a {
   align-items: start;
   background-color: white;
   padding: 2rem;
-  margin-top: 10rem;
+  margin-bottom: 10rem;
   color: black;
   border-radius: 2rem;
   min-height: 600px;
+  height: auto;
   justify-content: space-between;
 }
 @media only screen and (max-width: 480px) {

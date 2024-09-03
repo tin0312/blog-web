@@ -7,27 +7,21 @@
     <% if(locals.posts.length){ %>
         <div class="posts-container">
             <% posts.map(post=>{ %>
-
-                <div data-id="<%= post.id %> " class="post-container">
-                    <a href="/posts/<%= post.id %>">
+                <a href="/posts/<%= post.id %>">
+                    <div data-id="<%= post.id %> " class="post-container">
                         <div>
                             <h2>
                                 <%= post.title %>
                             </h2>
-                            <p>
-                                <%= post.content %>
-                            </p>
                         </div>
                         <div class="post-metadata">
-                            <p>Created At: <span>
-                                    <%= post.created_at %>
-                                </span></p>
-                            <p>Updated At: <span>
-                                    <%= post.created_at %>
-                                </span></p>
+                            <p> <strong>On: </strong>
+                                <%= new Date(post.created_at).toLocaleDateString()%>
+                            </p>
                         </div>
-                    </a>
-                </div>
+
+                    </div>
+                </a>
 
                 <% }) %>
         </div>

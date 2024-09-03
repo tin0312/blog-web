@@ -15,12 +15,9 @@
                     </p>
                 </div>
                 <div class="post-metadata">
-                    <p>Created At: <span>
-                            <%= post.created_at %>
-                        </span></p>
-                    <p>Updated At: <span>
-                            <%= post.created_at %>
-                        </span></p>
+                    <p> <strong>On: </strong> 
+                            <%= new Date(post.created_at).toLocaleDateString()%>
+                        </p>
                 </div>
             </div>
             <%} else {%>

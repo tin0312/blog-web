@@ -39,6 +39,7 @@ async function getAllPosts() {
 
 app.get("/", async (req, res) => {
   const posts = await getAllPosts();
+  // get onl
   res.render("newsFeed.ejs", { posts: posts });
 });
 

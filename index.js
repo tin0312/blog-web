@@ -76,7 +76,7 @@ app.delete("/delete/:id", async (req, res) => {
       "DELETE FROM posts WHERE id = $1 RETURNING*",
       [id]
     );
-    res.redirect("/my-posts");
+    res.redirect("/");
   } catch (error) {
     console.log("Error deleting posts");
   }

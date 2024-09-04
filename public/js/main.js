@@ -101,3 +101,24 @@ navIcon.addEventListener("click", () => {
     setTimeout(() => mobileNav.classList.add("show"), 10); // Allow time for hide class to be removed
   }
 });
+
+// dynamically resize textarea based on input and data passed fron the server
+const textarea = document.getElementById('auto-resizing-textarea');
+document.addEventListener('DOMContentLoaded', function() {
+  const textarea = document.getElementById('auto-resizing-textarea');
+  
+  if (textarea) {
+      // Adjust height initially based on the loaded content
+      resizeTextarea(textarea);
+
+      // Adjust height dynamically as the user inputs text
+      textarea.addEventListener('input', function() {
+          resizeTextarea(this);
+      });
+  }
+
+  function resizeTextarea(element) {
+      element.style.height = 'auto'; // Reset the height to auto to recalculate
+      element.style.height = element.scrollHeight + 'px'; // Set the height to match the content
+  }
+});

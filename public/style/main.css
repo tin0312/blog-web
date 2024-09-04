@@ -44,6 +44,12 @@ h3 {
     font-size: 1rem;
   }
 }
+p{
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-line;
+}
 .section-title {
   width: 90%;
   margin: 4rem 0;
@@ -79,11 +85,11 @@ label {
 
 input:not(:last-of-type),
 textarea {
-  padding: 0.5rem;
   border: none;
+  padding: 0.2rem;
   opacity: 0.7;
   border-radius: 0.5rem;
-  font-size: 18px;
+  font-size: 1rem;
   color: black;
   width: 100%;
 }
@@ -92,8 +98,8 @@ textarea:focus {
   outline: none;
 }
 input[type="submit"] {
-  margin-top: 1rem;
   border: none;
+  font-size: 1rem;
   width: 6rem;
   border-radius: 1rem;
   background-color: #797a71;
@@ -104,11 +110,27 @@ input[type="submit"]:hover {
   background-color: #c1ae95;
   transition: all 0.5s ease-in;
 }
+.cancel-btn{
+  height: 50px;
+  width: 6rem;
+  font-size: 1rem;
+  border-radius: 1rem;
+  background-color: white;
+  color: #797a71;
+  text-align: center;
+  padding: 0;
+  line-height: 50px;
+}
+.cancel-btn:hover{
+  background-color: #c1ae95;
+  color: white;
+  border: none;
+  transition: all 0.5s ease-in;
+}
 .form-container form {
   display: flex;
   flex-direction: column;
   width: 70vw;
-  /* height: 600px; */
   gap: 2rem;
   border: 5px solid #797a71;
   padding: 2rem;
@@ -125,6 +147,8 @@ input[type="submit"]:hover {
 }
 input {
   height: 50px;
+  border: none;
+  font-size: 2rem;
 }
 textarea {
   height: 200px;
@@ -446,7 +470,13 @@ a {
   justify-content: center;
 }
 .post-wrapper{
- height: 1000px;
+margin-top: 3rem;
+padding-bottom: 10rem;
+}
+@media only screen and (max-width: 480px){
+  .post-wrapper{
+    margin-top: 10rem;
+  }
 }
 .form-container {
   display: flex;
@@ -495,11 +525,10 @@ a {
   border: 6px solid whitesmoke;
   cursor: pointer;
 }
-.post {
+.post, .post-edit {
   display: flex;
-  width: 50vw;
+  width: 70vw;
   flex-direction: column;
-  align-items: start;
   background-color: white;
   padding: 2rem;
   margin-bottom: 10rem;
@@ -508,6 +537,16 @@ a {
   min-height: 600px;
   height: auto;
   justify-content: space-between;
+}
+.post-edit{
+  justify-content: center;
+}
+.post-edit label{
+  text-align: left;
+}
+.post-edit form{
+  display: flex;
+  flex-direction: column;
 }
 @media only screen and (max-width: 480px) {
   .post {
@@ -518,6 +557,7 @@ a {
   display: flex;
   flex-direction: row;
   gap: 1rem;
+  margin-top: 2rem;
 }
 button {
   background-color: #199319;

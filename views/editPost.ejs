@@ -3,7 +3,7 @@
 </header>
 
 <div>
-    <div class="posts-wrapper">
+    <div class="post-wrapper">
         <% if(locals.post) {%>
             <div class="post post-<%= post.id %>">
                 <form action="/update/<%= post.id %>/?_method=PATCH" method="POST">

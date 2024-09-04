@@ -15,9 +15,17 @@
                     </p>
                 </div>
                 <div class="post-metadata">
-                    <p>Created At: <span>
-                            <%= post.created_at %>
-                        </span></p>
+                    <p> <strong>On: </strong>
+                        <%= new Date(post.created_at).toLocaleDateString()%>
+                    </p>
+                        <div class="btn-container">
+                            <form method="POST" action="/delete/<%= post.id %>/?_method=DELETE">
+                                <input type="submit" value="Delete" />
+                            </form>
+                            <form method="GET" action="/edit/<%= post.id %>">
+                                <input type="submit" value="Edit">
+                            </form>
+                        </div>
                 </div>
             </div>
             <%} else {%>

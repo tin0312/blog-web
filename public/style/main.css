@@ -63,10 +63,7 @@ h3 {
 @media only screen and (max-width: 480px) {
   .section-title {
     font-size: 2rem;
-    padding: 3rem;
-    padding-left: 0;
-    font-weight: 700;
-    width: 90vw;
+    margin: 2rem 0;
   }
   .form-title {
     width: 90vw !important;
@@ -174,7 +171,7 @@ nav {
 }
 @media only screen and (max-width: 480px) {
    nav{
-    padding-bottom: 7rem;
+    padding-bottom: 5rem;
    }
 }
 .desktop-nav {
@@ -213,7 +210,7 @@ nav {
   z-index: 10000; /* Higher z-index to stay on top */
   position: absolute; /* Use absolute positioning for icons */
   right: 1rem; /* Position icons on the right side */
-  top: 1rem; /* Slight padding from top */
+  top: 1.5rem; /* Slight padding from top */
   cursor: pointer; /* Change cursor to pointer */
 }
 .nav-icon i {
@@ -476,6 +473,7 @@ a {
 }
 .post-wrapper{
 margin-top: 3rem;
+padding-bottom: 3rem;
 }
 .form-container {
   display: flex;

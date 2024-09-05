@@ -15,8 +15,11 @@
                             </h2>
                         </div>
                         <div class="post-metadata">
-                            <p> <strong>On: </strong>
+                            <p> <strong>published date: </strong>
                                 <%= new Date(post.created_at).toLocaleDateString()%>
+                            </p>
+                            <p> <strong>updated at:</strong>
+                                <%= new Date(post.updated_at).toLocaleDateString()%>
                             </p>
                         </div>
 

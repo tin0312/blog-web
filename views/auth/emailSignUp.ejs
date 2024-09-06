@@ -1,0 +1,28 @@
+<header>
+    <%- include("../partials/header.ejs") %>
+</header>
+<div>
+    <div class="post-wrapper">
+        <div class="post sign-up">
+            <form action="/add-user" method="POST">
+                <label for="title">Name</label>
+                <input type="text" id="title" name="name" />
+                <label for="title">Username</label>
+                <input type="text" id="title" name="username" />
+                <label for="title">Email</label>
+                <input type="text" id="title" name="email" />
+                <label for="password">Password</label>
+                <input type="text" pattern="[a-h1-8]+" name="password">
+                <label for="password-confirmation">Password Confirmation</label>
+                <input type="text" pattern="[a-h1-8]+" name="password-confirmation">
+                <div class="btn-container">
+                    <a class="cancel-btn" href="/emailLogin">Login</a>
+                    <input type="submit" value="Sign up" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <%- include("../partials/footer.ejs") %>
+    </footer>

@@ -129,6 +129,65 @@ app.get("/posts/:postID", async (req, res) => {
   }
 });
 
+app.get("/register", (req, res) => {
+  res.render("auth/emailSignUp.ejs");
+});
+
+app.post("/add-user", async (req, res) => {
+  const { email, password, name, username } = req.body;
+  console.log(
+    `Email: ${email} \n Password: ${password} \n name: ${name} \n username: ${username}`
+  );
+  try {
+    const result = await db.query(
+      "INSERT INTO users (name, username, email, password) VALUES ($1, $2, $3, $4) RETURNING*",
+      [name, username, email, password]
+    );
+    console.log("result after inserted", result.rows[0]);
+    res.redirect("/emailLogin");
+  } catch (error) {
+    console.log("Error adding user");
+  }
+});
+app.get("/emailLogin", (req, res) => {
+  res.render("auth/emailLogin.ejs");
+});
+app.post("/login", async (req, res) => {
+  const { usernameOrEmail, password } = req.body;
+  try {
+    const result = await getQueryForLogin(usernameOrEmail);
+    if (result.rows[0].length == 0) {
+      res.json({ message: "User not found" });
+    } else {
+      if (password == result.rows[0].password) {
+        res.redirect("/");
+      } else {
+        res.json({ message: "Invalid Password" });
+      }
+    }
+  } catch (error) {
+    console.log("Error loggin in", error);
+  }
+});
+
+async function getQueryForLogin(usernameOrEmail) {
+  const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+  try {
+    let result;
+    if (emailRegex.test(usernameOrEmail)) {
+      result = await db.query("SELECT * FROM users WHERE email = $1", [
+        usernameOrEmail,
+      ]);
+    } else {
+      result = await db.query("SELECT * FROM users WHERE username = $1", [
+        usernameOrEmail,
+      ]);
+    }
+    return result;
+  } catch (error) {
+    console.log("Error getting query for login", error);
+  }
+}
 app.listen(port, () => {
   console.log(`Blog Web app listening at http://localhost:${port}`);
 });

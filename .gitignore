@@ -1,3 +1,4 @@
 #ignore files
 /node_modules
 /.env
+/schema.sql

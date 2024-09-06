@@ -44,7 +44,7 @@ h3 {
     font-size: 1rem;
   }
 }
-.post-content{
+.post-content {
   max-width: 100%;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -73,14 +73,14 @@ label {
   font-size: 1.2rem;
   color: black;
   background-color: white;
-  width: 70px;
+  width: 100%;
   height: 70px;
   border-radius: 50%;
   text-align: center;
   line-height: 70px;
 }
 
-input:not(:last-of-type),
+input,
 textarea {
   border: none;
   padding: 0.2rem;
@@ -107,7 +107,7 @@ input[type="submit"]:hover {
   background-color: #c1ae95;
   transition: all 0.5s ease-in;
 }
-.cancel-btn{
+.cancel-btn {
   height: 50px;
   width: 6rem;
   font-size: 1rem;
@@ -118,7 +118,7 @@ input[type="submit"]:hover {
   padding: 0;
   line-height: 50px;
 }
-.cancel-btn:hover{
+.cancel-btn:hover {
   background-color: #c1ae95;
   color: white;
   border: none;
@@ -135,7 +135,7 @@ input[type="submit"]:hover {
   border-radius: 2rem;
 }
 @media only screen and (max-width: 480px) {
-  .form-container form{
+  .form-container form {
     width: 90vw;
   }
 }
@@ -170,9 +170,9 @@ nav {
   justify-content: center;
 }
 @media only screen and (max-width: 480px) {
-   nav{
+  nav {
     padding-bottom: 5rem;
-   }
+  }
 }
 .desktop-nav {
   display: flex;
@@ -464,16 +464,15 @@ a {
 
 .posts-wrapper,
 .form-wrapper,
-.post-wrapper
- {
+.post-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.post-wrapper{
-margin-top: 3rem;
-padding-bottom: 3rem;
+.post-wrapper {
+  margin-top: 3rem;
+  padding-bottom: 3rem;
 }
 .form-container {
   display: flex;
@@ -522,7 +521,8 @@ padding-bottom: 3rem;
   border: 6px solid whitesmoke;
   cursor: pointer;
 }
-.post, .post-edit {
+.post,
+.post-edit {
   display: flex;
   width: 70vw;
   flex-direction: column;
@@ -535,13 +535,13 @@ padding-bottom: 3rem;
   height: auto;
   justify-content: space-between;
 }
-.post-edit{
+.post-edit {
   justify-content: center;
 }
-.post-edit label{
+.post-edit label {
   text-align: left;
 }
-.post-edit form{
+.post-edit form {
   display: flex;
   flex-direction: column;
 }
@@ -576,11 +576,19 @@ button:hover {
   gap: 1rem;
   padding: 2rem 0 1rem 0rem;
 }
-.post-metadata p{
+.post-metadata p {
   opacity: 0.5;
 }
 @media only screen and (max-width: 480px) {
   .post-metadata {
     font-size: 0.8rem;
   }
+}
+/* Authentication */
+
+/* Sign up */
+
+.sign-up input,
+.login input {
+  border: 1px solid black;
 }

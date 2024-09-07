@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import "dotenv/config";
 import pg from "pg";
 import methodOverride from "method-override";
+import session from "express-session";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -23,6 +24,24 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 // use middleware method override to support PUT & DELETE where client doesnt support it
 app.use(methodOverride("_method"));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "default_secret", // Use an environment variable for the secret
+    resave: false, // Do not save session if unmodified
+    saveUninitialized: false, // Do not create session until something is stored
+    cookie: {
+      secure: false,
+      httpOnly: true, // Prevent client-side JS from accessing the cookie
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    },
+  })
+);
+
+// Middleware to make isAuthenticated available in all templates
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isAuthenticated || false;
+  next();
+});
 
 async function getAllPosts() {
   try {
@@ -39,14 +58,9 @@ async function getAllPosts() {
 
 app.get("/", async (req, res) => {
   const posts = await getAllPosts();
-  // get onl
   res.render("posts.ejs", { posts: posts });
 });
 
-app.get("/my-posts", async (req, res) => {
-  const posts = await getAllPosts();
-  res.render("my-posts.ejs", { posts: posts });
-});
 app.get("/create-post", (req, res) => {
   res.render("create-post.ejs", { posts });
 });
@@ -62,10 +76,6 @@ app.post("/add-post", async (req, res) => {
   } catch (error) {
     console.error(error);
   }
-});
-
-app.get("/my-posts", (req, res) => {
-  res.render("my-posts.ejs", { posts });
 });
 
 app.delete("/delete/:id", async (req, res) => {
@@ -130,7 +140,7 @@ app.get("/posts/:postID", async (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  res.render("auth/emailSignUp.ejs");
+  res.render("auth/emailSignup.ejs");
 });
 
 app.post("/add-user", async (req, res) => {
@@ -153,6 +163,7 @@ app.get("/emailLogin", (req, res) => {
   res.render("auth/emailLogin.ejs");
 });
 app.post("/login", async (req, res) => {
+  const posts = await getAllPosts();
   const { usernameOrEmail, password } = req.body;
   try {
     const result = await getQueryForLogin(usernameOrEmail);
@@ -160,6 +171,7 @@ app.post("/login", async (req, res) => {
       res.json({ message: "User not found" });
     } else {
       if (password == result.rows[0].password) {
+        req.session.isAuthenticated = true;
         res.redirect("/");
       } else {
         res.json({ message: "Invalid Password" });
@@ -188,6 +200,10 @@ async function getQueryForLogin(usernameOrEmail) {
     console.log("Error getting query for login", error);
   }
 }
+app.get("/log-out", (req, res) => {
+  req.session.destroy();
+  res.redirect("/emailLogin");
+});
 app.listen(port, () => {
   console.log(`Blog Web app listening at http://localhost:${port}`);
 });

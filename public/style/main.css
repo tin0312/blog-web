@@ -592,3 +592,15 @@ button:hover {
 .login input {
   border: 1px solid black;
 }
+
+.user-icon,
+.logout-icon {
+  width: 35px;
+  height: 35px;
+}
+.user-icon:hover,
+.logout-icon {
+  cursor: pointer;
+  transform: scale(1.4);
+  transition: all 0.5s ease-in;
+}

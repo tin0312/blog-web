@@ -14,11 +14,20 @@
         <!-- Desktop Navigation Bar -->
         <ul class="desktop-nav">
             <li><a class="nav-link" href="/">posts</a></li>
-            <li><a class="nav-link create-post-btn" href="/create-post">Create Post</a></li>
-            <li><a href="/emailLogin"> Login
+            <% if(!locals.isAuthenticated) { %>
+                <li><a href="/emailLogin">
+                        <img class="user-icon" src="/icon/user.png" alt="user-icon" />
+                    </a>
+                <li><a class="nav-link create-post-btn" href="/register">Register</a></li>
+                </li>
+                <% } else {%>
+                    <li><a class="nav-link create-post-btn" href="/create-post">Create Post</a></li>
+                    <li><a href="/log-out">
+                            <img class="user-icon" src="/icon/log-out.png" alt="user-icon" />
 
-                </a></li>
-            <li><a class="nav-link create-post-btn" href="/register">Register</a></li>
+                        </a>
+                    </li>
+                    <%} %>
         </ul>
         <!-- Menu icon -->
         <span class="nav-icon hide">
@@ -29,10 +38,19 @@
         <!-- Mobile Navigation Bar -->
         <ul class="mobile-nav hide">
             <li><a class="nav-link" href="/">posts</a></li>
-            <li><a class="nav-link create-post-btn" href="/create-post">Create Post</a></li>
-            <li><a href="/emailLogin"> Login
+            <% if(!locals.isAuthenticated) { %>
+                <li><a href="/emailLogin">
+                        <img class="user-icon" src="/icon/user.png" alt="user-icon" />
+                <li><a class="nav-link create-post-btn" href="/register">Register</a></li>
+                </a>
+                </li>
+                <% } else {%>
+                    <li><a class="nav-link create-post-btn" href="/create-post">Create Post</a></li>
+                    <li><a href="/log-out">
+                            <img class="user-icon" src="/icon/log-out.png" alt="user-icon" />
 
-                </a></li>
-            <li><a class="nav-link create-post-btn" href="/register">Register</a></li>
+                        </a>
+                    </li>
+                    <%} %>
         </ul>
     </nav>

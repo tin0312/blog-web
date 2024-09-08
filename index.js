@@ -140,7 +140,7 @@ app.get("/posts/:postID", async (req, res) => {
 });
 
 app.get("/register", (req, res) => {
-  res.render("auth/emailSignup.ejs");
+  res.render("auth/emailSignUp.ejs");
 });
 
 app.post("/add-user", async (req, res) => {
@@ -154,13 +154,13 @@ app.post("/add-user", async (req, res) => {
       [name, username, email, password]
     );
     console.log("result after inserted", result.rows[0]);
-    res.redirect("/emailLogin");
+    res.redirect("/emailLogIn");
   } catch (error) {
     console.log("Error adding user");
   }
 });
 app.get("/emailLogin", (req, res) => {
-  res.render("auth/emailLogin.ejs");
+  res.render("auth/emailLogIn.ejs");
 });
 app.post("/login", async (req, res) => {
   const posts = await getAllPosts();
@@ -202,7 +202,7 @@ async function getQueryForLogin(usernameOrEmail) {
 }
 app.get("/log-out", (req, res) => {
   req.session.destroy();
-  res.redirect("/emailLogin");
+  res.redirect("/emailLogIn");
 });
 app.listen(port, () => {
   console.log(`Blog Web app listening at http://localhost:${port}`);

@@ -43,6 +43,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// let currentUserEmail;
+let currentUserName;
+
 async function getAllPosts() {
   try {
     const posts = [];
@@ -68,10 +71,10 @@ app.get("/create-post", (req, res) => {
 app.post("/add-post", async (req, res) => {
   const { title, body } = req.body;
   try {
-    db.query("INSERT INTO posts (title, content) VALUES ($1, $2)", [
-      title,
-      body,
-    ]);
+    db.query(
+      "INSERT INTO posts (title, content, author_username) VALUES ($1, $2, $3)",
+      [title, body, currentUserName]
+    );
     res.redirect("/");
   } catch (error) {
     console.error(error);
@@ -163,7 +166,6 @@ app.get("/emailLogin", (req, res) => {
   res.render("auth/emailLogIn.ejs");
 });
 app.post("/login", async (req, res) => {
-  const posts = await getAllPosts();
   const { usernameOrEmail, password } = req.body;
   try {
     const result = await getQueryForLogin(usernameOrEmail);
@@ -190,14 +192,28 @@ async function getQueryForLogin(usernameOrEmail) {
       result = await db.query("SELECT * FROM users WHERE email = $1", [
         usernameOrEmail,
       ]);
+      await getCurrentUserName(usernameOrEmail);
     } else {
       result = await db.query("SELECT * FROM users WHERE username = $1", [
         usernameOrEmail,
       ]);
+      currentUserName = usernameOrEmail;
     }
     return result;
   } catch (error) {
     console.log("Error getting query for login", error);
+  }
+}
+
+async function getCurrentUserName(usernameOrEmail) {
+  try {
+    const result = await db.query(
+      "SELECT username from users WHERE email = $1",
+      [usernameOrEmail]
+    );
+    currentUserName = result.rows[0].username;
+  } catch (error) {
+    res.render(" Error getting current user email!");
   }
 }
 app.get("/log-out", (req, res) => {

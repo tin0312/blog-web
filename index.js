@@ -9,7 +9,7 @@ import passport from "passport";
 import { Strategy } from "passport-local";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 let posts = [];
 
 // connect to database
@@ -29,7 +29,7 @@ app.use(express.static("public"));
 app.use(methodOverride("_method"));
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "default_secret", // Use an environment variable for the secret
+    secret: process.env.SESSION_SECRET,
     resave: false, // Do not save session if unmodified
     saveUninitialized: false, // Do not create session until something is stored
     cookie: {

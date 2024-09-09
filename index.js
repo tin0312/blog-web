@@ -4,6 +4,7 @@ import "dotenv/config";
 import pg from "pg";
 import methodOverride from "method-override";
 import session from "express-session";
+import bcrypt from "bcrypt";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -148,19 +149,25 @@ app.get("/register", (req, res) => {
 
 app.post("/add-user", async (req, res) => {
   const { email, password, name, username } = req.body;
-  console.log(
-    `Email: ${email} \n Password: ${password} \n name: ${name} \n username: ${username}`
-  );
-  try {
-    const result = await db.query(
-      "INSERT INTO users (name, username, email, password) VALUES ($1, $2, $3, $4) RETURNING*",
-      [name, username, email, password]
-    );
-    console.log("result after inserted", result.rows[0]);
-    res.redirect("/emailLogIn");
-  } catch (error) {
-    console.log("Error adding user");
-  }
+  // hash user password
+  // salt rounds for layers of security
+  const saltRound = 10;
+  bcrypt.hash(password, saltRound, async (error, hash) => {
+    if (error) {
+      console.log("Error hashing", error);
+    } else {
+      try {
+        const result = await db.query(
+          "INSERT INTO users (name, username, email, password) VALUES ($1, $2, $3, $4) RETURNING*",
+          [name, username, email, hash]
+        );
+        console.log("result after inserted", result.rows[0]);
+        res.redirect("/emailLogIn");
+      } catch (error) {
+        console.log("Error adding user");
+      }
+    }
+  });
 });
 app.get("/emailLogin", (req, res) => {
   res.render("auth/emailLogIn.ejs");
@@ -172,11 +179,13 @@ app.post("/login", async (req, res) => {
     if (result.rows[0].length == 0) {
       res.json({ message: "User not found" });
     } else {
-      if (password == result.rows[0].password) {
+      const hashPassword = result.rows[0].password;
+      const match = bcrypt.compare(password, hashPassword);
+      if (match) {
         req.session.isAuthenticated = true;
         res.redirect("/");
       } else {
-        res.json({ message: "Invalid Password" });
+        res.json({ message: "Incorrect password" });
       }
     }
   } catch (error) {

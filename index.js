@@ -5,6 +5,8 @@ import pg from "pg";
 import methodOverride from "method-override";
 import session from "express-session";
 import bcrypt from "bcrypt";
+import passport from "passport";
+import { Strategy } from "passport-local";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -38,14 +40,15 @@ app.use(
   })
 );
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Middleware to make isAuthenticated available in all templates
 app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.session.isAuthenticated || false;
+  res.locals.isAuthenticated = req.isAuthenticated();
+  res.locals.user = req.user;
   next();
 });
-
-// let currentUserEmail;
-let currentUserName;
 
 async function getAllPosts() {
   try {
@@ -66,15 +69,17 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/create-post", (req, res) => {
+  // console.log("Current User Data in add route ", req.user);
   res.render("create-post.ejs", { posts });
 });
 
 app.post("/add-post", async (req, res) => {
+  const currentUsername = req.user.username;
   const { title, body } = req.body;
   try {
     db.query(
       "INSERT INTO posts (title, content, author_username) VALUES ($1, $2, $3)",
-      [title, body, currentUserName]
+      [title, body, currentUsername]
     );
     res.redirect("/");
   } catch (error) {
@@ -83,13 +88,9 @@ app.post("/add-post", async (req, res) => {
 });
 
 app.delete("/delete/:id", async (req, res) => {
-  const posts = await getAllPosts();
   const id = req.params.id;
   try {
-    const result = await db.query(
-      "DELETE FROM posts WHERE id = $1 RETURNING*",
-      [id]
-    );
+    await db.query("DELETE FROM posts WHERE id = $1 RETURNING*", [id]);
     res.redirect("/");
   } catch (error) {
     console.log("Error deleting posts");
@@ -118,10 +119,11 @@ app.patch("/update/:id", async (req, res) => {
       body: body || post.body,
     };
     try {
-      const result = await db.query(
-        "UPDATE posts SET title = $1, content = $2 WHERE id =$3",
-        [newPostContent.title, newPostContent.body, id]
-      );
+      await db.query("UPDATE posts SET title = $1, content = $2 WHERE id =$3", [
+        newPostContent.title,
+        newPostContent.body,
+        id,
+      ]);
       res.redirect("/");
     } catch (error) {
       console.log("Error saving post");
@@ -161,8 +163,11 @@ app.post("/add-user", async (req, res) => {
           "INSERT INTO users (name, username, email, password) VALUES ($1, $2, $3, $4) RETURNING*",
           [name, username, email, hash]
         );
-        console.log("result after inserted", result.rows[0]);
-        res.redirect("/emailLogIn");
+        const user = result.rows[0];
+        req.login(user, (error) => {
+          console.log(error);
+          res.redirect("/");
+        });
       } catch (error) {
         console.log("Error adding user");
       }
@@ -172,63 +177,75 @@ app.post("/add-user", async (req, res) => {
 app.get("/emailLogin", (req, res) => {
   res.render("auth/emailLogIn.ejs");
 });
-app.post("/login", async (req, res) => {
-  const { usernameOrEmail, password } = req.body;
-  try {
-    const result = await getQueryForLogin(usernameOrEmail);
-    if (result.rows[0].length == 0) {
-      res.json({ message: "User not found" });
-    } else {
-      const hashPassword = result.rows[0].password;
-      const match = bcrypt.compare(password, hashPassword);
-      if (match) {
-        req.session.isAuthenticated = true;
-        res.redirect("/");
-      } else {
-        res.json({ message: "Incorrect password" });
-      }
-    }
-  } catch (error) {
-    console.log("Error loggin in", error);
-  }
-});
+app.post(
+  "/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/emailLogIn",
+  })
+);
 
-async function getQueryForLogin(usernameOrEmail) {
+async function getQueryForLogin(username) {
   const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
   try {
     let result;
-    if (emailRegex.test(usernameOrEmail)) {
+    if (emailRegex.test(username)) {
       result = await db.query("SELECT * FROM users WHERE email = $1", [
-        usernameOrEmail,
+        username,
       ]);
-      await getCurrentUserName(usernameOrEmail);
     } else {
       result = await db.query("SELECT * FROM users WHERE username = $1", [
-        usernameOrEmail,
+        username,
       ]);
-      currentUserName = usernameOrEmail;
     }
     return result;
   } catch (error) {
     console.log("Error getting query for login", error);
   }
 }
-
-async function getCurrentUserName(usernameOrEmail) {
-  try {
-    const result = await db.query(
-      "SELECT username from users WHERE email = $1",
-      [usernameOrEmail]
-    );
-    currentUserName = result.rows[0].username;
-  } catch (error) {
-    res.render(" Error getting current user email!");
-  }
-}
 app.get("/log-out", (req, res) => {
   req.session.destroy();
   res.redirect("/emailLogIn");
 });
+
+// trigger the local strategy to authenticate the user from local passport
+passport.use(
+  new Strategy(async function verify(username, password, cb) {
+    try {
+      const result = await getQueryForLogin(username);
+
+      if (result.rows.length > 0) {
+        const user = result.rows[0];
+        const hashPassword = user.password;
+        bcrypt.compare(password, hashPassword, (error, valid) => {
+          if (error) {
+            console.log("Error comparing password");
+            return cb(err);
+          } else {
+            if (valid) {
+              return cb(null, user);
+            } else {
+              return cb(null, false);
+            }
+          }
+        });
+      } else {
+        return cb("User not found");
+      }
+    } catch (error) {
+      console.log("Loggin Error", error);
+    }
+  })
+);
+
+// store and retrieve user data from local storage
+passport.serializeUser((user, cb) => {
+  cb(null, user);
+});
+passport.deserializeUser((user, cb) => {
+  cb(null, user);
+});
+
 app.listen(port, () => {
   console.log(`Blog Web app listening at http://localhost:${port}`);
 });

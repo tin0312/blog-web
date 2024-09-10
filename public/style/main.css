@@ -469,6 +469,15 @@ a {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 1000px;
+}
+@media only screen and (max-width: 480px) {
+  .posts-wrapper {
+    height: auto;
+  }
+  .form-wrapper {
+    height: 900px;
+  }
 }
 .post-wrapper {
   margin-top: 3rem;
@@ -522,19 +531,26 @@ a {
   cursor: pointer;
 }
 .post,
-.post-edit {
+.post-edit,
+.login-form,
+.signup-form {
   display: flex;
   width: 70vw;
   flex-direction: column;
   background-color: white;
   padding: 2rem;
-  margin-bottom: 10rem;
   color: black;
   border-radius: 2rem;
   min-height: 600px;
   height: auto;
   justify-content: space-between;
 }
+.login-form,
+.signup-form {
+  width: 30vw;
+  height: auto;
+}
+
 .post-edit {
   justify-content: center;
 }
@@ -546,8 +562,10 @@ a {
   flex-direction: column;
 }
 @media only screen and (max-width: 480px) {
-  .post {
-    width: 90%;
+  .post,
+  .login-form,
+  .signup-form {
+    width: 90vw;
   }
 }
 .btn-container {
@@ -587,9 +605,8 @@ button:hover {
 /* Authentication */
 
 /* Sign up */
-
-.sign-up input,
-.login input {
+.signup-form input,
+.login-form input {
   border: 1px solid black;
 }
 

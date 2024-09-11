@@ -621,3 +621,22 @@ button:hover {
   transform: scale(1.4);
   transition: all 0.5s ease-in;
 }
+
+.google-signin-container {
+  border: 1px solid #c1ae95;
+  display: flex;
+  justify-content: center;
+}
+.google-signin-container:hover {
+  background-color: red;
+  cursor: pointer;
+  transition: all 1s ease-in-out;
+}
+.google-signin-container a:hover {
+  color: white;
+}
+@media only screen and (max-width: 480px) {
+  .google-signin-container a {
+    font-size: 1rem;
+  }
+}

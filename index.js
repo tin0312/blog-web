@@ -7,6 +7,7 @@ import session from "express-session";
 import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy } from "passport-local";
+import GoogleStrategy from "passport-google-oauth2";
 
 const app = express();
 const port = process.env.PORT;
@@ -69,7 +70,6 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/create-post", (req, res) => {
-  // console.log("Current User Data in add route ", req.user);
   res.render("create-post.ejs", { posts });
 });
 
@@ -145,8 +145,8 @@ app.get("/posts/:postID", async (req, res) => {
   }
 });
 
-app.get("/register", (req, res) => {
-  res.render("auth/emailSignUp.ejs");
+app.get("/signup", (req, res) => {
+  res.render("auth/signup.ejs");
 });
 
 app.post("/add-user", async (req, res) => {
@@ -174,14 +174,27 @@ app.post("/add-user", async (req, res) => {
     }
   });
 });
-app.get("/emailLogin", (req, res) => {
-  res.render("auth/emailLogIn.ejs");
+app.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+  })
+);
+app.get(
+  "/auth/google/googleLogIn",
+  passport.authenticate("google", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+  })
+);
+app.get("/login", (req, res) => {
+  res.render("auth/login.ejs");
 });
 app.post(
   "/login",
   passport.authenticate("local", {
     successRedirect: "/",
-    failureRedirect: "/emailLogIn",
+    failureRedirect: "/login",
   })
 );
 
@@ -205,11 +218,12 @@ async function getQueryForLogin(username) {
 }
 app.get("/log-out", (req, res) => {
   req.session.destroy();
-  res.redirect("/emailLogIn");
+  res.redirect("/login");
 });
 
 // trigger the local strategy to authenticate the user from local passport
 passport.use(
+  "local",
   new Strategy(async function verify(username, password, cb) {
     try {
       const result = await getQueryForLogin(username);
@@ -236,6 +250,37 @@ passport.use(
       console.log("Loggin Error", error);
     }
   })
+);
+
+passport.use(
+  "google",
+  new GoogleStrategy(
+    {
+      clientID: process.env.CLIENT_ID,
+      clientSecret: process.env.CLIENT_SECRET,
+      callbackURL: "http://localhost:3000/auth/google/googleLogIn",
+      userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+    },
+    async (accessToken, refreshToken, profile, cb) => {
+      console.log(profile);
+      try {
+        const result = await db.query("SELECT * FROM users WHERE email = $1", [
+          profile.email,
+        ]);
+        if (result.rows.length === 0) {
+          const newUser = await db.query(
+            "INSERT INTO users (email, password, username) VALUES($1, $2, $3) RETURNING*",
+            [profile.email, "google", profile.displayName]
+          );
+          return cb(null, newUser.rows[0]);
+        } else {
+          return cb(null, result.rows[0]);
+        }
+      } catch (error) {
+        return cb(error);
+      }
+    }
+  )
 );
 
 // store and retrieve user data from local storage

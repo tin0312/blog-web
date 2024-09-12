@@ -1,68 +1,3 @@
-// this is a way to manipulate the DOM on client side
-// it basically listen for click event, then remove the nodelist on the DOM
-
-// handle update and delete posts
-// function handleDelete(postId, buttonElement) {
-//   fetch(`/delete/${postId}`, {
-//     method: "DELETE",
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       if (data.success) {
-//         // Remove the post element from the DOM
-//         const postContainer = buttonElement.closest(".post-container");
-//         postContainer.remove();
-//       } else {
-//         console.error("Failed to delete the post");
-//       }
-//     })
-//     .catch((error) => console.error("Error:", error));
-// }
-
-// function startUpdate(postId, buttonElement) {
-//   const postContainer = buttonElement.closest(".post-container");
-//   const h3 = postContainer.querySelector("h3");
-//   const p = postContainer.querySelector("p");
-//   h3.innerHTML = `<input type="text" name="title" value="${h3.innerText}">`;
-//   p.innerHTML = `<input type="text" name="body" value="${p.innerText}">`;
-//   buttonElement.innerText = "Save";
-//   buttonElement.onclick = () => handleUpdate(postId, buttonElement);
-// }
-
-// function handleUpdate(postId, buttonElement) {
-//   const postContainer = buttonElement.closest(".post-container");
-//   const titleInput = postContainer.querySelector('input[name="title"]');
-//   const bodyInput = postContainer.querySelector('input[name="body"]');
-
-//   const updatedPost = {
-//     title: titleInput.value,
-//     body: bodyInput.value,
-//   };
-
-//   fetch(`/update/${postId}`, {
-//     method: "PUT",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(updatedPost),
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       if (data.success) {
-//         const h3 = postContainer.querySelector("h3");
-//         const p = postContainer.querySelector("p");
-//         h3.innerHTML = updatedPost.title;
-//         p.innerHTML = updatedPost.body;
-
-//         buttonElement.innerText = "Update";
-//         buttonElement.onclick = () => startUpdate(postId, buttonElement);
-//       } else {
-//         console.error("Failed to update the post");
-//       }
-//     })
-//     .catch((error) => console.error("Error:", error));
-// };
-
 // handle active links
 const navLinks = document.querySelectorAll(".nav-link");
 navLinks.forEach((link, index) => {
@@ -103,22 +38,29 @@ navIcon.addEventListener("click", () => {
 });
 
 // dynamically resize textarea based on input and data passed fron the server
-const textarea = document.getElementById('auto-resizing-textarea');
-document.addEventListener('DOMContentLoaded', function() {
-  const textarea = document.getElementById('auto-resizing-textarea');
-  
-  if (textarea) {
-      // Adjust height initially based on the loaded content
-      resizeTextarea(textarea);
+const textarea = document.getElementById("auto-resizing-textarea");
+document.addEventListener("DOMContentLoaded", function () {
+  const textarea = document.getElementById("auto-resizing-textarea");
 
-      // Adjust height dynamically as the user inputs text
-      textarea.addEventListener('input', function() {
-          resizeTextarea(this);
-      });
+  if (textarea) {
+    // Adjust height initially based on the loaded content
+    resizeTextarea(textarea);
+
+    // Adjust height dynamically as the user inputs text
+    textarea.addEventListener("input", function () {
+      resizeTextarea(this);
+    });
   }
 
   function resizeTextarea(element) {
-      element.style.height = 'auto'; // Reset the height to auto to recalculate
-      element.style.height = element.scrollHeight + 'px'; // Set the height to match the content
+    element.style.height = "auto"; // Reset the height to auto to recalculate
+    element.style.height = element.scrollHeight + "px"; // Set the height to match the content
   }
+});
+
+// user dropdown
+const userProfile = document.querySelector(".user-icon");
+const userDropDown = document.querySelector(".user-drop-down");
+userProfile.addEventListener("click", () => {
+  userDropDown.classList.toggle("hide");
 });

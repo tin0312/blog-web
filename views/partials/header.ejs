@@ -16,20 +16,31 @@
         <!-- Desktop Navigation Bar -->
         <ul class="desktop-nav">
             <li><a class="nav-link" href="/">posts</a></li>
-            <% if(!locals.isAuthenticated) { %>
-                <li><a href="/login">
+            <% if(locals.isAuthenticated) {%>
+                <li><a class="create-post-btn" href="/create-post">Create Post</a></li>
+                <% } %>
+                    <div class="user-container">
                         <img class="user-icon" src="/icon/user.png" alt="user-icon" />
-                    </a>
-                <li><a class="nav-link create-post-btn" href="/signup">Sign up</a></li>
-                </li>
-                <% } else {%>
-                    <li><a class="nav-link create-post-btn" href="/create-post">Create Post</a></li>
-                    <li><a href="/log-out">
-                            <img class="user-icon" src="/icon/log-out.png" alt="user-icon" />
+                        <div class="user-drop-down hide">
+                            <ul>
+                                <% if(!locals.isAuthenticated) { %>
+                                    <li><a class="nav-link" href="/login">Sign in</a></li>
+                                    <hr class="solid">
+                                    <li><a class="nav-link" href="/signup">Sign up</a></li>
+                                    <% } else {%>
+                                        <li><a class="nav-link" href="/user-profile">
+                                                Profile
+                                            </a></li>
+                                        <hr class="solid">
+                                        <li><a class="nav-link" href="/log-out">
+                                                <img class="user-icon" src="/icon/log-out.png" alt="user-icon" />
 
-                        </a>
-                    </li>
-                    <%} %>
+                                            </a>
+                                        </li>
+                                        <%} %>
+                            </ul>
+                        </div>
+                    </div>
         </ul>
         <!-- Menu icon -->
         <span class="nav-icon hide">

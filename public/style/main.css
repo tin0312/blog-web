@@ -167,7 +167,8 @@ footer {
 /* Navigation */
 nav {
   display: flex;
-  justify-content: center;
+  justify-content: end;
+  padding-right: 10rem;
 }
 @media only screen and (max-width: 480px) {
   nav {
@@ -402,7 +403,7 @@ a {
   padding: 0.8rem 0;
 }
 .active-link {
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid white !important;
 }
 @media only screen and (max-width: 480px) {
   .nav-icon {
@@ -432,17 +433,25 @@ a {
 .mobile-nav li {
   list-style: none;
   padding: 2rem;
+  text-align: center;
+}
+.nav-link {
+  border: 0 solid transparent;
 }
 .nav-link:hover {
-  border-radius: 0.5rem;
-  box-shadow: 10px 5px 5px white;
-  padding-right: 0.8rem;
+  color: orange;
+  border-bottom: 1px solid orange;
 }
 .create-post-btn {
   padding: 0.8rem 1rem;
   border: 1px solid white;
   border-radius: 1rem;
   transition: all 0.5s;
+}
+.create-post-btn:hover {
+  border-radius: 0.5rem;
+  box-shadow: 10px 5px 5px white;
+  padding-right: 0.8rem;
 }
 @media only screen and (max-width: 480px) {
   .create-post-btn {
@@ -612,8 +621,8 @@ button:hover {
 
 .user-icon,
 .logout-icon {
-  width: 35px;
-  height: 35px;
+  width: 50px;
+  height: 50px;
 }
 .user-icon:hover,
 .logout-icon {
@@ -639,4 +648,21 @@ button:hover {
   .google-signin-container a {
     font-size: 1rem;
   }
+}
+
+/* user drop-down */
+.user-container {
+  position: relative;
+}
+.user-drop-down {
+  position: absolute;
+  background-color: white;
+  border-radius: 1rem;
+  top: 5rem;
+  width: 150px;
+}
+hr.solid {
+  border-top: 3px solid #bbb;
+  width: 50%;
+  margin: 0 auto;
 }

@@ -1,0 +1,24 @@
+<header>
+    <%- include("partials/header.ejs") %>
+</header>
+<div class="profile-wrapper">
+    <div class="profile-container">
+        <div class="profile-content">
+            <img src="" alt="profile-image">
+            <div><button>Edit Profile</button></div>
+            <h1>
+                <%= user.username %>
+            </h1>
+            <p>Bio</p>
+            <p>Join Date</p>
+
+        </div>
+        <div class="profile-posts">
+            <%-include("userPosts.ejs") %>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <%- include("partials/footer.ejs") %>
+</footer>

@@ -221,6 +221,20 @@ app.get("/log-out", (req, res) => {
   res.redirect("/login");
 });
 
+app.get("/profile", async (req, res) => {
+  const authorUsername = req.user.username;
+  // need to pass user posts here
+  try {
+    const result = await db.query(
+      "SELECT * FROM posts WHERE author_username = $1",
+      [authorUsername]
+    );
+    const posts = result.rows;
+    res.render("profile.ejs", { posts: posts });
+  } catch (error) {
+    console.log("Error getting user posts", error);
+  }
+});
 // trigger the local strategy to authenticate the user from local passport
 passport.use(
   "local",
@@ -258,7 +272,7 @@ passport.use(
     {
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/auth/google/googleLogIn",
+      callbackURL: "https://blog-web-ennj.onrender.com/auth/google/googleLogIn",
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
     async (accessToken, refreshToken, profile, cb) => {

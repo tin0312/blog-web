@@ -2,7 +2,7 @@
     <% if(locals.posts.length){ %>
         <div class="posts-container">
             <% posts.map(post=>{ %>
-                <a href="/posts/<%= post.id %>">
+                <a href="/posts/<%= user.username %>/<%= post.id %>">
                     <div data-id="<%= post.id %> " class="post-container">
                         <div>
                             <h2>

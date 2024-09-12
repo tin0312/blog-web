@@ -139,12 +139,24 @@ app.get("/posts/:postID", async (req, res) => {
       postID,
     ]);
     const post = result.rows[0];
-    res.render("post.ejs", { post: post });
+    res.render("post.ejs", { post: post, isEditable: false });
   } catch (error) {
     res.json(error);
   }
 });
-
+app.get("/posts/:username/:postID", async (req, res) => {
+  console.log("username :", req.params.username);
+  try {
+    const result = await db.query(
+      "SELECT * FROM posts WHERE id = $1 AND author_username = $2",
+      [req.params.postID, req.params.username]
+    );
+    const post = result.rows[0];
+    res.render("post.ejs", { post: post, isEditable: true });
+  } catch (error) {
+    res.json(error);
+  }
+});
 app.get("/signup", (req, res) => {
   res.render("auth/signup.ejs");
 });
@@ -272,7 +284,7 @@ passport.use(
     {
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: "https://blog-web-ennj.onrender.com/auth/google/googleLogIn",
+      callbackURL: "http://localhost:3000/auth/google/googleLogIn",
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
     async (accessToken, refreshToken, profile, cb) => {

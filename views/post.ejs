@@ -21,6 +21,7 @@
                     <p> <strong>updated at:</strong>
                         <%= new Date(post.updated_at).toLocaleDateString()%>
                     </p>
+                    <% if(isEditable){ %>
                         <div class="btn-container">
                             <form method="POST" action="/delete/<%= post.id %>/?_method=DELETE">
                                 <input type="submit" value="Delete" />
@@ -29,6 +30,7 @@
                                 <input type="submit" value="Edit">
                             </form>
                         </div>
+                        <% } %>
                 </div>
             </div>
             <%} else {%>

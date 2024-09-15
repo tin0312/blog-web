@@ -119,9 +119,10 @@ app.patch("/update/:id", async (req, res) => {
       body: body || post.body,
     };
     try {
-      await db.query("UPDATE posts SET title = $1, content = $2 WHERE id =$3", [
+      await db.query("UPDATE posts SET title = $1, content = $2 , updated_at = $3 WHERE id =$4", [
         newPostContent.title,
         newPostContent.body,
+        new Date().toISOString(),
         id,
       ]);
       res.redirect("/");

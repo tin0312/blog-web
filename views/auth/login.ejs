@@ -2,27 +2,30 @@
 <%- include("../partials/header.ejs") %>
     </header>
     <div>
-        <div class="form-wrapper">
-            <div class="login-form">
-                <div class="google-signin-container">
-                    <a class="btn btn-block" href="/auth/google" role="button">
-                        <i class="fab fa-google"></i> Sign in with Google
-                    </a>
+        <div class="login-wrapper">
+            <!-- Manual Login Method -->
+            <form class="login-form" action="/login" method="POST">
+                <label for="title">Username or Email</label>
+                <input type="text" id="title" name="username" />
+                <label for="password">Password</label>
+                <input type="text" pattern="[a-h1-8]+" name="password">
+                <label for="password-confirmation">Password Confirmation</label>
+                <input type="text" pattern="[a-h1-8]+" name="password-confirmation">
+                <div class="btn-container">
+                    <input type="submit" value="Log in" />
                 </div>
-                <form action="/login" method="POST">
-                    <label for="title">Username or Email</label>
-                    <input type="text" id="title" name="username" />
-                    <label for="password">Password</label>
-                    <input type="text" pattern="[a-h1-8]+" name="password">
-                    <label for="password-confirmation">Password Confirmation</label>
-                    <input type="text" pattern="[a-h1-8]+" name="password-confirmation">
-                    <div class="btn-container">
-                        <input type="submit" value="Log in" />
-                    </div>
-                </form>
+            </form>
+                <!-- Devider  -->
+                <hr class="hr-text" data-content="OR">
+            <!-- Google Login Method -->
+            <div class="google-signin-container">
+                <a class="btn btn-block" href="/auth/google" role="button">
+                    <i class="fab fa-google"></i> Sign in with Google
+                </a>
             </div>
         </div>
+    </div>
 
-        <footer>
-            <%- include("../partials/footer.ejs") %>
-        </footer>
+    <footer>
+        <%- include("../partials/footer.ejs") %>
+    </footer>

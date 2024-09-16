@@ -7,20 +7,20 @@ navLinks.forEach((link, index) => {
   }
 });
 
-const navbar = document.querySelector("ul");
-// handle sticky navbar
-window.addEventListener("load", () => {
-  let top = navbar.offsetTop;
-  function stickyNavbar() {
-    if (window.scrollY > top) {
-      navbar.classList.add("sticky");
-    } else {
-      navbar.classList.remove("sticky");
-    }
-  }
+// const navbar = document.querySelector("ul");
+// // handle sticky navbar
+// window.addEventListener("load", () => {
+//   let top = navbar.offsetTop;
+//   function stickyNavbar() {
+//     if (window.scrollY > top) {
+//       navbar.classList.add("sticky");
+//     } else {
+//       navbar.classList.remove("sticky");
+//     }
+//   }
 
-  window.addEventListener("scroll", stickyNavbar);
-});
+//   window.addEventListener("scroll", stickyNavbar);
+// });
 
 // responsive navigation bar
 const mobileNav = document.querySelector(".mobile-nav");

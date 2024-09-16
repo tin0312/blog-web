@@ -28,6 +28,8 @@ body {
   background-image: url("../images/blog-bg.png");
   background-repeat: no-repeat;
   background-size: cover;
+}
+html{
   position: relative;
 }
 
@@ -69,38 +71,148 @@ h3 {
     width: 90vw !important;
   }
 }
-label {
-  font-size: 1.2rem;
-  color: black;
-  background-color: white;
-  width: 100%;
-  height: 70px;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 70px;
-}
+
+/* Input and Forms */
 
 input,
 textarea {
   border: none;
-  padding: 0.2rem;
-  opacity: 0.7;
-  border-radius: 0.5rem;
   font-size: 1rem;
   color: black;
-  width: 100%;
+  opacity: 0.7;
+  padding: 1rem;
+  border-radius: 1rem;
 }
+label{
+  padding-bottom: 1rem;
+}
+form{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 0.3rem;
+  justify-content: space-between;
+}
+
+.post,
+.post-edit,
+.login-form,
+.signup-form {
+  display: flex;
+  width: 70vw;
+  flex-direction: column;
+  background-color: rgba(236, 236, 236, 0.652);
+  padding: 2rem;
+  color: black;
+  border-radius: 2rem;
+  min-height: 600px;
+  justify-content: space-between;
+
+}
+.login-wrapper,
+.signup-wrapper
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5rem;
+  margin-bottom: 20rem;
+  gap: 10rem;
+}
+.login-form,
+.signup-form {
+  width: 40vw;
+  height: 500px;
+  min-height: auto;
+}
+@media only screen and (max-width: 480px){
+  .signup-form{
+    height: 700px;
+    padding: 2rem 1rem;
+  }
+}
+
+.google-signin-container {
+  border: 1px solid white;
+  display: flex;
+  border-radius: 1.5rem;
+  padding: 0.3rem 0.8rem;
+}
+.google-signin-container a, .divider-container p{
+  color: white;
+}
+.google-signin-container:hover {
+  background-color: red;
+  cursor: pointer;
+  transition: all 1s ease-in-out;
+}
+.google-signin-container a:hover {
+  color: white;
+}
+@media only screen and (max-width: 480px) {
+  .google-signin-container a {
+    font-size: 1rem;
+  }
+  .login-wrapper{
+    flex-direction: column;
+    gap: 3rem;
+  }
+}
+
+/* divider line */
+.hr-text {
+  border: 0;
+  line-height: 1em;
+  position: relative;
+  width: 1.5em;
+  height: 300px;
+  font-size: 1.2rem;
+}
+
+.hr-text::before {
+  content: "";
+  background-color: bisque;
+  position: absolute;
+  left: 50%;
+  height: 100%;
+  width: 2px;
+}
+
+.hr-text::after {
+  content: attr(data-content);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 7px; 
+  border-radius: 3rem;
+  color: white;
+  background-color: #080b01;
+}
+@media only  screen and (max-width: 480px) {
+  .hr-text{
+    width: 90%;
+    height: 1rem;
+  }
+  .hr-text::before{
+    width: 100%;
+    height: 2px;
+    top: 50%;
+    left: 0;
+  }
+}
+
 input:focus,
 textarea:focus {
   outline: none;
 }
 input[type="submit"] {
-  border: none;
   font-size: 1rem;
   width: 6rem;
   border-radius: 1rem;
   background-color: #797a71;
   color: white;
+  opacity: 1;
 }
 input[type="submit"]:hover {
   cursor: pointer;
@@ -142,18 +254,11 @@ input[type="submit"]:hover {
 .form-title {
   width: 70vw;
 }
-input {
-  height: 50px;
-  border: none;
-  font-size: 2rem;
-}
 textarea {
   height: 200px;
 }
-
 footer {
   display: flex;
-  margin-top: 100px;
   height: 50px;
   justify-content: center;
   align-items: center;
@@ -479,13 +584,8 @@ a {
   flex-direction: column;
   align-items: center;
 }
-@media only screen and (max-width: 480px) {
-  .posts-wrapper {
-    height: auto;
-  }
-  .form-wrapper {
-    height: 900px;
-  }
+.form-wrapper{
+  margin: 4rem auto 12rem;
 }
 .post-wrapper {
   margin-top: 3rem;
@@ -501,14 +601,14 @@ a {
 .posts-container {
   display: flex;
   flex-direction: column;
-  margin: 7rem auto 10rem;
+  margin: 6rem auto 20rem;
 }
 @media only screen and (max-width: 480px) {
   .posts-container {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    margin-bottom: 10rem;
+    margin: 2rem auto 10rem;
   }
 }
 
@@ -541,25 +641,9 @@ a {
   border: 6px solid whitesmoke;
   cursor: pointer;
 }
-.post,
-.post-edit,
-.login-form,
-.signup-form {
-  display: flex;
-  width: 70vw;
-  flex-direction: column;
-  background-color: white;
-  padding: 2rem;
-  color: black;
-  border-radius: 2rem;
-  min-height: 600px;
-  height: auto;
-  justify-content: space-between;
-}
-.login-form,
-.signup-form {
-  width: 30vw;
-  height: auto;
+
+.login-form input:not(:last-of-type){
+  width: 100%;
 }
 
 .post-edit {
@@ -602,12 +686,6 @@ a {
 }
 /* Authentication */
 
-/* Sign up */
-.signup-form input,
-.login-form input {
-  border: 1px solid black;
-}
-
 .user-icon,
 .logout-icon {
   width: 40px;
@@ -623,7 +701,11 @@ a {
 .google-signin-container {
   border: 1px solid #c1ae95;
   display: flex;
-  justify-content: center;
+  border-radius: 1.5rem;
+  padding: 0.3rem 0.8rem;
+}
+.google-signin-container a{
+  color: white;
 }
 .google-signin-container:hover {
   background-color: red;

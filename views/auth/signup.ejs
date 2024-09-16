@@ -2,19 +2,17 @@
 <%- include("../partials/header.ejs") %>
     </header>
     <div>
-        <div class="form-wrapper">
+        <div class="signup-wrapper">
             <div class="signup-form">
                 <form action="/add-user" method="POST">
-                    <label for="title">Name</label>
-                    <input type="text" id="title" name="name" />
-                    <label for="title">Username</label>
-                    <input type="text" id="title" name="username" />
-                    <label for="title">Email</label>
-                    <input type="text" id="title" name="email" />
-                    <label for="password">Password</label>
-                    <input type="text" pattern="[a-h1-8]+" name="password">
-                    <label for="password-confirmation">Password Confirmation</label>
-                    <input type="text" pattern="[a-h1-8]+" name="password-confirmation">
+
+                        <input type="text" id="title" name="name" placeholder="name" />
+
+                        <input type="text" id="title" name="username" placeholder="username" />
+                    
+                    <input type="text" id="title" name="email" placeholder="email" />
+                    <input type="text" pattern="[a-h1-8]+" name="password" placeholder="password">
+                    <input type="text" pattern="[a-h1-8]+" name="password-confirmation" placeholder="re-enter password">
                     <div class="btn-container">
                         <a class="cancel-btn" href="/login">Login</a>
                         <input type="submit" value="Sign up" />

@@ -1,5 +1,5 @@
 @font-face {
-  font-family: "Gilroy";
+  font-family: "Gilroy";http://localhost:3000/auth/google/googleLogIn
   src: url("../fonts/Gilroy/Gilroy-Reg.desktop-navar.woff") format("woff");
   font-weight: 300;
 }
@@ -115,7 +115,7 @@ form{
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 5rem;
+  margin-top: 20rem;
   margin-bottom: 20rem;
   gap: 10rem;
 }
@@ -274,6 +274,10 @@ nav {
   display: flex;
   justify-content: end;
   padding-right: 7rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+
 }
 @media only screen and (max-width: 480px) {
   nav {
@@ -527,7 +531,7 @@ a {
     border-bottom: 0.2rem solid beige;
   }
 }
-.sticky {
+.is-sticky {
   position: fixed;
   top: 0;
   background-color: #797a71;
@@ -545,7 +549,6 @@ a {
 }
 .nav-link:hover {
   color: orange;
-  border-bottom: 1px solid orange;
 }
 .create-post-btn {
   padding: 0.8rem 1rem;
@@ -583,6 +586,7 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 10rem;
 }
 .form-wrapper{
   margin: 4rem auto 12rem;
@@ -729,7 +733,7 @@ a {
   position: absolute;
   background-color: white;
   border-radius: 1rem;
-  top: 5rem;
+  top: 7rem;
   width: 150px;
 }
 hr.solid {

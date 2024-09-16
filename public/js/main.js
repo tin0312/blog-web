@@ -7,20 +7,15 @@ navLinks.forEach((link, index) => {
   }
 });
 
-// const navbar = document.querySelector("ul");
-// // handle sticky navbar
-// window.addEventListener("load", () => {
-//   let top = navbar.offsetTop;
-//   function stickyNavbar() {
-//     if (window.scrollY > top) {
-//       navbar.classList.add("sticky");
-//     } else {
-//       navbar.classList.remove("sticky");
-//     }
-//   }
-
-//   window.addEventListener("scroll", stickyNavbar);
-// });
+const navbar = document.querySelector("ul");
+window.addEventListener("scroll", () => {
+  const currentScroll = window.scrollY;
+  if (currentScroll > 100) {
+    navbar.classList.add("is-sticky");
+  } else {
+    navbar.classList.remove("is-sticky");
+  }
+});
 
 // responsive navigation bar
 const mobileNav = document.querySelector(".mobile-nav");

@@ -533,7 +533,6 @@ a {
 }
 .is-sticky {
   position: fixed;
-  top: 0;
   background-color: #797a71;
   transition: all 1s;
   z-index: 100000;

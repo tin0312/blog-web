@@ -10,7 +10,7 @@ navLinks.forEach((link, index) => {
 const navbar = document.querySelector("ul");
 window.addEventListener("scroll", () => {
   const currentScroll = window.scrollY;
-  if (currentScroll > 100) {
+  if (currentScroll > 0) {
     navbar.classList.add("is-sticky");
   } else {
     navbar.classList.remove("is-sticky");

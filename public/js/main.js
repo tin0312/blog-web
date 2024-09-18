@@ -59,3 +59,35 @@ const userDropDown = document.querySelector(".user-drop-down");
 userProfile.addEventListener("click", () => {
   userDropDown.classList.toggle("hide");
 });
+
+
+// error message
+setTimeout(() => {
+  document.querySelector(".error-message")?.classList.add("hide");
+}, 3000)
+
+// password confirmation
+const loginForm = document.querySelector(".login-form");
+const signupForm = document.querySelector(".signup-form");
+const password = document.getElementById("password");
+const passwordConfirmation = document.getElementById("password-confirmation");
+const validationMessage = document.querySelector(".validation-message")
+
+
+function validatePassword(){
+  if(password?.value !== passwordConfirmation?.value){
+    event.preventDefault();
+    console.log(password.value)
+    console.log(passwordConfirmation.value)
+    validationMessage.style.display = "block";
+    validationMessage.style.color = "red";
+    validationMessage.textContent = "Passwords do not match";
+    setTimeout(() => {
+      validationMessage.textContent = ""
+      password.value=""
+      passwordConfirmation.value=""
+    }, 3000)
+  }
+}
+loginForm?.addEventListener("submit", validatePassword);
+signupForm?.addEventListener("submit", validatePassword);

@@ -8,6 +8,7 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import { Strategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth2";
+import flash from "connect-flash";
 
 const app = express();
 const port = process.env.PORT;
@@ -43,11 +44,13 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 // Middleware to make isAuthenticated available in all templates
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated();
   res.locals.user = req.user;
+  res.locals.errorMessage = req.flash('error');
   next();
 });
 
@@ -175,17 +178,23 @@ app.post("/add-user", async (req, res) => {
       console.log("Error hashing", error);
     } else {
       try {
+        const checkUserResult = await db.query("SELECT * FROM users WHERE email = $1" ,[email])
+        if (checkUserResult.rows.length > 0) {
+           res.render("auth/signup.ejs", {errorMessage: "User already exists with the registered email!"})
+        }
+
         const result = await db.query(
           "INSERT INTO users (name, username, email, password) VALUES ($1, $2, $3, $4) RETURNING*",
           [name, username, email, hash]
         );
         const user = result.rows[0];
+
         req.login(user, (error) => {
           console.log(error);
           res.redirect("/");
         });
       } catch (error) {
-        console.log("Error adding user");
+        console.log("Error adding user", error);
       }
     }
   });
@@ -211,6 +220,7 @@ app.post(
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/login",
+    failureFlash: true, 
   })
 );
 
@@ -269,12 +279,12 @@ passport.use(
             if (valid) {
               return cb(null, user);
             } else {
-              return cb(null, false);
+              return cb(null, false, { message: "Invalid password" });
             }
           }
         });
       } else {
-        return cb("User not found");
+        return cb(null, false, {message: "User not found"});
       }
     } catch (error) {
       console.log("Loggin Error", error);

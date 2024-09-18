@@ -5,14 +5,12 @@
 <div>
     <div class="post-wrapper">
         <% if(locals.post) {%>
-            <div class="post post-edit">
+            <div class="post post-edit-form">
                 <form action="/update/<%= post.id %>/?_method=PATCH" method="POST">
-                    <label for="title">Title</label>
                     <input type="text" id="title" name="title" value="<%= post.title %>" />
-                    <label for="body">Body</label>
                     <textarea  id="auto-resizing-textarea" name="body"><%= post.content %></textarea>
                     <div class="btn-container">
-                        <a class = "cancel-btn" href="/posts/<%= post.id %>"> Cancel </a>
+                        <a class = "cancel-btn" href="/posts/<%= user.username %>/<%= post.id %>"> Cancel </a>
                         <input type="submit" value="Save" />
                     </div>
                 </form>

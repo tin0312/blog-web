@@ -54,7 +54,7 @@ h3 {
 }
 .section-title {
   width: 90%;
-  margin: 4rem 0;
+  margin: 0.2rem 0;
   text-align: left;
   font-weight: 400;
   letter-spacing: 0.5rem;
@@ -283,6 +283,9 @@ input[type="submit"]:hover {
   }
 }
 .form-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 70vw;
 }
 textarea {
@@ -345,13 +348,18 @@ nav {
   transform: translateX(0);
 }
 /* animate nav menu icon */
-.nav-icon {
+.nav-icon{
   width: 10vw;
   z-index: 10000; /* Higher z-index to stay on top */
   position: absolute; /* Use absolute positioning for icons */
   right: 1rem; /* Position icons on the right side */
   top: 1.5rem; /* Slight padding from top */
   cursor: pointer; /* Change cursor to pointer */
+}
+
+.icon{
+  width: 3.8vw;
+  color: white;
 }
 .nav-icon i {
   background-color: bisque;

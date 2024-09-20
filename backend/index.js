@@ -9,6 +9,7 @@ import passport from "passport";
 import { Strategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth2";
 import flash from "connect-flash";
+import cors from "cors";
 
 const app = express();
 const port = process.env.PORT;
@@ -22,11 +23,14 @@ const db = new pg.Client({
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
 });
-
+const corsOptions = {
+  origin: "http://localhost:3000",
+};
 db.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static("public"));
+app.use(cors(corsOptions));
 // use middleware method override to support PUT & DELETE where client doesnt support it
 app.use(methodOverride("_method"));
 app.use(
@@ -50,7 +54,7 @@ app.use(flash());
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated();
   res.locals.user = req.user;
-  res.locals.errorMessage = req.flash('error');
+  res.locals.errorMessage = req.flash("error");
   next();
 });
 
@@ -68,8 +72,12 @@ async function getAllPosts() {
 }
 
 app.get("/", async (req, res) => {
-  const posts = await getAllPosts();
-  res.render("posts.ejs", { posts: posts });
+  try {
+    const posts = await getAllPosts();
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching posts" });
+  }
 });
 
 app.get("/create-post", (req, res) => {
@@ -178,9 +186,14 @@ app.post("/add-user", async (req, res) => {
       console.log("Error hashing", error);
     } else {
       try {
-        const checkUserResult = await db.query("SELECT * FROM users WHERE email = $1" ,[email])
+        const checkUserResult = await db.query(
+          "SELECT * FROM users WHERE email = $1",
+          [email]
+        );
         if (checkUserResult.rows.length > 0) {
-           res.render("auth/signup.ejs", {errorMessage: "User already exists with the registered email!"})
+          res.render("auth/signup.ejs", {
+            errorMessage: "User already exists with the registered email!",
+          });
         }
 
         const result = await db.query(
@@ -220,7 +233,7 @@ app.post(
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/login",
-    failureFlash: true, 
+    failureFlash: true,
   })
 );
 
@@ -284,7 +297,7 @@ passport.use(
           }
         });
       } else {
-        return cb(null, false, {message: "User not found"});
+        return cb(null, false, { message: "User not found" });
       }
     } catch (error) {
       console.log("Loggin Error", error);

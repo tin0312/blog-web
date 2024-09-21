@@ -4,6 +4,8 @@ import App from "./components/App";
 import Posts from "./components/Posts/Posts";
 import PostEditor from "./components/Posts/PostEditor";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import dotenv from "dotenv";
+dotenv.config();
 
 const router = createBrowserRouter([
   {

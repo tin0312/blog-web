@@ -24,7 +24,7 @@ const db = new pg.Client({
   port: process.env.DB_PORT,
 });
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: process.env.FRONTEND_URL,
 };
 db.connect();
 app.use(bodyParser.urlencoded({ extended: true }));

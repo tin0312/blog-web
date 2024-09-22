@@ -4,7 +4,7 @@ import convertTimestamp from "../../helpers/convertTimestamp";
 function Post(props) {
   const updatedTime = convertTimestamp(props.updated_at);
   return (
-    <div className="post-container">
+    <div className={props.className || "post-container"}>
       <div>
         <h2>{props.title}</h2>
         <p className="post-content">{props.content}</p>

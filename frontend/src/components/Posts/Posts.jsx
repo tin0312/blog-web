@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Post from "./Post";
+import { Link } from "react-router-dom";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -24,14 +25,27 @@ function Posts() {
     <div className="posts-wrapper">
       <div className="posts-container">
         {posts.map((post) => (
-          <Post
-            key={post.id}
-            title={post.title}
-            content={post.content}
-            author={post.author_username}
-            createdAt={post.created_at}
-            updatedAt={post.updated_at}
-          />
+          <Link
+            to={`/posts/${post.id}`}
+            state={{
+              id: post.id,
+              title: post.title,
+              content: post.content,
+              author: post.author_username,
+              createdAt: post.created_at,
+              updatedAt: post.updated_at,
+            }}
+          >
+            <Post
+              key={post.id}
+              id={post.id}
+              title={post.title}
+              content={post.content}
+              author={post.author_username}
+              createdAt={post.created_at}
+              updatedAt={post.updated_at}
+            />
+          </Link>
         ))}
       </div>
     </div>

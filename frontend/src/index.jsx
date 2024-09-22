@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./components/App";
 import Posts from "./components/Posts/Posts";
+import PostView from "./components/Posts/PostView";
 import PostEditor from "./components/Posts/PostEditor";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import dotenv from "dotenv";
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
       {
         path: "/create-post",
         element: <PostEditor />,
+      },
+      {
+        path: "/posts/:id",
+        element: <PostView />,
       },
     ],
   },

@@ -154,7 +154,7 @@ app.get("/posts/:postID", async (req, res) => {
       postID,
     ]);
     const post = result.rows[0];
-    res.render("post.ejs", { post: post, isEditable: false });
+    res.json(post);
   } catch (error) {
     res.json(error);
   }

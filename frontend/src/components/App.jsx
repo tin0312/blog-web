@@ -2,6 +2,7 @@ import React from "react";
 import Header from "./Navigations/Header";
 import Footer from "./Navigations/Footer";
 import { Outlet } from "react-router-dom";
+import "./App.css";
 
 function App() {
   return (

@@ -26,7 +26,7 @@ function Posts() {
       <div className="posts-container">
         {posts.map((post) => (
           <Link
-            to={`/posts/${post.id}`}
+            to={`posts/${post.id}`}
             state={{
               id: post.id,
               title: post.title,

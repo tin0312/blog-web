@@ -225,9 +225,9 @@ app.get(
     failureRedirect: "/login",
   })
 );
-app.get("/login", (req, res) => {
-  res.render("auth/login.ejs");
-});
+// app.get("/login", (req, res) => {
+//   res.render("auth/login.ejs");
+// });
 app.post(
   "/login",
   passport.authenticate("local", {
@@ -279,6 +279,7 @@ passport.use(
   "local",
   new Strategy(async function verify(username, password, cb) {
     try {
+      console.log("Username & Password: ", username, password);
       const result = await getQueryForLogin(username);
 
       if (result.rows.length > 0) {

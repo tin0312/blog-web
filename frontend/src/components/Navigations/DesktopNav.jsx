@@ -1,7 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import UserMenu from "../Users/UserMenu";
 
 function DesktopNav() {
+  const [isUserMenu, setIsUserMenu] = useState(false);
+  function handleOpenUserMenu() {
+    setIsUserMenu((preState) => !preState);
+  }
   return (
     <>
       {/* Desktop Nabigation */}
@@ -18,10 +24,12 @@ function DesktopNav() {
         </li>
         <li>
           <div
+            onClick={handleOpenUserMenu}
             className="user-
-                        ntainer"
+                        container"
           >
             <img className="user-icon" src="/icon/user.png" alt="user-icon" />
+            {isUserMenu && <UserMenu />}
           </div>
         </li>
       </ul>

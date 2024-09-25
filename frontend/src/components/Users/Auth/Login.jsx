@@ -1,16 +1,24 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState();
-  const [loginError, setLoginError] = useState("");
+  // const [loginError, setLoginError] = useState("");
 
-  async function handleLogin() {
+  const navigate = useNavigate();
+
+  async function handleLogin(event) {
+    event.preventDefault();
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/login`,
+
         {
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
           method: "POST",
           body: JSON.stringify({
             username: username,
@@ -18,6 +26,11 @@ function Login() {
           }),
         }
       );
+      const data = await response.json();
+      console.log(data.message);
+      if (data.message === "Login successfully") {
+        navigate("/");
+      }
     } catch (error) {
       console.log("Error Loging In", error);
     }

@@ -184,6 +184,7 @@ app.post("/add-user", async (req, res) => {
   bcrypt.hash(password, saltRound, async (error, hash) => {
     if (error) {
       console.log("Error hashing", error);
+      return res.status(500).json({ message: "Error encrypting password" });
     } else {
       try {
         const checkUserResult = await db.query(
@@ -191,9 +192,7 @@ app.post("/add-user", async (req, res) => {
           [email]
         );
         if (checkUserResult.rows.length > 0) {
-          res.render("auth/signup.ejs", {
-            errorMessage: "User already exists with the registered email!",
-          });
+          return res.status(409).json({ message: "User already exists" });
         }
 
         const result = await db.query(
@@ -203,11 +202,17 @@ app.post("/add-user", async (req, res) => {
         const user = result.rows[0];
 
         req.login(user, (error) => {
-          console.log(error);
-          res.redirect("/");
+          if (error) {
+            console.log("Login error:", error);
+            return res.status(500).json({ message: "Error logging in user" });
+          }
+          return res.json({
+            message: "User created and logged in successfully",
+          });
         });
       } catch (error) {
         console.log("Error adding user", error);
+        return res.status(500).json({ message: "Error adding user" });
       }
     }
   });
@@ -228,14 +233,28 @@ app.get(
 // app.get("/login", (req, res) => {
 //   res.render("auth/login.ejs");
 // });
-app.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-    failureFlash: true,
-  })
-);
+app.post("/login", (req, res, next) => {
+  passport.authenticate("local", (error, user, info) => {
+    if (error) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Error executing database queries" });
+    }
+    if (!user) {
+      return res.status(401).json({ success: false, message: info.message });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ success: false, message: "Error logging in user" });
+      }
+      return res
+        .status(200)
+        .json({ success: true, message: "Login successfully", user });
+    });
+  })(req, res, next);
+});
 
 async function getQueryForLogin(username) {
   const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
@@ -301,7 +320,7 @@ passport.use(
         return cb(null, false, { message: "User not found" });
       }
     } catch (error) {
-      console.log("Loggin Error", error);
+      return cb(error);
     }
   })
 );

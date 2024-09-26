@@ -1,39 +1,18 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/AuthProvider";
 
 function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState();
+  const auth = useAuth();
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+  });
   // const [loginError, setLoginError] = useState("");
-
-  const navigate = useNavigate();
 
   async function handleLogin(event) {
     event.preventDefault();
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/login`,
-
-        {
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-          method: "POST",
-          body: JSON.stringify({
-            username: username,
-            password: password,
-          }),
-        }
-      );
-      const data = await response.json();
-      console.log(data.message);
-      if (data.message === "Login successfully") {
-        navigate("/");
-      }
-    } catch (error) {
-      console.log("Error Loging In", error);
-    }
+    auth.logIn(user);
   }
   return (
     <div>
@@ -44,7 +23,12 @@ function Login() {
             type="text"
             id="title"
             name="username"
-            onChange={(event) => setUsername(event.target.value)}
+            onChange={(event) =>
+              setUser((prevUserData) => ({
+                ...prevUserData,
+                username: event.target.value,
+              }))
+            }
             required
           />
           <label htmlFor="password">Password</label>
@@ -52,7 +36,12 @@ function Login() {
             id="password"
             type="password"
             name="password"
-            onChange={(event) => setPassword(event.target.value)}
+            onChange={(event) =>
+              setUser((prevUserData) => ({
+                ...prevUserData,
+                password: event.target.value,
+              }))
+            }
             required
           />
           <label htmlFor="password-confirmation">Password Confirmation</label>

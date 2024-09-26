@@ -29,9 +29,7 @@ function SignUp() {
           }),
         }
       );
-
-      const data = await response.json();
-      if (data.message === "User created and logged in successfully") {
+      if (response.status === 201) {
         navigate("/");
       }
     } catch (error) {

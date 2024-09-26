@@ -25,6 +25,7 @@ const db = new pg.Client({
 });
 const corsOptions = {
   origin: process.env.FRONTEND_URL,
+  credentials: true,
 };
 db.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -50,12 +51,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-// Middleware to make isAuthenticated available in all templates
-app.use((req, res, next) => {
-  res.locals.isAuthenticated = req.isAuthenticated();
-  res.locals.user = req.user;
-  res.locals.errorMessage = req.flash("error");
-  next();
+app.post("/log-out", (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      return res.status(500).json({ message: "Log Out Error" });
+    }
+    // Destroy the session and clear the cookie
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Failed to destroy session" });
+      }
+      res.clearCookie("connect.sid");
+      res.status(200).json({ message: "Logged out successfully" });
+    });
+  });
 });
 
 async function getAllPosts() {
@@ -204,10 +213,10 @@ app.post("/add-user", async (req, res) => {
         req.login(user, (error) => {
           if (error) {
             console.log("Login error:", error);
-            return res.status(500).json({ message: "Error logging in user" });
+            return res.status(500).json({ message: "Login Error" });
           }
-          return res.json({
-            message: "User created and logged in successfully",
+          return res.status(201).json({
+            message: "User created",
           });
         });
       } catch (error) {
@@ -230,9 +239,6 @@ app.get(
     failureRedirect: "/login",
   })
 );
-// app.get("/login", (req, res) => {
-//   res.render("auth/login.ejs");
-// });
 app.post("/login", (req, res, next) => {
   passport.authenticate("local", (error, user, info) => {
     if (error) {
@@ -241,13 +247,11 @@ app.post("/login", (req, res, next) => {
         .json({ success: false, message: "Error executing database queries" });
     }
     if (!user) {
-      return res.status(401).json({ success: false, message: info.message });
+      return res.status(404).json({ success: false, message: info.message });
     }
     req.logIn(user, (err) => {
       if (err) {
-        return res
-          .status(500)
-          .json({ success: false, message: "Error logging in user" });
+        return res.status(500).json({ success: false, message: info.message });
       }
       return res
         .status(200)
@@ -276,7 +280,7 @@ async function getQueryForLogin(username) {
 }
 app.get("/log-out", (req, res) => {
   req.session.destroy();
-  res.redirect("/login");
+  // res.redirect("/login");
 });
 
 app.get("/profile", async (req, res) => {

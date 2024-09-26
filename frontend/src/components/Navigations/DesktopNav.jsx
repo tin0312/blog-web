@@ -13,9 +13,9 @@ function DesktopNav() {
       {/* Desktop Nabigation */}
       <ul className="desktop-nav">
         <li>
-          <a className="nav-link" href="/">
-            posts
-          </a>
+          <Link className="nav-link" to="/">
+            home
+          </Link>
         </li>
         <li>
           <Link to="/create-post" className="create-post-btn">

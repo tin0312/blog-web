@@ -1,26 +1,38 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../hooks/AuthProvider";
 
 function UserMenu() {
+  const { user, logOut } = useAuth();
   return (
     <div className="user-drop-down">
       <ul>
-        <li>
-          <Link to="/login"> Sign in</Link>
-        </li>
-        <hr class="solid" />
-        <li>
-          <Link to="signup">Sign up</Link>
-        </li>
-        <li>
-          <Link to="/profile">Profile</Link>
-        </li>
-        <hr class="solid" />
-        <li>
-          <Link to="/log-out">
-            <img class="user-icon" src="/icon/log-out.png" alt="user-icon" />
-          </Link>
-        </li>
+        {user ? (
+          <>
+            <li>
+              <Link to="/profile">Profile</Link>
+            </li>
+            <hr class="solid" />
+            <li>
+              <img
+                class="user-icon"
+                src="/icon/log-out.png"
+                alt="logout-icon"
+                onClick={logOut}
+              />
+            </li>
+          </>
+        ) : (
+          <>
+            <li>
+              <Link to="/login"> Sign in</Link>
+            </li>
+            <hr class="solid" />
+            <li>
+              <Link to="/signup">Sign up</Link>
+            </li>
+          </>
+        )}
       </ul>
     </div>
   );

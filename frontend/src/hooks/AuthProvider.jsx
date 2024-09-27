@@ -49,7 +49,7 @@ function AuthProvider({ children }) {
         }
       );
       const data = await response.json();
-      console.log(data.user);
+      console.log("User in auth hook", data.user);
       if (response.status === 200) {
         setUser(data.user);
         navigate("/");

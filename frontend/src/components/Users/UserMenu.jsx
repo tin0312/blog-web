@@ -4,6 +4,7 @@ import { useAuth } from "../../hooks/AuthProvider";
 
 function UserMenu() {
   const { user, logOut } = useAuth();
+  console.log("User in Menue Dropdown ", user);
   return (
     <div className="user-drop-down">
       <ul>

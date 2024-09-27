@@ -8,6 +8,7 @@ import LogIn from "./components/Users/Auth/LogIn";
 import SignUp from "./components/Users/Auth/SignUp";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import dotenv from "dotenv";
+import UserProfile from "./components/Users/UserProfile";
 dotenv.config();
 
 const router = createBrowserRouter([
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "/posts/:id",
         element: <PostView />,
+      },
+      {
+        path: "/profile",
+        element: <UserProfile />,
       },
     ],
   },

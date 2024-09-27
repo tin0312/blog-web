@@ -51,22 +51,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-app.post("/log-out", (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      return res.status(500).json({ message: "Log Out Error" });
-    }
-    // Destroy the session and clear the cookie
-    req.session.destroy((err) => {
-      if (err) {
-        return res.status(500).json({ message: "Failed to destroy session" });
-      }
-      res.clearCookie("connect.sid");
-      res.status(200).json({ message: "Logged out successfully" });
-    });
-  });
-});
-
 async function getAllPosts() {
   try {
     const posts = [];
@@ -79,7 +63,13 @@ async function getAllPosts() {
     console.error(error);
   }
 }
-
+app.get("/current-user", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json(req.user);
+  } else {
+    res.status(401).json({ message: "User is not authenticated" });
+  }
+});
 app.get("/", async (req, res) => {
   try {
     const posts = await getAllPosts();
@@ -168,6 +158,22 @@ app.get("/posts/:postID", async (req, res) => {
     res.json(error);
   }
 });
+app.get("/posts/:username", async (req, res) => {
+  console.log("Post for username route handler is being hit");
+  const username = req.params.username;
+  console.log(username);
+  try {
+    const result = await db.query(
+      "SELECT * FROM posts WHERE author_username = $1",
+      [username]
+    );
+    console.log(result);
+    const posts = result.rows;
+    res.json(posts);
+  } catch (error) {
+    res.status(404).json({ message: "Posts not found!" });
+  }
+});
 app.get("/posts/:username/:postID", async (req, res) => {
   console.log("username :", req.params.username);
   try {
@@ -176,7 +182,8 @@ app.get("/posts/:username/:postID", async (req, res) => {
       [req.params.postID, req.params.username]
     );
     const post = result.rows[0];
-    res.render("post.ejs", { post: post, isEditable: true });
+    // res.render("post.ejs", { post: post, isEditable: true });
+    res.json(post);
   } catch (error) {
     res.json(error);
   }
@@ -278,11 +285,21 @@ async function getQueryForLogin(username) {
     console.log("Error getting query for login", error);
   }
 }
-app.get("/log-out", (req, res) => {
-  req.session.destroy();
-  // res.redirect("/login");
+app.post("/log-out", (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      return res.status(500).json({ message: "Log Out Error" });
+    }
+    // Destroy the session and clear the cookie
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: "Failed to destroy session" });
+      }
+      res.clearCookie("connect.sid");
+      res.status(200).json({ message: "Logged out successfully" });
+    });
+  });
 });
-
 app.get("/profile", async (req, res) => {
   const authorUsername = req.user.username;
   // need to pass user posts here

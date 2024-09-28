@@ -6,36 +6,28 @@ import dotenv from "dotenv";
 dotenv.config();
 
 function Posts(props) {
-  if (props.user) {
-    console.log(
-      "Username in Posts when user available is ",
-      props.user.username
-    );
-  }
-  // console.log("User in Posts is ", props.user.username);
-
   const [posts, setPosts] = useState([]);
   const serverURL = process.env.REACT_APP_BACKEND_URL;
   useEffect(() => {
     async function fetchPosts() {
       try {
-        let response;
-        if (!props.user) {
-          response = await fetch(serverURL);
-        } else {
-          response = await fetch(
-            `${serverURL}/posts/${encodeURIComponent(props.user.username)}`
-          );
-        }
+        let response = await fetch(
+          `${serverURL}${
+            props.user
+              ? `/${encodeURIComponent(props.user.username)}/posts`
+              : ""
+          }`
+        );
         const data = await response.json();
         setPosts(data);
-        console.log("Data fetch with or without user: ", data);
       } catch (error) {
-        console.log("Error fetching posts, ", error);
+        console.log("Error fetching posts: ", error);
       }
     }
+
     fetchPosts();
   }, [props.user, serverURL]);
+
   return (
     <div className="posts-wrapper">
       <div className="posts-container">

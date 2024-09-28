@@ -71,6 +71,7 @@ app.get("/current-user", (req, res) => {
   }
 });
 app.get("/", async (req, res) => {
+  console.log("I am being hit");
   try {
     const posts = await getAllPosts();
     res.json(posts);
@@ -158,22 +159,28 @@ app.get("/posts/:postID", async (req, res) => {
     res.json(error);
   }
 });
-app.get("/posts/:username", async (req, res) => {
-  console.log("Post for username route handler is being hit");
-  const username = req.params.username;
-  console.log(username);
+app.get("/:username/posts", async (req, res) => {
+  console.log("I am being hit with the user");
+  const username = decodeURIComponent(req.params.username.trim()); // Ensure username is clean
+  console.log("Fetched username:", username); // Log to check
+
   try {
     const result = await db.query(
       "SELECT * FROM posts WHERE author_username = $1",
       [username]
     );
-    console.log(result);
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "No posts found for this user." });
+    }
     const posts = result.rows;
+    console.log("Posts found for user:", posts); // Check if correct posts are fetched
     res.json(posts);
   } catch (error) {
-    res.status(404).json({ message: "Posts not found!" });
+    console.error("Error fetching posts:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 app.get("/posts/:username/:postID", async (req, res) => {
   console.log("username :", req.params.username);
   try {
@@ -182,7 +189,6 @@ app.get("/posts/:username/:postID", async (req, res) => {
       [req.params.postID, req.params.username]
     );
     const post = result.rows[0];
-    // res.render("post.ejs", { post: post, isEditable: true });
     res.json(post);
   } catch (error) {
     res.json(error);

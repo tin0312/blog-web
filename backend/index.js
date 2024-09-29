@@ -71,7 +71,6 @@ app.get("/current-user", (req, res) => {
   }
 });
 app.get("/", async (req, res) => {
-  console.log("I am being hit");
   try {
     const posts = await getAllPosts();
     res.json(posts);
@@ -100,6 +99,7 @@ app.post("/add-post", async (req, res) => {
 
 app.delete("/delete/:id", async (req, res) => {
   const id = req.params.id;
+  console.log("Delete route getting hit");
   try {
     await db.query("DELETE FROM posts WHERE id = $1 RETURNING*", [id]);
     res.redirect("/");
@@ -110,6 +110,7 @@ app.delete("/delete/:id", async (req, res) => {
 
 app.get("/edit/:id", async (req, res) => {
   const id = req.params.id;
+  console.log("Edit route getting hit");
   try {
     const result = await db.query("SELECT * FROM posts WHERE id = $1", [id]);
     res.render("editPost.ejs", {
@@ -171,7 +172,6 @@ app.get("/:username/posts", async (req, res) => {
       return res.status(404).json({ message: "No posts found for this user." });
     }
     const posts = result.rows;
-    console.log("Posts found for user:", posts); // Check if correct posts are fetched
     res.json(posts);
   } catch (error) {
     console.error("Error fetching posts:", error);

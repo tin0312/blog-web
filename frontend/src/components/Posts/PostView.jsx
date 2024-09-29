@@ -40,6 +40,7 @@ function PostView() {
         content={state?.content || post?.content}
         author={state?.author || post?.author_username}
         createdAt={state?.createdAt || post?.created_at}
+        authenticatedUser={state?.authenticatedUser || null}
         // updatedAt={state.updatedAt || post.updated_at}
         className="post"
       />

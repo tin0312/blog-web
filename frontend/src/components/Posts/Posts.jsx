@@ -36,7 +36,7 @@ function Posts(props) {
             key={post.id}
             to={
               props.user
-                ? `posts/${props.user.username}/${post.id}`
+                ? `/${props.user.username}/posts/${post.id}`
                 : `posts/${post.id}`
             }
             state={{
@@ -46,6 +46,7 @@ function Posts(props) {
               author: post.author_username,
               createdAt: post.created_at,
               updatedAt: post.updated_at,
+              authenticatedUser: props.user?.username,
             }}
           >
             <Post

@@ -244,11 +244,26 @@ input[type="submit"] {
   background-color: #797a71;
   color: white;
   opacity: 1;
+  border: none;
 }
 input[type="submit"]:hover {
   cursor: pointer;
   background-color: #c1ae95;
   transition: all 0.5s ease-in;
+}
+
+.btn-container button {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 2rem;
+}
+.btn-container button:last-child {
+  background-color: #797a71;
+  color: white;
+}
+.btn-container button:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }
 .cancel-btn {
   height: 50px;

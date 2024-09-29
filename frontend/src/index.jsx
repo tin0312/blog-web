@@ -40,6 +40,10 @@ const router = createBrowserRouter([
         path: "/profile",
         element: <UserProfile />,
       },
+      {
+        path: "/:username/posts/:id",
+        element: <PostView />,
+      },
     ],
   },
 ]);

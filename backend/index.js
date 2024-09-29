@@ -160,9 +160,7 @@ app.get("/posts/:postID", async (req, res) => {
   }
 });
 app.get("/:username/posts", async (req, res) => {
-  console.log("I am being hit with the user");
-  const username = decodeURIComponent(req.params.username.trim()); // Ensure username is clean
-  console.log("Fetched username:", username); // Log to check
+  const username = decodeURIComponent(req.params.username.trim());
 
   try {
     const result = await db.query(

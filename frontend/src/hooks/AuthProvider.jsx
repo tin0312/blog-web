@@ -1,35 +1,41 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
   const navigate = useNavigate();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   // Fetch the current user when the app loads
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/current-user`,
-          {
-            credentials: "include",
+    if (!user) {
+      const fetchCurrentUser = async () => {
+        try {
+          const response = await fetch(
+            `${process.env.REACT_APP_BACKEND_URL}/current-user`,
+            {
+              credentials: "include",
+            }
+          );
+          if (response.status === 200) {
+            const userData = await response.json();
+            localStorage.setItem("user", JSON.stringify(userData));
+            setUser(userData);
+          } else {
+            setUser(null);
           }
-        );
-        if (response.status === 200) {
-          const userData = await response.json();
-          setUser(userData);
-        } else {
-          setUser(null);
+        } catch (error) {
+          console.log("Error fetching current user", error);
         }
-      } catch (error) {
-        console.log("Error fetching current user", error);
-      }
-    };
+      };
 
-    fetchCurrentUser();
-  }, []);
+      fetchCurrentUser();
+    }
+  }, [user]);
 
   async function logIn(userData) {
     try {

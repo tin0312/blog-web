@@ -1,13 +1,19 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 
 function PostEditor() {
+  const { state } = useLocation();
   return (
     <div>
       <div className="post-wrapper">
         <div className="post post-edit-form">
           <form action="" method="POST">
-            <input type="text" id="title" name="title" />
-            <textarea id="auto-resizing-textarea" name="body"></textarea>
+            <input type="text" id="title" name="title" value={state.title} />
+            <textarea
+              id="auto-resizing-textarea"
+              name="body"
+              value={state.body}
+            ></textarea>
             <div className="btn-container">
               <a
                 className="cancel-btn"

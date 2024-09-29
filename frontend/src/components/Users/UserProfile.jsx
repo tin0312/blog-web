@@ -3,7 +3,6 @@ import { useAuth } from "../../hooks/AuthProvider";
 import Posts from "../Posts/Posts";
 function UserProfile() {
   const { user } = useAuth();
-  console.log("user in User Profile ", user);
   return (
     <div className="profile-wrapper">
       <div className="profile-container">

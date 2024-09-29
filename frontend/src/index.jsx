@@ -44,6 +44,10 @@ const router = createBrowserRouter([
         path: "/:username/posts/:id",
         element: <PostView />,
       },
+      {
+        path: "/edit/:id",
+        element: <PostEditor />,
+      },
     ],
   },
 ]);

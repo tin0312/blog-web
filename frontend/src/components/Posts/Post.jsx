@@ -1,6 +1,7 @@
 import React from "react";
 import convertTimestamp from "../../helpers/convertTimestamp";
 import { useNavigate } from "react-router-dom";
+import { title } from "process";
 
 function Post(props) {
   const navigate = useNavigate();
@@ -17,8 +18,13 @@ function Post(props) {
     }
   }
 
-  function hanldeEditPost(id) {
-    navigate(`/edit/${id}`);
+  function hanldeEditPost(id, title, body) {
+    navigate(`/edit/${id}`, {
+      state: {
+        title,
+        body,
+      },
+    });
   }
 
   const updatedTime = convertTimestamp(props.updated_at);
@@ -37,8 +43,14 @@ function Post(props) {
         <p>{updatedTime && updatedTime}</p>
         {props.authenticatedUser && (
           <div class="btn-container">
-            <button onClick={(id) => hanldeDeletePost(id)}>Delete</button>
-            <button onClick={(id) => hanldeEditPost(id)}>Edit</button>
+            <button onClick={() => hanldeDeletePost(props.id)}>Delete</button>
+            <button
+              onClick={() =>
+                hanldeEditPost(props.id, props.title, props.content)
+              }
+            >
+              Edit
+            </button>
           </div>
         )}
       </div>

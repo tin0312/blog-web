@@ -1,13 +1,14 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function CreatePost() {
+  const navigate = useNavigate();
   const [post, setPost] = useState({
     title: "",
     content: "",
   });
   async function handlePost(event) {
     event.preventDefault();
-    console.log("Post is being created...");
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/add-post`,
@@ -23,6 +24,9 @@ function CreatePost() {
           credentials: "include",
         }
       );
+      if (response.status === 201) {
+        navigate("/");
+      }
     } catch (error) {
       console.log("Error saving post", error);
     }

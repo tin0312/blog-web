@@ -2,7 +2,6 @@ import express from "express";
 import bodyParser from "body-parser";
 import "dotenv/config";
 import pg from "pg";
-import methodOverride from "method-override";
 import session from "express-session";
 import bcrypt from "bcrypt";
 import passport from "passport";
@@ -13,7 +12,6 @@ import cors from "cors";
 
 const app = express();
 const port = process.env.PORT;
-let posts = [];
 
 // connect to database
 const db = new pg.Client({
@@ -28,27 +26,25 @@ const corsOptions = {
   credentials: true,
 };
 db.connect();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(express.static("public"));
-app.use(cors(corsOptions));
-// use middleware method override to support PUT & DELETE where client doesnt support it
-app.use(methodOverride("_method"));
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
-    resave: false, // Do not save session if unmodified
-    saveUninitialized: false, // Do not create session until something is stored
+    resave: false,
+    saveUninitialized: false,
     cookie: {
       secure: false,
-      httpOnly: true, // Prevent client-side JS from accessing the cookie
-      maxAge: 1000 * 60 * 60 * 24, // 1 day
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,
     },
   })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(express.static("public"));
+app.use(cors(corsOptions));
 app.use(flash());
 
 async function getAllPosts() {
@@ -80,18 +76,16 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/add-post", (req, res) => {
-  console.log("Add post route handler TRIGGERED");
-  console.log("Is the user authenticated?", req.isAuthenticated());
-  // const { title, body } = req.body;
-  // try {
-  //   db.query(
-  //     "INSERT INTO posts (title, content, author_username) VALUES ($1, $2, $3)",
-  //     [title, body, currentUsername]
-  //   );
-  //   res.redirect("/");
-  // } catch (error) {
-  //   console.error(error);
-  // }
+  const { title, content } = req.body;
+  try {
+    db.query(
+      "INSERT INTO posts (title, content, author_username) VALUES ($1, $2, $3)",
+      [title, content, req.user.username]
+    );
+    res.status(201).json({ message: "Post saved" });
+  } catch (error) {
+    res.status(500).json({ message: "Error saving post" });
+  }
 });
 
 app.delete("/delete/:id", async (req, res) => {
@@ -220,10 +214,6 @@ app.post("/add-user", async (req, res) => {
             console.log("Login error:", error);
             return res.status(500).json({ message: "Login Error" });
           }
-          console.log(
-            "Is user authenticated in Sign up",
-            req.isAuthenticated()
-          );
           return res.status(201).json({
             message: "User created",
             user: req.user,

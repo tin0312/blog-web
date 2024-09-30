@@ -55,7 +55,6 @@ function AuthProvider({ children }) {
         }
       );
       const data = await response.json();
-      console.log("User in auth hook", data.user);
       if (response.status === 200) {
         setUser(data.user);
         navigate("/");
@@ -71,13 +70,14 @@ function AuthProvider({ children }) {
         credentials: "include",
       });
       setUser(null);
+      localStorage.clear();
       navigate("/login");
     } catch (error) {
       console.log("Error Logging Out", error);
     }
   }
   return (
-    <AuthContext.Provider value={{ user, logIn, logOut }}>
+    <AuthContext.Provider value={{ user, logIn, logOut, setUser }}>
       {children}
     </AuthContext.Provider>
   );

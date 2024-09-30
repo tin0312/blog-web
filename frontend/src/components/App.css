@@ -97,14 +97,16 @@ form {
 .post,
 .login-form,
 .signup-form {
-  display: flex;
-  width: 70vw;
-  flex-direction: column;
   background-color: rgba(236, 236, 236, 0.652);
   padding: 2rem;
   color: black;
   border-radius: 2rem;
   min-height: 600px;
+}
+.post {
+  width: 70vw;
+  display: flex;
+  flex-direction: column;
   justify-content: space-between;
 }
 .post-edit-form form {
@@ -639,6 +641,7 @@ a {
   flex-direction: column;
   align-items: center;
   margin: 10rem auto;
+  padding-top: 7rem;
 }
 @media only screen and (max-width: 480px) {
   .posts-wrapper,
@@ -663,8 +666,17 @@ a {
 .posts-container {
   display: flex;
   flex-direction: column;
-  margin: 6rem auto 20rem;
+  margin: 0 auto 20rem;
   gap: 3rem;
+}
+.posts-container .info-message {
+  background-color: #c1ae95;
+  padding: 1em;
+  color: white;
+  width: 20%;
+  text-align: center;
+  border-radius: 2rem;
+  align-self: center;
 }
 @media only screen and (max-width: 480px) {
   .posts-container {

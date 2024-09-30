@@ -79,22 +79,19 @@ app.get("/", async (req, res) => {
   }
 });
 
-app.get("/create-post", (req, res) => {
-  res.render("create-post.ejs", { posts });
-});
-
-app.post("/add-post", async (req, res) => {
-  const currentUsername = req.user.username;
-  const { title, body } = req.body;
-  try {
-    db.query(
-      "INSERT INTO posts (title, content, author_username) VALUES ($1, $2, $3)",
-      [title, body, currentUsername]
-    );
-    res.redirect("/");
-  } catch (error) {
-    console.error(error);
-  }
+app.post("/add-post", (req, res) => {
+  console.log("Add post route handler TRIGGERED");
+  console.log("Is the user authenticated?", req.isAuthenticated());
+  // const { title, body } = req.body;
+  // try {
+  //   db.query(
+  //     "INSERT INTO posts (title, content, author_username) VALUES ($1, $2, $3)",
+  //     [title, body, currentUsername]
+  //   );
+  //   res.redirect("/");
+  // } catch (error) {
+  //   console.error(error);
+  // }
 });
 
 app.delete("/delete/:id", async (req, res) => {
@@ -192,9 +189,6 @@ app.get("/posts/:username/:postID", async (req, res) => {
     res.json(error);
   }
 });
-app.get("/signup", (req, res) => {
-  res.render("auth/signup.ejs");
-});
 
 app.post("/add-user", async (req, res) => {
   const { email, password, name, username } = req.body;
@@ -221,13 +215,18 @@ app.post("/add-user", async (req, res) => {
         );
         const user = result.rows[0];
 
-        req.login(user, (error) => {
+        req.logIn(user, (error) => {
           if (error) {
             console.log("Login error:", error);
             return res.status(500).json({ message: "Login Error" });
           }
+          console.log(
+            "Is user authenticated in Sign up",
+            req.isAuthenticated()
+          );
           return res.status(201).json({
             message: "User created",
+            user: req.user,
           });
         });
       } catch (error) {

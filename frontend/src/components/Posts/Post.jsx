@@ -1,7 +1,6 @@
 import React from "react";
 import convertTimestamp from "../../helpers/convertTimestamp";
 import { useNavigate } from "react-router-dom";
-import { title } from "process";
 
 function Post(props) {
   const navigate = useNavigate();

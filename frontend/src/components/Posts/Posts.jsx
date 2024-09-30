@@ -7,6 +7,7 @@ dotenv.config();
 
 function Posts(props) {
   const [posts, setPosts] = useState([]);
+  const [info, setInfo] = useState("");
   const serverURL = process.env.REACT_APP_BACKEND_URL;
   useEffect(() => {
     async function fetchPosts() {
@@ -19,6 +20,9 @@ function Posts(props) {
           }`
         );
         const data = await response.json();
+        if (response.status === 404) {
+          setInfo(data.message);
+        }
         setPosts(data);
       } catch (error) {
         console.log("Error fetching posts: ", error);
@@ -31,35 +35,39 @@ function Posts(props) {
   return (
     <div className="posts-wrapper">
       <div className="posts-container">
-        {posts.map((post) => (
-          <Link
-            key={post.id}
-            to={
-              props.user
-                ? `/${props.user.username}/posts/${post.id}`
-                : `posts/${post.id}`
-            }
-            state={{
-              id: post.id,
-              title: post.title,
-              content: post.content,
-              author: post.author_username,
-              createdAt: post.created_at,
-              updatedAt: post.updated_at,
-              authenticatedUser: props.user?.username,
-            }}
-          >
-            <Post
+        {info === "" ? (
+          posts.map((post) => (
+            <Link
               key={post.id}
-              id={post.id}
-              title={post.title}
-              content={post.content}
-              author={post.author_username}
-              createdAt={post.created_at}
-              updatedAt={post.updated_at}
-            />
-          </Link>
-        ))}
+              to={
+                props.user
+                  ? `/${props.user.username}/posts/${post.id}`
+                  : `posts/${post.id}`
+              }
+              state={{
+                id: post.id,
+                title: post.title,
+                content: post.content,
+                author: post.author_username,
+                createdAt: post.created_at,
+                updatedAt: post.updated_at,
+                authenticatedUser: props.user?.username,
+              }}
+            >
+              <Post
+                key={post.id}
+                id={post.id}
+                title={post.title}
+                content={post.content}
+                author={post.author_username}
+                createdAt={post.created_at}
+                updatedAt={post.updated_at}
+              />
+            </Link>
+          ))
+        ) : (
+          <p className="info-message">Posts not available</p>
+        )}
       </div>
     </div>
   );

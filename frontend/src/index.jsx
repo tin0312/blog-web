@@ -4,6 +4,7 @@ import App from "./components/App";
 import Posts from "./components/Posts/Posts";
 import PostView from "./components/Posts/PostView";
 import PostEditor from "./components/Posts/PostEditor";
+import CreatePost from "./components/Posts/CreatePost";
 import LogIn from "./components/Users/Auth/LogIn";
 import SignUp from "./components/Users/Auth/SignUp";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/create-post",
-        element: <PostEditor />,
+        element: <CreatePost />,
       },
       {
         path: "/login",

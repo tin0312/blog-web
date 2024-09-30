@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/AuthProvider";
 
 function SignUp() {
   const [name, setName] = useState("");
@@ -7,6 +8,7 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const { setUser } = useAuth();
 
   const navigate = useNavigate();
 
@@ -27,9 +29,12 @@ function SignUp() {
             email,
             password,
           }),
+          credentials: "include",
         }
       );
+      const data = await response.json();
       if (response.status === 201) {
+        setUser(data.user);
         navigate("/");
       }
     } catch (error) {

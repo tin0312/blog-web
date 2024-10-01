@@ -15,26 +15,31 @@ function MobileNav() {
             posts
           </a>
         </li>
+
         <li>
           <a href="/login">
             <img className="user-icon" src="/icon/user.png" alt="user-icon" />
-            <li>
-              <a className="nav-link create-post-btn" href="/signup">
-                Register
-              </a>
-            </li>
           </a>
         </li>
+
+        <li>
+          <a className="nav-link create-post-btn" href="/signup">
+            Register
+          </a>
+        </li>
+
         <li>
           <a className="nav-link create-post-btn" href="/create-post">
             Create Post
           </a>
         </li>
+
         <li>
           <a className="nav-link" href="/profile">
             Profile
           </a>
         </li>
+
         <li>
           <a href="/log-out">
             <img

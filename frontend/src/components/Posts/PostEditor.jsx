@@ -1,27 +1,85 @@
-import React from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 
 function PostEditor() {
   const { state } = useLocation();
+  const [post, setPost] = useState({
+    title: state.title,
+    content: state.content,
+  });
+  const navigate = useNavigate();
+  console.log("State in Editor", state);
+  async function handleEdit(event) {
+    event.preventDefault();
+    try {
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/update/${state.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8",
+          },
+          body: JSON.stringify({
+            title: post.title,
+            content: post.content,
+          }),
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      if (response.status === 200) {
+        navigate(`/${state.author}/posts/${state.id}`, {
+          state: {
+            id: state.id,
+            title: data.post.title,
+            content: data.post.content,
+            author: state.author,
+            authenticatedUser: state.authenticatedUser,
+            createdAt: state.createdAt,
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error editting post", error);
+    }
+  }
   return (
     <div>
       <div className="post-wrapper">
         <div className="post post-edit-form">
-          <form action="" method="POST">
-            <input type="text" id="title" name="title" value={state.title} />
+          <form onSubmit={handleEdit}>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={post.title}
+              onChange={(event) =>
+                setPost((post) => ({ ...post, title: event.target.value }))
+              }
+            />
             <textarea
               id="auto-resizing-textarea"
               name="body"
-              value={state.body}
+              value={post.content}
+              onChange={(event) =>
+                setPost((post) => ({ ...post, content: event.target.value }))
+              }
             ></textarea>
             <div className="btn-container">
-              <a
+              <Link
+                state={{
+                  id: state.id,
+                  title: state.title,
+                  content: state.content,
+                  author: state.author,
+                  authenticatedUser: state.authenticatedUser,
+                  createdAt: state.createdAt,
+                }}
                 className="cancel-btn"
-                href="/posts/<%= user.username %>/<%= post.id %>"
+                to={`/${state.author}/posts/${state.id}`}
               >
-                {" "}
-                Cancel{" "}
-              </a>
+                Cancel
+              </Link>
               <input type="submit" value="Save" />
             </div>
           </form>

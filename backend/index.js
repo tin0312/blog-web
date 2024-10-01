@@ -61,7 +61,7 @@ async function getAllPosts() {
 }
 app.get("/current-user", (req, res) => {
   if (req.isAuthenticated()) {
-    res.json(req.user);
+    res.status(200).json(req.user);
   } else {
     res.status(401).json({ message: "User is not authenticated" });
   }
@@ -99,44 +99,32 @@ app.delete("/delete/:id", async (req, res) => {
   }
 });
 
-app.get("/edit/:id", async (req, res) => {
-  const id = req.params.id;
-  console.log("Edit route getting hit");
-  try {
-    const result = await db.query("SELECT * FROM posts WHERE id = $1", [id]);
-    res.render("editPost.ejs", {
-      post: result.rows[0],
-    });
-  } catch (error) {
-    console.log("Error fetching post");
-  }
-});
 app.patch("/update/:id", async (req, res) => {
-  const { title, body } = req.body;
+  const { title, content } = req.body;
   const id = req.params.id;
   try {
     const result = await db.query("SELECT * FROM posts WHERE id = $1", [id]);
     const post = result.rows[0];
     const newPostContent = {
       title: title || post.title,
-      body: body || post.body,
+      content: content || post.body,
     };
     try {
       await db.query(
         "UPDATE posts SET title = $1, content = $2 , updated_at = $3 WHERE id =$4",
         [
           newPostContent.title,
-          newPostContent.body,
+          newPostContent.content,
           new Date().toISOString(),
           id,
         ]
       );
-      res.redirect("/");
+      res.status(200).json({ message: "Post updated", post: newPostContent });
     } catch (error) {
-      console.log("Error saving post");
+      res.status(500).json({ message: "Error updating post" });
     }
   } catch (error) {
-    console.log("Error locating selected post");
+    res.status(500).json({ message: "Error locating post" });
   }
 });
 app.get("/posts/:postID", async (req, res) => {

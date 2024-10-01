@@ -701,11 +701,11 @@ a {
   justify-content: space-between;
   box-shadow: 0 0 10px #c3c2c0;
   border-radius: 10px;
-  padding: 3rem 0 0 2rem;
+  padding: 3rem 2rem 0 2rem;
   background-color: #c1ae95;
   transition: all 0.2s ease-in-out;
   border: 0 solid transparent;
-  height: 300px;
+  min-height: 300px;
 }
 @media only screen and (max-width: 480px) {
   .post-container {

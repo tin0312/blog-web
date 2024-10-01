@@ -6,8 +6,7 @@ function PostView() {
   const [post, setPost] = useState();
   const { state } = useLocation();
   const { id } = useParams();
-  console.log("Post id is ", id);
-  console.log(state);
+  console.log("Post data in Post to pass to edit route", state);
 
   useEffect(() => {
     if (!state) {

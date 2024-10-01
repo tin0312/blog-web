@@ -17,11 +17,22 @@ function Post(props) {
     }
   }
 
-  function hanldeEditPost(id, title, body) {
+  function hanldeEditPost(
+    id,
+    title,
+    content,
+    author,
+    authenticatedUser,
+    createdAt
+  ) {
     navigate(`/edit/${id}`, {
       state: {
+        id,
         title,
-        body,
+        content,
+        author,
+        authenticatedUser,
+        createdAt,
       },
     });
   }
@@ -45,7 +56,14 @@ function Post(props) {
             <button onClick={() => hanldeDeletePost(props.id)}>Delete</button>
             <button
               onClick={() =>
-                hanldeEditPost(props.id, props.title, props.content)
+                hanldeEditPost(
+                  props.id,
+                  props.title,
+                  props.content,
+                  props.author,
+                  props.authenticatedUser,
+                  props.createdAt
+                )
               }
             >
               Edit

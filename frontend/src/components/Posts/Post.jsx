@@ -6,12 +6,9 @@ function Post(props) {
   const navigate = useNavigate();
   async function hanldeDeletePost(id) {
     try {
-      const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/delete/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      await fetch(`${process.env.REACT_APP_BACKEND_URL}/delete/${id}`, {
+        method: "DELETE",
+      });
     } catch (error) {
       console.log("Error deleting post");
     }
@@ -25,7 +22,7 @@ function Post(props) {
     authenticatedUser,
     createdAt
   ) {
-    navigate(`/edit/${id}`, {
+    navigate(`/${author}/posts/${id}/edit`, {
       state: {
         id,
         title,
@@ -37,7 +34,7 @@ function Post(props) {
     });
   }
 
-  const updatedTime = convertTimestamp(props.updated_at);
+  const updatedTime = convertTimestamp(props.updatedAt);
   return (
     <div className={props.className || "post-container"}>
       <div>

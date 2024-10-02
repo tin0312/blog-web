@@ -45,12 +45,6 @@ function Posts(props) {
                   : `posts/${post.id}`
               }
               state={{
-                id: post.id,
-                title: post.title,
-                content: post.content,
-                author: post.author_username,
-                createdAt: post.created_at,
-                updatedAt: post.updated_at,
                 authenticatedUser: props.user?.username,
               }}
             >

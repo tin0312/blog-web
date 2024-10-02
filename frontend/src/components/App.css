@@ -109,6 +109,7 @@ form {
   flex-direction: column;
   justify-content: space-between;
 }
+
 .post-edit-form form {
   min-height: 400px;
   gap: 2rem;

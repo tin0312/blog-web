@@ -3,12 +3,12 @@ import { useLocation, Link, useNavigate } from "react-router-dom";
 
 function PostEditor() {
   const { state } = useLocation();
-  const [post, setPost] = useState({
-    title: state.title,
-    content: state.content,
-  });
   const navigate = useNavigate();
-  console.log("State in Editor", state);
+  const [post, setPost] = useState({
+    title: state?.title || "",
+    content: state?.content || "",
+  });
+
   async function handleEdit(event) {
     event.preventDefault();
     try {
@@ -46,43 +46,63 @@ function PostEditor() {
   return (
     <div>
       <div className="post-wrapper">
-        <div className="post post-edit-form">
-          <form onSubmit={handleEdit}>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={post.title}
-              onChange={(event) =>
-                setPost((post) => ({ ...post, title: event.target.value }))
-              }
-            />
-            <textarea
-              id="auto-resizing-textarea"
-              name="body"
-              value={post.content}
-              onChange={(event) =>
-                setPost((post) => ({ ...post, content: event.target.value }))
-              }
-            ></textarea>
-            <div className="btn-container">
-              <Link
-                state={{
-                  id: state.id,
-                  title: state.title,
-                  content: state.content,
-                  author: state.author,
-                  authenticatedUser: state.authenticatedUser,
-                  createdAt: state.createdAt,
-                }}
-                className="cancel-btn"
-                to={`/${state.author}/posts/${state.id}`}
-              >
-                Cancel
-              </Link>
-              <input type="submit" value="Save" />
-            </div>
-          </form>
+        <div
+          className="post post-edit-form"
+          style={
+            !state
+              ? {
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }
+              : {}
+          }
+        >
+          {state ? (
+            <form onSubmit={handleEdit}>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                value={post.title}
+                onChange={(event) =>
+                  setPost((post) => ({ ...post, title: event.target.value }))
+                }
+              />
+              <textarea
+                id="auto-resizing-textarea"
+                name="body"
+                value={post.content}
+                onChange={(event) =>
+                  setPost((post) => ({ ...post, content: event.target.value }))
+                }
+              ></textarea>
+              <div className="btn-container">
+                <Link
+                  state={{
+                    id: state.id,
+                    title: state.title,
+                    content: state.content,
+                    author: state.author,
+                    authenticatedUser: state.authenticatedUser,
+                    createdAt: state.createdAt,
+                  }}
+                  className="cancel-btn"
+                  to=".."
+                  relative="path"
+                >
+                  Cancel
+                </Link>
+                <input type="submit" value="Save" />
+              </div>
+            </form>
+          ) : (
+            <>
+              <h1>Unauthorized access</h1>
+              <p>You do not have permission to edit this post.</p>
+              <Link to="..">Go back to Home</Link>
+            </>
+          )}
         </div>
       </div>
     </div>

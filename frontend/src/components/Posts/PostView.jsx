@@ -36,7 +36,7 @@ function PostView() {
         author={post?.author_username}
         createdAt={post?.created_at}
         authenticatedUser={state?.authenticatedUser || null}
-        // updatedAt={state.updatedAt || post.updated_at}
+        updatedAt={post?.updated_at}
         className="post"
       />
     </div>

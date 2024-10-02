@@ -47,7 +47,7 @@ function Post(props) {
           {props.author}
         </p>
         <p>{new Date(props.createdAt).toLocaleDateString()}</p>
-        <p>{updatedTime && updatedTime}</p>
+        <p>{props.updatedAt && updatedTime}</p>
         {props.authenticatedUser && (
           <div class="btn-container">
             <button onClick={() => hanldeDeletePost(props.id)}>Delete</button>

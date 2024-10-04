@@ -97,6 +97,7 @@ form {
 .post,
 .login-form,
 .signup-form {
+  position: relative;
   background-color: rgba(236, 236, 236, 0.652);
   padding: 2rem;
   color: black;
@@ -841,4 +842,9 @@ hr.solid {
 .error-message {
   color: red;
   font-style: italic;
+}
+
+/* Messages */
+.error-message {
+  color: red;
 }

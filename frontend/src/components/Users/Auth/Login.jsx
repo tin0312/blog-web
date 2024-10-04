@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../hooks/AuthProvider";
+import { handleKeyUp, handleKeyDown } from "../../../helpers/keyEvent";
 
 function Login() {
   const auth = useAuth();
   const [user, setUser] = useState({
     username: "",
     password: "",
+    passwordConfirmation: "",
   });
-  // const [loginError, setLoginError] = useState("");
-
+  const [loginError, setLoginError] = useState("");
   async function handleLogin(event) {
     event.preventDefault();
     auth.logIn(user);
@@ -23,6 +24,7 @@ function Login() {
             type="text"
             id="title"
             name="username"
+            value={user.username}
             onChange={(event) =>
               setUser((prevUserData) => ({
                 ...prevUserData,
@@ -36,6 +38,7 @@ function Login() {
             id="password"
             type="password"
             name="password"
+            value={user.password}
             onChange={(event) =>
               setUser((prevUserData) => ({
                 ...prevUserData,
@@ -48,9 +51,34 @@ function Login() {
           <input
             id="password-confirmation"
             type="password"
+            style={{
+              border: loginError ? "1px solid red" : "1px solid transparent",
+            }}
             name="password-confirmation"
+            value={user.passwordConfirmation}
+            onChange={(event) =>
+              setUser((user) => ({
+                ...user,
+                passwordConfirmation: event.target.value,
+              }))
+            }
+            onKeyUp={handleKeyUp(
+              user.password,
+              user.passwordConfirmation,
+              setLoginError
+            )}
+            onKeyDown={handleKeyDown}
             required
           />
+          <p
+            className="error-message"
+            style={{
+              position: "absolute",
+              bottom: "6rem",
+            }}
+          >
+            {loginError}
+          </p>
           <div className="btn-container">
             <input type="submit" value="Log in" />
           </div>

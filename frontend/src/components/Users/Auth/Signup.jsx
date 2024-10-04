@@ -91,12 +91,12 @@ function SignUp() {
               name="password-confirmation"
               placeholder="re-enter password"
               value={passwordConfirmation}
-              onKeyUp={handleKeyUp(
-                password,
-                passwordConfirmation,
-                setSignUpError
-              )}
-              onKeyDown={handleKeyDown}
+              onKeyUp={() =>
+                handleKeyUp(password, passwordConfirmation, setSignUpError)
+              }
+              onKeyDown={() =>
+                handleKeyDown(passwordConfirmation, setSignUpError)
+              }
               required
               onChange={(event) => setPasswordConfirmation(event.target.value)}
             />

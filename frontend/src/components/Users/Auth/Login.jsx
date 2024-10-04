@@ -62,12 +62,16 @@ function Login() {
                 passwordConfirmation: event.target.value,
               }))
             }
-            onKeyUp={handleKeyUp(
-              user.password,
-              user.passwordConfirmation,
-              setLoginError
-            )}
-            onKeyDown={handleKeyDown}
+            onKeyUp={() =>
+              handleKeyUp(
+                user.password,
+                user.passwordConfirmation,
+                setLoginError
+              )
+            }
+            onKeyDown={() =>
+              handleKeyDown(user.passwordConfirmation, setLoginError)
+            }
             required
           />
           <p

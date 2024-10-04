@@ -13,12 +13,5 @@ function handleKeyUp(password, passwordConfirmation, setErrorMessage) {
     });
   }, timeoutInterval);
 }
-function handleKeyDown(passwordConfirmation, setErrorMessage) {
-  window.clearTimeout(timer);
-  if (!passwordConfirmation) {
-    setErrorMessage(() => {
-      return "";
-    });
-  }
-}
-export { handleKeyUp, handleKeyDown };
+
+export default handleKeyUp;

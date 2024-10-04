@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { useAuth } from "../../../hooks/AuthProvider";
-import { handleKeyUp, handleKeyDown } from "../../../helpers/keyEvent";
+import handleKeyUp from "../../../helpers/keyEvent";
 
 function Login() {
   const auth = useAuth();
@@ -15,10 +16,18 @@ function Login() {
     event.preventDefault();
     auth.logIn(user);
   }
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
   return (
     <div>
       <div className="login-wrapper">
-        <form className="login-form" onSubmit={handleLogin}>
+        <form className="login-form" onSubmit={handleSubmit(handleLogin)}>
           <label htmlFor="title">Username or Email</label>
           <input
             type="text"
@@ -31,8 +40,13 @@ function Login() {
                 username: event.target.value,
               }))
             }
-            required
+            {...register("username", {
+              required: "username required",
+            })}
           />
+          {errors.username && (
+            <p className="error-message">{errors.username.message}</p>
+          )}
           <label htmlFor="password">Password</label>
           <input
             id="password"
@@ -51,6 +65,12 @@ function Login() {
           <input
             id="password-confirmation"
             type="password"
+            {...register("password-confirmation", {
+              minLength: {
+                value: 8,
+                message: "Password must be at least 8 characters long",
+              },
+            })}
             style={{
               border: loginError ? "1px solid red" : "1px solid transparent",
             }}
@@ -68,9 +88,6 @@ function Login() {
                 user.passwordConfirmation,
                 setLoginError
               )
-            }
-            onKeyDown={() =>
-              handleKeyDown(user.passwordConfirmation, setLoginError)
             }
             required
           />

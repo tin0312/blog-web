@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/AuthProvider";
-import { handleKeyUp, handleKeyDown } from "../../../helpers/keyEvent";
+import handleKeyUp from "../../../helpers/keyEvent";
 
 function SignUp() {
   const [name, setName] = useState("");
@@ -93,9 +93,6 @@ function SignUp() {
               value={passwordConfirmation}
               onKeyUp={() =>
                 handleKeyUp(password, passwordConfirmation, setSignUpError)
-              }
-              onKeyDown={() =>
-                handleKeyDown(passwordConfirmation, setSignUpError)
               }
               required
               onChange={(event) => setPasswordConfirmation(event.target.value)}

@@ -6,17 +6,7 @@ import handleKeyUp from "../../../helpers/keyEvent";
 
 function Login() {
   const auth = useAuth();
-  const [user, setUser] = useState({
-    username: "",
-    password: "",
-    passwordConfirmation: "",
-  });
   const [loginError, setLoginError] = useState("");
-  async function handleLogin(event) {
-    event.preventDefault();
-    auth.logIn(user);
-  }
-
   const {
     register,
     handleSubmit,
@@ -24,72 +14,67 @@ function Login() {
     formState: { errors },
   } = useForm();
 
+  async function handleLogin(loginCredentials) {
+    auth.logIn(loginCredentials);
+  }
+
+  const registerOptions = {
+    username: {
+      required: "username required",
+    },
+    password: {
+      required: "password required",
+    },
+    passwordConfirmation: {
+      required: "password confirmation missing",
+    },
+  };
   return (
     <div>
       <div className="login-wrapper">
         <form className="login-form" onSubmit={handleSubmit(handleLogin)}>
-          <label htmlFor="title">Username or Email</label>
+          <label htmlFor="title">Username</label>
           <input
             type="text"
             id="title"
             name="username"
-            value={user.username}
-            onChange={(event) =>
-              setUser((prevUserData) => ({
-                ...prevUserData,
-                username: event.target.value,
-              }))
-            }
-            {...register("username", {
-              required: "username required",
-            })}
+            placeholder="Username Or Email"
+            {...register("username", registerOptions.username)}
           />
-          {errors.username && (
+          {/* {errors.username && (
             <p className="error-message">{errors.username.message}</p>
-          )}
+          )} */}
           <label htmlFor="password">Password</label>
           <input
             id="password"
             type="password"
             name="password"
-            value={user.password}
-            onChange={(event) =>
-              setUser((prevUserData) => ({
-                ...prevUserData,
-                password: event.target.value,
-              }))
-            }
-            required
+            placeholder="********"
+            {...register("password", registerOptions.password)}
           />
+          {/* {errors.password && (
+            <p className="error-message">{errors.password.message}</p>
+          )} */}
           <label htmlFor="password-confirmation">Password Confirmation</label>
           <input
             id="password-confirmation"
             type="password"
-            {...register("password-confirmation", {
-              minLength: {
-                value: 8,
-                message: "Password must be at least 8 characters long",
-              },
-            })}
+            {...register(
+              "password-confirmation",
+              registerOptions.passwordConfirmation
+            )}
             style={{
               border: loginError ? "1px solid red" : "1px solid transparent",
             }}
             name="password-confirmation"
-            value={user.passwordConfirmation}
-            onChange={(event) =>
-              setUser((user) => ({
-                ...user,
-                passwordConfirmation: event.target.value,
-              }))
-            }
             onKeyUp={() =>
               handleKeyUp(
-                user.password,
-                user.passwordConfirmation,
+                watch("password"),
+                watch("password-confirmation"),
                 setLoginError
               )
             }
-            required
+            placeholder="********"
           />
           <p
             className="error-message"
@@ -100,6 +85,11 @@ function Login() {
           >
             {loginError}
           </p>
+          {/* {errors.passwordConfirmation && (
+            <p className="error-message">
+              {errors.passwordConfirmation.message}
+            </p>
+          )} */}
           <div className="btn-container">
             <input type="submit" value="Log in" />
           </div>

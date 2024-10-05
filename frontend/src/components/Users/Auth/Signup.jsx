@@ -1,21 +1,35 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { useAuth } from "../../../hooks/AuthProvider";
 import handleKeyUp from "../../../helpers/keyEvent";
 
 function SignUp() {
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [signUpError, setSignUpError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const registerOptions = {
+    name: {
+      required: "name required",
+    },
+    email: {
+      required: "email required",
+    },
+    password: {
+      required: "password required",
+    },
+    passwordConfirmation: {
+      required: "password confirmation missing",
+    },
+  };
   const { setUser } = useAuth();
 
   const navigate = useNavigate();
-  async function handleSignUp(event) {
-    event.preventDefault();
-
+  async function handleSignUp(userInfo) {
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/add-user`,
@@ -25,10 +39,10 @@ function SignUp() {
             "Content-Type": "application/json; charset=UTF-8",
           },
           body: JSON.stringify({
-            name,
-            username,
-            email,
-            password,
+            name: userInfo.name,
+            username: userInfo.username,
+            email: userInfo.email,
+            password: userInfo.password,
           }),
           credentials: "include",
         }
@@ -48,39 +62,35 @@ function SignUp() {
       <div className="signup-wrapper">
         <hr className="hr-text" data-content="Sign Up" />
         <div className="signup-form">
-          <form onSubmit={handleSignUp}>
+          <form onSubmit={handleSubmit(handleSignUp)}>
             <input
               type="text"
               id="title"
               name="name"
+              {...register("name", registerOptions.name)}
               placeholder="name"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
             />
             <input
               type="text"
               id="title"
               name="username"
+              {...register("username")}
               placeholder="username"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
             />
             <input
               type="text"
               id="title"
               name="email"
+              {...register("email", registerOptions.email)}
               placeholder="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
             />
             <input
               id="password"
               type="password"
               name="password"
+              {...register("password", registerOptions.password)}
               placeholder="enter password"
-              value={password}
               required
-              onChange={(event) => setPassword(event.target.value)}
             />
             <input
               id="password-confirmation"
@@ -89,13 +99,19 @@ function SignUp() {
               }}
               type="password"
               name="password-confirmation"
+              {...register(
+                "passwordConfirmation",
+                registerOptions.passwordConfirmation
+              )}
               placeholder="re-enter password"
-              value={passwordConfirmation}
               onKeyUp={() =>
-                handleKeyUp(password, passwordConfirmation, setSignUpError)
+                handleKeyUp(
+                  watch("password"),
+                  watch("passwordConfirmation"),
+                  setSignUpError
+                )
               }
               required
-              onChange={(event) => setPasswordConfirmation(event.target.value)}
             />
             <p
               className="error-message"

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { useForm, SubmitHandler } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { useAuth } from "../../../hooks/AuthProvider";
 import handleKeyUp from "../../../helpers/keyEvent";
 
@@ -98,9 +97,9 @@ function Login() {
         <hr className="hr-text" data-content="OR" />
 
         <div className="google-signin-container">
-          <Link to="/auth/google">
+          <a href={`${process.env.REACT_APP_BACKEND_URL}/auth/google`}>
             <i className="fab fa-google"></i> Sign in with Google
-          </Link>
+          </a>
         </div>
       </div>
     </div>

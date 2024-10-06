@@ -223,8 +223,8 @@ app.get(
 app.get(
   "/auth/google/googleLogIn",
   passport.authenticate("google", {
-    successRedirect: "/",
-    failureRedirect: "/login",
+    successRedirect: process.env.FRONTEND_URL,
+    failureRedirect: `${process.env.FRONTEND_URL}/login`,
   })
 );
 app.post("/login", (req, res, next) => {
@@ -337,7 +337,7 @@ passport.use(
       userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
     },
     async (accessToken, refreshToken, profile, cb) => {
-      console.log(profile);
+      console.log("User data from gmail: ", profile);
       try {
         const result = await db.query("SELECT * FROM users WHERE email = $1", [
           profile.email,

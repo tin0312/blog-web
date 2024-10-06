@@ -9,6 +9,7 @@ import { Strategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth2";
 import flash from "connect-flash";
 import cors from "cors";
+import multer from "multer";
 
 const app = express();
 const port = process.env.PORT;
@@ -21,6 +22,9 @@ const db = new pg.Client({
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
 });
+// Multer File Upload Storage
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 const corsOptions = {
   origin: process.env.FRONTEND_URL,
   credentials: true,
@@ -172,8 +176,9 @@ app.get("/posts/:username/:postID", async (req, res) => {
   }
 });
 
-app.post("/add-user", async (req, res) => {
+app.post("/add-user", upload.single("profilePicFile"), async (req, res) => {
   const { email, password, name, username } = req.body;
+  const profilePicFile = req.file;
   // hash user password
   // salt rounds for layers of security
   const saltRound = 10;
@@ -192,8 +197,8 @@ app.post("/add-user", async (req, res) => {
         }
 
         const result = await db.query(
-          "INSERT INTO users (name, username, email, password) VALUES ($1, $2, $3, $4) RETURNING*",
-          [name, username, email, hash]
+          "INSERT INTO users (name, username, email, password, profile_pic_file) VALUES ($1, $2, $3, $4, $5) RETURNING*",
+          [name, username, email, hash, profilePicFile]
         );
         const user = result.rows[0];
 
@@ -344,8 +349,8 @@ passport.use(
         ]);
         if (result.rows.length === 0) {
           const newUser = await db.query(
-            "INSERT INTO users (email, password, username) VALUES($1, $2, $3) RETURNING*",
-            [profile.email, "google", profile.displayName]
+            "INSERT INTO users (email, password, username, profile_pic_url) VALUES($1, $2, $3, $4) RETURNING*",
+            [profile.email, "google", profile.displayName, profile.picture]
           );
           return cb(null, newUser.rows[0]);
         } else {

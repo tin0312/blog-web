@@ -62,7 +62,10 @@ function SignUp() {
       <div className="signup-wrapper">
         <hr className="hr-text" data-content="Sign Up" />
         <div className="signup-form">
-          <form onSubmit={handleSubmit(handleSignUp)}>
+          <form
+            encType="multipart/form-data"
+            onSubmit={handleSubmit(handleSignUp)}
+          >
             <input
               type="text"
               id="title"
@@ -122,6 +125,15 @@ function SignUp() {
             >
               {signUpError}
             </p>
+            <label htmlFor="profile-pic">
+              Choose a profile picture (optional)
+            </label>
+            <input
+              type="file"
+              id="profile-pic"
+              name="profilePicFile"
+              accept="image/png, img/jpeg"
+            />
             <div className="btn-container">
               <Link to="/login">Login</Link>
               <input type="submit" value="Sign up" />

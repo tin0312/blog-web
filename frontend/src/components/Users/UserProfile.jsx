@@ -7,7 +7,13 @@ function UserProfile() {
     <div className="profile-wrapper">
       <div className="profile-container">
         <div className="profile-content">
-          <img src="" alt="profile-image" />
+          <img
+            className="profile-pic"
+            src={
+              user.profile_pic_url ? user.profile_pic_url : user.user_pic_file
+            }
+            alt="profile-image"
+          />
           <div>
             <button>Edit Profile</button>
           </div>

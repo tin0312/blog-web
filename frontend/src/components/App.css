@@ -84,9 +84,7 @@ textarea {
   padding: 1rem;
   border-radius: 1rem;
 }
-label {
-  padding-bottom: 1rem;
-}
+
 form {
   display: flex;
   flex-direction: column;
@@ -102,6 +100,13 @@ form {
   padding: 2rem;
   color: black;
   border-radius: 2rem;
+}
+.login-form,
+.signup-form {
+  width: 40vw;
+  height: 500px;
+}
+.signup-form {
   min-height: 600px;
 }
 .post {
@@ -132,12 +137,6 @@ form {
 }
 .signup-wrapper {
   flex-direction: column;
-}
-.login-form,
-.signup-form {
-  width: 40vw;
-  height: 500px;
-  min-height: auto;
 }
 @media only screen and (max-width: 480px) {
   .signup-form {
@@ -240,6 +239,10 @@ form {
 input:focus,
 textarea:focus {
   outline: none;
+}
+input#profile-pic {
+  padding: 0.2rem;
+  padding-left: 0;
 }
 input[type="submit"] {
   font-size: 1rem;
@@ -733,7 +736,6 @@ a {
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  margin-top: 2rem;
 }
 
 .post-metadata {
@@ -847,4 +849,10 @@ hr.solid {
 /* Messages */
 .error-message {
   color: red;
+}
+
+.profile-pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
 }

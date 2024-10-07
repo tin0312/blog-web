@@ -30,30 +30,34 @@ function SignUp() {
 
   const navigate = useNavigate();
   async function handleSignUp(userInfo) {
+    const formData = new FormData();
+    formData.append("name", userInfo.name);
+    formData.append("username", userInfo.username);
+    formData.append("email", userInfo.email);
+    formData.append("password", userInfo.password);
+    if (userInfo.profilePicFile && userInfo.profilePicFile[0]) {
+      formData.append("profilePicFile", userInfo.profilePicFile[0]);
+    }
+
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/add-user`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-          },
-          body: JSON.stringify({
-            name: userInfo.name,
-            username: userInfo.username,
-            email: userInfo.email,
-            password: userInfo.password,
-          }),
-          credentials: "include",
+          body: formData, // Send formData directly
+          credentials: "include", // Include credentials (e.g., cookies)
         }
       );
       const data = await response.json();
       if (response.status === 201) {
         setUser(data.user);
-        navigate("/");
+        navigate("/"); // Redirect to homepage
+      } else {
+        setSignUpError(data.message || "Sign-up failed");
       }
     } catch (error) {
-      console.error("Error adding users", error);
+      console.error("Error adding user", error);
+      setSignUpError("An error occurred during sign-up");
     }
   }
 
@@ -62,10 +66,7 @@ function SignUp() {
       <div className="signup-wrapper">
         <hr className="hr-text" data-content="Sign Up" />
         <div className="signup-form">
-          <form
-            encType="multipart/form-data"
-            onSubmit={handleSubmit(handleSignUp)}
-          >
+          <form onSubmit={handleSubmit(handleSignUp)}>
             <input
               type="text"
               id="title"
@@ -133,6 +134,7 @@ function SignUp() {
               id="profile-pic"
               name="profilePicFile"
               accept="image/png, img/jpeg"
+              {...register("profilePicFile")}
             />
             <div className="btn-container">
               <Link to="/login">Login</Link>

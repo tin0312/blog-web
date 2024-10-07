@@ -178,6 +178,8 @@ app.get("/posts/:username/:postID", async (req, res) => {
 
 app.post("/add-user", upload.single("profilePicFile"), async (req, res) => {
   const { email, password, name, username } = req.body;
+  const profilePic = req.file?.buffer;
+  console.log(profilePic);
   const profilePicFile = req.file;
   // hash user password
   // salt rounds for layers of security
@@ -198,7 +200,7 @@ app.post("/add-user", upload.single("profilePicFile"), async (req, res) => {
 
         const result = await db.query(
           "INSERT INTO users (name, username, email, password, profile_pic_file) VALUES ($1, $2, $3, $4, $5) RETURNING*",
-          [name, username, email, hash, profilePicFile]
+          [name, username, email, hash, profilePic]
         );
         const user = result.rows[0];
 

@@ -113,7 +113,7 @@ form {
   width: 70vw;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 2rem;
 }
 
 .post-edit-form form {
@@ -703,23 +703,24 @@ a {
 .post-container {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 2rem;
   box-shadow: 0 0 10px #c3c2c0;
   border-radius: 10px;
-  padding: 3rem 2rem 0 2rem;
+  padding: 0 1rem;
   background-color: #c1ae95;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.7s ease-in-out;
   border: 0 solid transparent;
-  min-height: 300px;
+  min-height: 250px;
+  border: 6px solid transparent;
+}
+.post-container:hover {
+  border: 6px solid whitesmoke;
+  cursor: pointer;
 }
 @media only screen and (max-width: 480px) {
   .post-container {
     height: auto;
   }
-}
-.post-container:hover {
-  border: 6px solid whitesmoke;
-  cursor: pointer;
 }
 
 .login-form input:not(:last-of-type) {
@@ -738,14 +739,22 @@ a {
   gap: 1rem;
 }
 
-.post-metadata {
+.post-metadata-container {
   display: flex;
-  flex-direction: column;
   gap: 1rem;
   padding: 2rem 0 1rem 0rem;
+  align-items: center;
 }
-.post-metadata p {
-  opacity: 0.5;
+.post-metadata p:first-of-type {
+  font-weight: 700;
+  padding-bottom: 0.4rem;
+}
+.post-metadata p:nth-of-type(2),
+.post-metadata p:last-child {
+  opacity: 0.3;
+  font-size: 0.8rem;
+  padding-bottom: 0.2rem;
+  font-weight: 700;
 }
 @media only screen and (max-width: 480px) {
   .post-metadata {
@@ -852,7 +861,7 @@ hr.solid {
 }
 
 .profile-pic {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
 }

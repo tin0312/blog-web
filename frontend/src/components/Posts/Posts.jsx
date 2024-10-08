@@ -46,6 +46,7 @@ function Posts(props) {
               }
               state={{
                 authenticatedUser: props.user?.username,
+                content: post.content,
               }}
             >
               <Post

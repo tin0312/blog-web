@@ -105,13 +105,16 @@ app.delete("/delete/:id", async (req, res) => {
 
 app.patch("/update/:id", async (req, res) => {
   const { title, content } = req.body;
+  console.log(`Title: ${title} \n Content: ${content}`);
   const id = req.params.id;
+  console.log("Post id is ", id);
   try {
     const result = await db.query("SELECT * FROM posts WHERE id = $1", [id]);
     const post = result.rows[0];
+    console.log("Post data found", post);
     const newPostContent = {
       title: title || post.title,
-      content: content || post.body,
+      content: content || post.content,
     };
     try {
       await db.query(

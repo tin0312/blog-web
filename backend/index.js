@@ -165,20 +165,6 @@ app.get("/:username/posts", async (req, res) => {
   }
 });
 
-app.get("/posts/:username/:postID", async (req, res) => {
-  console.log("username :", req.params.username);
-  try {
-    const result = await db.query(
-      "SELECT * FROM posts WHERE id = $1 AND author_username = $2",
-      [req.params.postID, req.params.username]
-    );
-    const post = result.rows[0];
-    res.json(post);
-  } catch (error) {
-    res.json(error);
-  }
-});
-
 app.post("/add-user", upload.single("profilePicFile"), async (req, res) => {
   const { email, password, name, username } = req.body;
   const profilePic = req.file?.buffer;

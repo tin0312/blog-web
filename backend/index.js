@@ -54,7 +54,9 @@ app.use(flash());
 async function getAllPosts() {
   try {
     const posts = [];
-    const result = await db.query("SELECT * FROM posts");
+    const result = await db.query(
+      "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username;"
+    );
     result.rows.forEach((post) => {
       posts.push(post);
     });
@@ -105,9 +107,7 @@ app.delete("/delete/:id", async (req, res) => {
 
 app.patch("/update/:id", async (req, res) => {
   const { title, content } = req.body;
-  console.log(`Title: ${title} \n Content: ${content}`);
   const id = req.params.id;
-  console.log("Post id is ", id);
   try {
     const result = await db.query("SELECT * FROM posts WHERE id = $1", [id]);
     const post = result.rows[0];
@@ -137,9 +137,10 @@ app.patch("/update/:id", async (req, res) => {
 app.get("/posts/:postID", async (req, res) => {
   const postID = req.params.postID;
   try {
-    const result = await db.query("SELECT * FROM posts WHERE id = $1", [
-      postID,
-    ]);
+    const result = await db.query(
+      "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE posts.id = $1",
+      [postID]
+    );
     const post = result.rows[0];
     res.json(post);
   } catch (error) {

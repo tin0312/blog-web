@@ -37,6 +37,8 @@ function PostView() {
         createdAt={post?.created_at}
         authenticatedUser={state?.authenticatedUser || null}
         updatedAt={post?.updated_at}
+        profileFile={post?.profile_pic_file}
+        profileUrl={post?.profile_pic_url}
         className="post"
       />
     </div>

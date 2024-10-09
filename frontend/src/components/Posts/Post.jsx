@@ -1,12 +1,10 @@
 import React from "react";
 import convertTimestamp from "../../helpers/convertTimestamp";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../hooks/AuthProvider";
 
 function Post(props) {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
 
   async function hanldeDeletePost(id) {
     try {
@@ -38,9 +36,9 @@ function Post(props) {
     });
   }
 
-  const profilePicFile = user.profile_pic_file
+  const profilePicFile = props.profileFile
     ? `data:image/png;base64,${btoa(
-        String.fromCharCode(...new Uint8Array(user.profile_pic_file.data))
+        String.fromCharCode(...new Uint8Array(props.profileFile.data))
       )}`
     : null;
 
@@ -50,7 +48,7 @@ function Post(props) {
       <div className="post-metadata-container">
         <img
           className="profile-pic"
-          src={profilePicFile ? profilePicFile : user.profile_pic_url}
+          src={props.profileFile ? profilePicFile : props?.profileUrl}
           alt="profile-image"
         />
         <div className="post-metadata">

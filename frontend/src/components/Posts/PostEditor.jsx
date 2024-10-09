@@ -39,6 +39,13 @@ function PostEditor() {
           },
         });
       }
+      if (response.status === 500) {
+        alert("Error updating post");
+        setPost({
+          title: state.title,
+          content: state.content,
+        });
+      }
     } catch (error) {
       console.error("Error editting post", error);
     }

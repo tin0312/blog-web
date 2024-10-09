@@ -57,6 +57,8 @@ function Posts(props) {
                 author={post.author_username}
                 createdAt={post.created_at}
                 updatedAt={post.updated_at}
+                profileFile={post?.profile_pic_file}
+                profileUrl={post?.profile_pic_url}
               />
             </Link>
           ))

@@ -15,8 +15,8 @@ function Posts(props) {
         let response = await fetch(
           `${serverURL}${
             props.user
-              ? `/${encodeURIComponent(props.user.username)}/posts`
-              : ""
+              ? `/posts/${encodeURIComponent(props.user.username)}/posts`
+              : "/posts"
           }`
         );
         const data = await response.json();

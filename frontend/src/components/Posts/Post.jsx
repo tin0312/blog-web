@@ -8,9 +8,15 @@ function Post(props) {
 
   async function hanldeDeletePost(id) {
     try {
-      await fetch(`${process.env.REACT_APP_BACKEND_URL}/delete/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/posts/delete/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      if (response.status === 200) {
+        navigate("/profile");
+      }
     } catch (error) {
       console.log("Error deleting post");
     }

@@ -13,7 +13,7 @@ function PostEditor() {
     event.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/update/${state.id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/posts/update/${state.id}`,
         {
           method: "PATCH",
           headers: {

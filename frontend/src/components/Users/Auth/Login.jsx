@@ -97,7 +97,7 @@ function Login() {
         <hr className="hr-text" data-content="OR" />
 
         <div className="google-signin-container">
-          <a href={`${process.env.REACT_APP_BACKEND_URL}/auth/google`}>
+          <a href={`${process.env.REACT_APP_BACKEND_URL}/users/auth/google`}>
             <i className="fab fa-google"></i> Sign in with Google
           </a>
         </div>

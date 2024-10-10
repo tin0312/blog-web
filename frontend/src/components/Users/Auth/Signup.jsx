@@ -41,17 +41,17 @@ function SignUp() {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/add-user`,
+        `${process.env.REACT_APP_BACKEND_URL}/users/add-user`,
         {
           method: "POST",
-          body: formData, // Send formData directly
-          credentials: "include", // Include credentials (e.g., cookies)
+          body: formData,
+          credentials: "include",
         }
       );
       const data = await response.json();
       if (response.status === 201) {
         setUser(data.user);
-        navigate("/"); // Redirect to homepage
+        navigate("/");
       } else {
         setSignUpError(data.message || "Sign-up failed");
       }

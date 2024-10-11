@@ -1,54 +1,68 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../hooks/AuthProvider";
 
 function MobileNav() {
+  const { logOut, user } = useAuth();
+  const [isToggled, setIsToggled] = useState(false);
+  const location = useLocation();
+  function handleOpenMenu() {
+    setIsToggled((prevState) => !prevState);
+  }
+  useEffect(() => {
+    setIsToggled(false);
+  }, [location]);
+
   return (
     <>
-      <span className="nav-icon hide">
+      <span
+        onClick={handleOpenMenu}
+        className={`nav-icon hide ${isToggled ? "active" : ""}`}
+      >
         <i></i>
         <i></i>
         <i></i>
       </span>
-      {/* Mobile Navigation */}
-      <ul className="mobile-nav hide">
+      <ul className={`mobile-nav ${isToggled ? "show" : ""}`}>
         <li>
-          <a className="nav-link" href="/">
+          <Link className="nav-link" to="/">
             posts
-          </a>
+          </Link>
         </li>
 
         <li>
-          <a href="/login">
+          <Link to="/login">
             <img className="user-icon" src="/icon/user.png" alt="user-icon" />
-          </a>
+          </Link>
         </li>
 
         <li>
-          <a className="nav-link create-post-btn" href="/signup">
-            Register
-          </a>
+          <Link className="nav-link create-post-btn" to="/signup">
+            Sign up
+          </Link>
         </li>
-
-        <li>
-          <a className="nav-link create-post-btn" href="/create-post">
-            Create Post
-          </a>
-        </li>
-
-        <li>
-          <a className="nav-link" href="/profile">
-            Profile
-          </a>
-        </li>
-
-        <li>
-          <a href="/log-out">
-            <img
-              className="user-icon"
-              src="/icon/log-out.png"
-              alt="user-icon"
-            />
-          </a>
-        </li>
+        {user && (
+          <>
+            <li>
+              <Link className="nav-link create-post-btn" to="/create-post">
+                Create Post
+              </Link>
+            </li>
+            <li>
+              <Link className="nav-link" to="/profile">
+                Profile
+              </Link>
+            </li>
+            <li>
+              <img
+                className="user-icon"
+                src="/icon/log-out.png"
+                alt="user-icon"
+                onClick={logOut}
+              />
+            </li>
+          </>
+        )}
       </ul>
     </>
   );

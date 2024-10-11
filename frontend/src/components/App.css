@@ -326,14 +326,11 @@ footer {
   background-color: #797a71;
 }
 /* Navigation */
-nav {
+header {
   display: flex;
   justify-content: end;
-  padding-right: 7rem;
-  position: absolute;
-  top: 0;
-  right: 0;
 }
+
 @media only screen and (max-width: 480px) {
   nav {
     padding-bottom: 5rem;
@@ -347,14 +344,15 @@ nav {
   height: 80px;
   border-radius: 4rem;
   margin: 2rem 0;
+  padding-right: 6rem;
 }
 
 .mobile-nav {
-  position: fixed; /* Keep ul positioned absolutely */
+  position: fixed;
   top: 0;
   left: 0;
   margin: 0;
-  background: white;
+  background-color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -362,11 +360,11 @@ nav {
   height: 100vh;
   width: 100vw;
   gap: 1rem;
-  z-index: 500; /* Lower z-index to stay behind the icons */
+  z-index: 500;
   transform: translateX(100%);
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.5s ease-in-out;
 }
-.mobile-nav.show {
+.show {
   transform: translateX(0);
 }
 /* animate nav menu icon */
@@ -646,8 +644,8 @@ a {
   flex-direction: column;
   align-items: center;
   margin: 10rem auto;
-  padding-top: 7rem;
 }
+
 @media only screen and (max-width: 480px) {
   .posts-wrapper,
   .form-wrapper,
@@ -656,6 +654,7 @@ a {
   }
   .post-wrapper {
     margin: 7rem auto 10rem;
+    padding-top: 7rem;
   }
 }
 .form-wrapper {

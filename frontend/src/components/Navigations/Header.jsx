@@ -5,10 +5,8 @@ import DesktopNav from "./DesktopNav";
 function Header() {
   return (
     <header>
-      <nav>
-        <DesktopNav />
-        <MobileNav />
-      </nav>
+      <DesktopNav />
+      <MobileNav />
     </header>
   );
 }

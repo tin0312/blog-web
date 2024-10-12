@@ -10,9 +10,11 @@ function MobileNav() {
     setIsToggled((prevState) => !prevState);
   }
   useEffect(() => {
-    setIsToggled(false);
+    if (isToggled) {
+      console.log("I am running for location changes");
+      setIsToggled(false);
+    }
   }, [location]);
-
   return (
     <>
       <span

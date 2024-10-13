@@ -128,13 +128,13 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 12rem;
-  margin-bottom: 20rem;
+  margin-top: 18rem;
+  margin-bottom: 30rem;
   gap: 10rem;
 }
 .signup-wrapper {
+  margin-top: 15rem;
   flex-direction: column;
-  margin-top: 4rem;
   gap: 3rem;
 }
 @media only screen and (max-width: 480px) {
@@ -145,10 +145,8 @@ form {
   .login-wrapper,
   .signup-wrapper {
     gap: 4rem;
-    flex-direction: column;
-  }
-  .signup-wrapper {
     margin-top: 10rem;
+    flex-direction: column;
   }
 }
 
@@ -328,6 +326,9 @@ footer {
 }
 /* Navigation */
 header {
+  position: absolute;
+  top: 0;
+  right: 0;
   display: flex;
   justify-content: end;
 }
@@ -579,7 +580,7 @@ a {
   #open-menu-bar {
     display: block;
   }
-  a:not(#login-link) {
+  a:not(.login-link) {
     font-size: 2rem;
   }
   .active-link {

@@ -137,7 +137,7 @@ function SignUp() {
               {...register("profilePicFile")}
             />
             <div className="btn-container">
-              <Link id="login-link" to="/login">
+              <Link class="login-link" to="/login">
                 Login
               </Link>
               <input type="submit" value="Sign up" />

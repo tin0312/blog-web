@@ -29,7 +29,7 @@ function AuthProvider({ children }) {
             setUser(null);
           }
         } catch (error) {
-          console.log("Error fetching current user", error);
+          console.log("Error fetching current user");
         }
       };
 

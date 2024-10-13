@@ -38,5 +38,5 @@ app.use("/posts", postRoutes);
 app.use("/users", userRoutes);
 
 app.listen(port, () => {
-  console.log(`Blog Web app listening at http://localhost:${port}`);
+  console.log(`Blog Web server listening at http://localhost:${port}`);
 });

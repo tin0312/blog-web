@@ -329,8 +329,6 @@ header {
   position: absolute;
   top: 0;
   right: 0;
-  display: flex;
-  justify-content: end;
 }
 
 @media only screen and (max-width: 480px) {
@@ -589,6 +587,8 @@ a {
 }
 .is-sticky {
   position: fixed;
+  top: 0;
+  right: 0;
   background-color: #797a71;
   transition: all 1s;
   z-index: 100000;
@@ -641,7 +641,7 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 10rem auto;
+  margin: 18rem auto;
 }
 
 @media only screen and (max-width: 480px) {
@@ -659,10 +659,20 @@ a {
   margin: 4rem auto 12rem;
 }
 .form-container {
+  margin-top: 0;
+  padding-top: 10rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+@media only screen and (max-width: 480px) {
+  .form-wrapper {
+    margin-top: 0;
+  }
+  .form-container {
+    padding-top: 5rem;
+  }
 }
 
 .posts-container {

@@ -32,18 +32,7 @@ function MobileNav() {
           </Link>
         </li>
 
-        <li>
-          <Link to="/login">
-            <img className="user-icon" src="/icon/user.png" alt="user-icon" />
-          </Link>
-        </li>
-
-        <li>
-          <Link className="nav-link create-post-btn" to="/signup">
-            Sign up
-          </Link>
-        </li>
-        {user && (
+        {user ? (
           <>
             <li>
               <Link className="nav-link create-post-btn" to="/create-post">
@@ -62,6 +51,24 @@ function MobileNav() {
                 alt="user-icon"
                 onClick={logOut}
               />
+            </li>
+          </>
+        ) : (
+          <>
+            <li>
+              <Link to="/login">
+                <img
+                  className="user-icon"
+                  src="/icon/user.png"
+                  alt="user-icon"
+                />
+              </Link>
+            </li>
+
+            <li>
+              <Link className="nav-link create-post-btn" to="/signup">
+                Sign up
+              </Link>
             </li>
           </>
         )}

@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 function CreatePost() {
   const navigate = useNavigate();
-  const [post, setPost] = useState({
-    title: "",
-    content: "",
-  });
-  async function handlePost(event) {
-    event.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { error },
+  } = useForm();
+  const registerOptions = {
+    title: { required: "Post Title required" },
+    content: { required: "Post Content required" },
+  };
+  async function handlePost(post) {
+    console.log(post);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/posts/add-post`,
@@ -39,7 +45,7 @@ function CreatePost() {
             <p>New Post</p>
           </div>
         </div>
-        <form className="post-edit-form" onSubmit={handlePost}>
+        <form className="post-edit-form" onSubmit={handleSubmit(handlePost)}>
           <label for="title" aria-placeholder="hehe">
             Title
           </label>
@@ -48,9 +54,7 @@ function CreatePost() {
             id="title"
             name="title"
             placeholder="Post title"
-            onChange={(event) =>
-              setPost((post) => ({ ...post, title: event.target.value }))
-            }
+            {...register("title", registerOptions.title)}
             required
           />
           <label for="body" aria-placeholder="sads">
@@ -58,11 +62,9 @@ function CreatePost() {
           </label>
           <textarea
             id="body"
-            name="body"
+            name="content"
             placeholder="Post content"
-            onChange={(event) =>
-              setPost((post) => ({ ...post, content: event.target.value }))
-            }
+            {...register("content", registerOptions.content)}
           ></textarea>
           <input type="submit" value="POST" />
         </form>

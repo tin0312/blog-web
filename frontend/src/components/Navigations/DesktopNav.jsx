@@ -13,10 +13,8 @@ function DesktopNav() {
   }
   useEffect(() => {
     const initialScroll = window.scrollY;
-    console.log("Initial scroll: ", initialScroll);
     window.addEventListener("scroll", () => {
       const currentScroll = window.scrollY;
-      console.log("Current scroll: ", currentScroll);
       if (currentScroll > initialScroll) {
         setIsSticked(true);
       } else {

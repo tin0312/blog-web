@@ -24,7 +24,6 @@ async function addUser(req, res) {
   const saltRound = 10;
   bcrypt.hash(password, saltRound, async (error, hash) => {
     if (error) {
-      console.log("Error hashing", error);
       return res.status(500).json({ message: "Error encrypting password" });
     } else {
       try {
@@ -44,7 +43,6 @@ async function addUser(req, res) {
 
         req.logIn(user, (error) => {
           if (error) {
-            console.log("Login error:", error);
             return res.status(500).json({ message: "Login Error" });
           }
           return res.status(201).json({

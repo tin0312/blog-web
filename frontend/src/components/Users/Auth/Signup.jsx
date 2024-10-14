@@ -1,34 +1,70 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../../hooks/AuthProvider";
 import handleKeyUp from "../../../helpers/keyEvent";
 
 function SignUp() {
-  const [signUpError, setSignUpError] = useState("");
   const {
     register,
     handleSubmit,
     watch,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm();
   const registerOptions = {
     name: {
-      required: "name required",
+      required: "Name is required",
+      minLength: {
+        value: 6,
+        message: "Name must be at least 6 characters long",
+      },
+      maxLength: {
+        value: 70,
+        message: "Name must not exceed 70 characters",
+      },
+      pattern: {
+        value: /^[a-zA-Z\s]+$/,
+        message: "Name should contain only letters",
+      },
     },
     email: {
-      required: "email required",
+      required: "Email is required",
+      minLength: {
+        value: 6,
+        message: "Email should be at least 6 characters long",
+      },
+      maxLength: {
+        value: 254,
+        message: "Email should not exceed 254 characters",
+      },
+      pattern: {
+        value: /^[a-zA-Z0-9._%±]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i,
+        message: "Invalid email format",
+      },
     },
     password: {
-      required: "password required",
+      required: "Password is required",
+      minLength: {
+        value: 12,
+        message: "Password should be at least 12 characters long",
+      },
+      pattern: {
+        value:
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+        message:
+          "Password must include at least one lowercase letter, one uppercase letter, one number, and one special character",
+      },
     },
     passwordConfirmation: {
-      required: "password confirmation missing",
+      required: "Password confirmation is required",
     },
   };
   const { setUser } = useAuth();
 
   const navigate = useNavigate();
+
   async function handleSignUp(userInfo) {
     const formData = new FormData();
     formData.append("name", userInfo.name);
@@ -49,15 +85,21 @@ function SignUp() {
         }
       );
       const data = await response.json();
+
       if (response.status === 201) {
         setUser(data.user);
         navigate("/");
       } else {
-        setSignUpError(data.message || "Sign-up failed");
+        // Set the error message from the server
+        setError("serverError", {
+          type: "custom",
+          message: data.message || "Registration failed",
+        });
       }
     } catch (error) {
-      console.error("Error adding user", error);
-      setSignUpError("An error occurred during sign-up");
+      setError("root.serverError", {
+        message: error.message || "Server error, please try again later.",
+      });
     }
   }
 
@@ -68,77 +110,116 @@ function SignUp() {
         <div className="signup-form">
           <form onSubmit={handleSubmit(handleSignUp)}>
             <input
+              style={{
+                border: errors.name ? "1px solid red" : "1px solid transparent",
+              }}
               type="text"
               id="title"
               name="name"
               {...register("name", registerOptions.name)}
-              placeholder="name"
+              placeholder="Name"
             />
+            {errors.name && (
+              <p className="error-message">{errors.name.message}</p>
+            )}
+
             <input
+              style={{
+                border: errors.username
+                  ? "1px solid red"
+                  : "1px solid transparent",
+              }}
               type="text"
-              id="title"
+              id="username"
               name="username"
               {...register("username")}
-              placeholder="username"
+              placeholder="Username"
             />
+            {errors.username && (
+              <p className="error-message">{errors.username.message}</p>
+            )}
+
             <input
-              type="text"
-              id="title"
+              style={{
+                border: errors.email
+                  ? "1px solid red"
+                  : "1px solid transparent",
+              }}
+              type="email"
+              id="email"
               name="email"
               {...register("email", registerOptions.email)}
-              placeholder="email"
+              placeholder="Email"
             />
+            {errors.email && (
+              <p className="error-message">{errors.email.message}</p>
+            )}
+
             <input
-              id="password"
-              type="password"
-              name="password"
-              {...register("password", registerOptions.password)}
-              placeholder="enter password"
-              required
-            />
-            <input
-              id="password-confirmation"
               style={{
-                border: signUpError ? "1px solid red" : "1px solid transparent",
+                border: errors.password
+                  ? "1px solid red"
+                  : "1px solid transparent",
               }}
               type="password"
-              name="password-confirmation"
+              id="password"
+              name="password"
+              {...register("password", registerOptions.password)}
+              placeholder="Password"
+            />
+            {errors.password && (
+              <p className="error-message">{errors.password.message}</p>
+            )}
+
+            <input
+              style={{
+                border: errors.passwordConfirmation
+                  ? "1px solid red"
+                  : "1px solid transparent",
+              }}
+              type="password"
+              id="passwordConfirmation"
+              name="passwordConfirmation"
               {...register(
                 "passwordConfirmation",
                 registerOptions.passwordConfirmation
               )}
-              placeholder="re-enter password"
+              placeholder="Confirm password"
               onKeyUp={() =>
                 handleKeyUp(
                   watch("password"),
                   watch("passwordConfirmation"),
-                  setSignUpError
+                  setError,
+                  clearErrors
                 )
               }
-              required
             />
-            <p
-              className="error-message"
-              style={{
-                position: "absolute",
-                bottom: "6rem",
-              }}
-            >
-              {signUpError}
-            </p>
-            <label htmlFor="profile-pic">
-              Choose a profile picture (optional)
-            </label>
+            {!errors.password && errors.passwordConfirmation && (
+              <p className="error-message">
+                {errors.passwordConfirmation.message}
+              </p>
+            )}
+
+            <label htmlFor="profile-pic">Profile Picture (optional)</label>
             <input
               type="file"
               id="profile-pic"
               name="profilePicFile"
-              accept="image/png, img/jpeg"
+              accept="image/png, image/jpeg"
               {...register("profilePicFile")}
             />
+
+            {errors.serverError && (
+              <p className="error-message">{errors.serverError.message}</p>
+            )}
+
+            {errors.root?.serverError && (
+              <p className="error-message">{errors.root.serverError.message}</p>
+            )}
+
             <div className="btn-container">
-              <Link class="login-link" to="/login">
-                Login
+              <Link to="/login" className="login-link">
+                Already have an account? Login
               </Link>
               <input type="submit" value="Sign up" />
             </div>

@@ -25,7 +25,7 @@ function Login() {
       required: "password required",
     },
     passwordConfirmation: {
-      required: "password confirmation missing",
+      required: "re-enter password",
     },
   };
   return (

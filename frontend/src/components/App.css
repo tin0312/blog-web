@@ -77,6 +77,7 @@ h3 {
 
 input,
 textarea {
+  width: 100%;
   border: none;
   font-size: 1rem;
   color: black;
@@ -376,6 +377,21 @@ header {
 .icon {
   width: 3.8vw;
   color: white;
+}
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.input-icon {
+  position: absolute;
+  width: 1.5rem;
+}
+#password-visibility {
+  right: 10px;
+}
+#password-visibility:hover {
+  cursor: pointer;
 }
 .nav-icon i {
   background-color: bisque;

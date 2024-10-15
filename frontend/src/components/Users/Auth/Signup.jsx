@@ -61,6 +61,7 @@ function SignUp() {
       required: "Password confirmation is required",
     },
   };
+
   const { setUser } = useAuth();
 
   const navigate = useNavigate();
@@ -90,7 +91,6 @@ function SignUp() {
         setUser(data.user);
         navigate("/");
       } else {
-        // Set the error message from the server
         setError("serverError", {
           type: "custom",
           message: data.message || "Registration failed",
@@ -111,7 +111,7 @@ function SignUp() {
           <form onSubmit={handleSubmit(handleSignUp)}>
             <input
               style={{
-                border: errors.name ? "1px solid red" : "1px solid transparent",
+                border: `1px solid ${errors.name ? "red" : "transparent"}`,
               }}
               type="text"
               id="title"
@@ -125,9 +125,7 @@ function SignUp() {
 
             <input
               style={{
-                border: errors.username
-                  ? "1px solid red"
-                  : "1px solid transparent",
+                border: `1px solid ${errors.username ? "red" : "transparent"}`,
               }}
               type="text"
               id="username"
@@ -141,9 +139,7 @@ function SignUp() {
 
             <input
               style={{
-                border: errors.email
-                  ? "1px solid red"
-                  : "1px solid transparent",
+                border: `1px solid ${errors.email ? "red" : "transparent"}`,
               }}
               type="email"
               id="email"
@@ -154,28 +150,35 @@ function SignUp() {
             {errors.email && (
               <p className="error-message">{errors.email.message}</p>
             )}
-
-            <input
-              style={{
-                border: errors.password
-                  ? "1px solid red"
-                  : "1px solid transparent",
-              }}
-              type="password"
-              id="password"
-              name="password"
-              {...register("password", registerOptions.password)}
-              placeholder="Password"
-            />
+            <div className="input-container">
+              <input
+                style={{
+                  border: `1px solid ${
+                    errors.password ? "red" : "transparent"
+                  }`,
+                }}
+                type="password"
+                id="password"
+                name="password"
+                {...register("password", registerOptions.password)}
+                placeholder="Password"
+              />
+              <img
+                className="input-icon"
+                id="password-visibility"
+                src="/icon/eye.png"
+                alt="eye-icon"
+              />
+            </div>
             {errors.password && (
               <p className="error-message">{errors.password.message}</p>
             )}
 
             <input
               style={{
-                border: errors.passwordConfirmation
-                  ? "1px solid red"
-                  : "1px solid transparent",
+                border: `1px solid ${
+                  errors.passwordConfirmation ? "red" : "transparent"
+                }`,
               }}
               type="password"
               id="passwordConfirmation"
@@ -194,12 +197,11 @@ function SignUp() {
                 )
               }
             />
-            {!errors.password && errors.passwordConfirmation && (
+            {errors.passwordConfirmation && (
               <p className="error-message">
                 {errors.passwordConfirmation.message}
               </p>
             )}
-
             <label htmlFor="profile-pic">Profile Picture (optional)</label>
             <input
               type="file"

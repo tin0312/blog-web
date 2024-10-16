@@ -85,6 +85,10 @@ textarea {
   padding: 1rem;
   border-radius: 1rem;
 }
+input:focus:not([type="file"]),
+textarea:focus {
+  outline: 2px solid #797a71;
+}
 
 form {
   display: flex;
@@ -236,10 +240,6 @@ form {
   }
 }
 
-input:focus,
-textarea:focus {
-  outline: none;
-}
 input#profile-pic {
   padding: 0.2rem;
   padding-left: 0;
@@ -380,12 +380,12 @@ header {
 }
 .input-container {
   position: relative;
-  display: flex;
-  align-items: center;
 }
 .input-icon {
   position: absolute;
   width: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
 }
 #password-visibility {
   right: 10px;

@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../../hooks/AuthProvider";
 import handleKeyUp from "../../../helpers/keyEvent";
 
 function SignUp() {
+  const [passwordType, setPasswordType] = useState("password");
+  const [passwordConfirmationType, setPasswordConfirmationType] =
+    useState("password");
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
+
+  function showPassword(event) {
+    const dataField = event.target.getAttribute("data-field");
+    if (dataField === "password") {
+      setPasswordType(() => {
+        return passwordType === "password" ? "text" : "password";
+      });
+    } else {
+      setPasswordConfirmationType(() => {
+        return passwordConfirmationType === "password" ? "text" : "password";
+      });
+    }
+  }
   const {
     register,
     handleSubmit,
@@ -61,10 +79,6 @@ function SignUp() {
       required: "Password confirmation is required",
     },
   };
-
-  const { setUser } = useAuth();
-
-  const navigate = useNavigate();
 
   async function handleSignUp(userInfo) {
     const formData = new FormData();
@@ -157,7 +171,7 @@ function SignUp() {
                     errors.password ? "red" : "transparent"
                   }`,
                 }}
-                type="password"
+                type={passwordType}
                 id="password"
                 name="password"
                 {...register("password", registerOptions.password)}
@@ -165,38 +179,53 @@ function SignUp() {
               />
               <img
                 className="input-icon"
+                data-field="password"
+                onClick={(event) => showPassword(event)}
                 id="password-visibility"
-                src="/icon/eye.png"
+                src={`/icon/eye-${
+                  passwordType === "password" ? "close" : "open"
+                }.png`}
                 alt="eye-icon"
               />
             </div>
             {errors.password && (
               <p className="error-message">{errors.password.message}</p>
             )}
-
-            <input
-              style={{
-                border: `1px solid ${
-                  errors.passwordConfirmation ? "red" : "transparent"
-                }`,
-              }}
-              type="password"
-              id="passwordConfirmation"
-              name="passwordConfirmation"
-              {...register(
-                "passwordConfirmation",
-                registerOptions.passwordConfirmation
-              )}
-              placeholder="Confirm password"
-              onKeyUp={() =>
-                handleKeyUp(
-                  watch("password"),
-                  watch("passwordConfirmation"),
-                  setError,
-                  clearErrors
-                )
-              }
-            />
+            <div className="input-container">
+              <input
+                style={{
+                  border: `1px solid ${
+                    errors.passwordConfirmation ? "red" : "transparent"
+                  }`,
+                }}
+                type={passwordConfirmationType}
+                id="passwordConfirmation"
+                name="passwordConfirmation"
+                {...register(
+                  "passwordConfirmation",
+                  registerOptions.passwordConfirmation
+                )}
+                placeholder="Confirm password"
+                onKeyUp={() =>
+                  handleKeyUp(
+                    watch("password"),
+                    watch("passwordConfirmation"),
+                    setError,
+                    clearErrors
+                  )
+                }
+              />
+              <img
+                className="input-icon"
+                data-field="passwordConfirmation"
+                onClick={(event) => showPassword(event)}
+                id="password-visibility"
+                src={`/icon/eye-${
+                  passwordConfirmationType === "password" ? "close" : "open"
+                }.png`}
+                alt="eye-icon"
+              />
+            </div>
             {errors.passwordConfirmation && (
               <p className="error-message">
                 {errors.passwordConfirmation.message}

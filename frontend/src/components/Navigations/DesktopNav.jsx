@@ -22,6 +22,7 @@ function DesktopNav() {
       }
     });
   }, []);
+
   return (
     <>
       {/* Desktop Nabigation */}

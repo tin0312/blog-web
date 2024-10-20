@@ -14,7 +14,6 @@ function CreatePost() {
     content: { required: "Post Content required" },
   };
   async function handlePost(post) {
-    console.log(post);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/posts/add-post`,

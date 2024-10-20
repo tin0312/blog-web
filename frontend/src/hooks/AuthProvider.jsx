@@ -5,37 +5,35 @@ const AuthContext = createContext();
 
 function AuthProvider({ children }) {
   const navigate = useNavigate();
-  const [user, setUser] = useState(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
-
-  // Fetch the current user when the app loads
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    if (!user) {
-      const fetchCurrentUser = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.REACT_APP_BACKEND_URL}/users/current-user`,
-            {
-              credentials: "include",
-            }
-          );
-          if (response.status === 200) {
-            const userData = await response.json();
-            localStorage.setItem("user", JSON.stringify(userData));
-            setUser(userData);
-          } else {
-            setUser(null);
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_BACKEND_URL}/users/current-user`,
+          {
+            credentials: "include",
           }
-        } catch (error) {
-          console.log("Error fetching current user");
+        );
+        if (response.status === 200) {
+          const userData = await response.json();
+          setUser(userData);
+        } else {
+          setUser(null);
         }
-      };
+      } catch (error) {
+        console.log("Error fetching current user");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCurrentUser();
+  }, []);
 
-      fetchCurrentUser();
-    }
-  }, [user]);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   async function logIn(userData) {
     try {
@@ -55,7 +53,6 @@ function AuthProvider({ children }) {
         }
       );
       const data = await response.json();
-      console.log("User Data :", data);
       if (response.status === 200) {
         setUser(data.user);
         navigate("/");
@@ -71,7 +68,6 @@ function AuthProvider({ children }) {
         credentials: "include",
       });
       setUser(null);
-      localStorage.clear();
       navigate("/login");
     } catch (error) {
       console.log("Error Logging Out", error);

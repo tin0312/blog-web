@@ -1,13 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAuth } from "../../hooks/AuthProvider";
 import Posts from "../Posts/Posts";
 
 function UserProfile() {
   const { user } = useAuth();
-
   // convert image buffer to base64 string
-
-  const profilePicFile = user.profile_pic_file
+  const profilePicFile = user?.profile_pic_file
     ? `data:image/png;base64,${btoa(
         String.fromCharCode(...new Uint8Array(user.profile_pic_file.data))
       )}`
@@ -19,7 +17,7 @@ function UserProfile() {
         <div className="profile-content">
           <img
             className="profile-pic"
-            src={profilePicFile ? profilePicFile : user.profile_pic_url}
+            src={user.profile_pic_file ? profilePicFile : user.profile_pic_url}
             alt="profile-image"
           />
           <div>

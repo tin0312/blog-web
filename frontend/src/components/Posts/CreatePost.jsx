@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks/AuthProvider";
 function CreatePost() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  console.log("user is", user);
   const {
     register,
     handleSubmit,
@@ -17,6 +18,7 @@ function CreatePost() {
     content: { required: "Post Content required" },
   };
   async function handlePost(post) {
+    console.log("Username is :", user.username);
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/posts/add-post`,
@@ -28,7 +30,7 @@ function CreatePost() {
           body: JSON.stringify({
             title: post.title,
             content: post.content,
-            username: user.username,
+            username: user && user.username,
           }),
           credentials: "include",
         }

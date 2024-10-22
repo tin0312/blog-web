@@ -4,7 +4,7 @@ import { useAuth } from "../../../hooks/AuthProvider";
 import handleKeyUp from "../../../helpers/keyEvent";
 
 function Login() {
-  const auth = useAuth();
+  const { logIn, loginError } = useAuth();
   const {
     register,
     handleSubmit,
@@ -14,8 +14,8 @@ function Login() {
     formState: { errors },
   } = useForm();
 
-  async function handleLogin(loginCredentials) {
-    auth.logIn(loginCredentials);
+  function handleLogin(loginCredentials) {
+    logIn(loginCredentials);
   }
 
   const registerOptions = {
@@ -91,6 +91,7 @@ function Login() {
               {errors.passwordConfirmation.message}
             </p>
           )}
+          {loginError && <p className="error-message">{loginError}</p>}
           <div className="btn-container">
             <input type="submit" value="Log in" />
           </div>

@@ -13,6 +13,7 @@ async function getAllPosts(req, res) {
 
 async function addPost(req, res) {
   const { title, content, username } = req.body;
+  console.log("Username is :", username);
   try {
     await db.query(
       "INSERT INTO posts (title, content, author_username) VALUES ($1, $2, $3)",

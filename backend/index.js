@@ -7,6 +7,8 @@ import flash from "connect-flash";
 import cors from "cors";
 import postRoutes from "./routes/postRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import redis from "redis";
+import RedisStore from "connect-redis";
 
 const app = express();
 const port = process.env.PORT;
@@ -15,8 +17,13 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
+let redisClient = redis.createClient({
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
+});
 app.use(
   session({
+    // store: new RedisStore({ client: redisClient }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,

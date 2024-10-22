@@ -6,6 +6,7 @@ const AuthContext = createContext();
 function AuthProvider({ children }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [loginError, setLoginError] = useState("");
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
@@ -19,8 +20,6 @@ function AuthProvider({ children }) {
         if (response.status === 200) {
           const userData = await response.json();
           setUser(userData);
-        } else {
-          setUser(null);
         }
       } catch (error) {
         console.log("Error fetching current user");
@@ -30,6 +29,7 @@ function AuthProvider({ children }) {
   }, []);
 
   async function logIn(userData) {
+    let data;
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND_URL}/users/login`,
@@ -46,13 +46,17 @@ function AuthProvider({ children }) {
           credentials: "include",
         }
       );
-      const data = await response.json();
+      data = await response.json();
       if (response.status === 200) {
         setUser(data.user);
         navigate("/");
+      } else if (response.status === 404) {
+        setLoginError(data.message);
+      } else {
+        setLoginError(data.message);
       }
     } catch (error) {
-      console.log("Error Loging In", error);
+      setLoginError(data.message);
     }
   }
   async function logOut() {
@@ -68,7 +72,7 @@ function AuthProvider({ children }) {
     }
   }
   return (
-    <AuthContext.Provider value={{ user, logIn, logOut, setUser }}>
+    <AuthContext.Provider value={{ user, logIn, loginError, logOut, setUser }}>
       {children}
     </AuthContext.Provider>
   );

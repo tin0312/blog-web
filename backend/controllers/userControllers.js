@@ -89,7 +89,7 @@ function logIn(req, res, next) {
     }
     req.logIn(user, (err) => {
       if (err) {
-        return res.status(500).json({ success: false, message: info.message });
+        return res.status(401).json({ success: false, message: info.message });
       }
       return res
         .status(200)

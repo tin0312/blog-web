@@ -1,5 +1,4 @@
 import db from "../db.js";
-import passport from "passport";
 
 async function getAllPosts(req, res) {
   try {
@@ -13,14 +12,15 @@ async function getAllPosts(req, res) {
 }
 
 async function addPost(req, res) {
-  const { title, content } = req.body;
+  const { title, content, username } = req.body;
   try {
     await db.query(
       "INSERT INTO posts (title, content, author_username) VALUES ($1, $2, $3)",
-      [title, content, req.user.username]
+      [title, content, username]
     );
     res.status(201).json({ message: "Post saved" });
   } catch (error) {
+    console.log("I am sending 500 status code back");
     res.status(500).json({ message: "Error saving post" });
   }
 }
@@ -88,7 +88,7 @@ async function getUserPosts(req, res) {
       [username]
     );
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "No posts found for this user." });
+      return res.status(204).send();
     }
     const posts = result.rows;
     res.json(posts);

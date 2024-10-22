@@ -100,7 +100,7 @@ function Login() {
 
         <div className="google-signin-container">
           <a
-            class="login-link"
+            className="login-link"
             href={`${process.env.REACT_APP_BACKEND_URL}/users/auth/google`}
           >
             <i className="fab fa-google"></i> Sign in with Google

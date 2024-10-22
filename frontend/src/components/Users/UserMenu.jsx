@@ -12,7 +12,7 @@ function UserMenu() {
             <li>
               <Link to="/profile">Profile</Link>
             </li>
-            <hr class="solid" />
+            <hr className="solid" />
             <li>
               <img
                 className="user-icon"

@@ -1,7 +1,7 @@
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
   name VARCHAR(50),
-  username VARCHAR(50) UNIQUE,
+  username VARCHAR(50) UNIQUE NOT NULL,
   profile_pic_file BYTEA,
   profile_pic_url TEXT
   email VARCHAR(254) UNIQUE NOT NULL,
@@ -15,8 +15,10 @@ CREATE TABLE posts (
     created_at DATE DEFAULT CURRENT_DATE,
     updated_at TIMESTAMPTZ DEFAULT NULL,
     cover_image BYTEA,
-    author_username VARCHAR(50),
+    author_username VARCHAR(50) UNIQUE NOT NULL,
     CONSTRAINT fk_author_username FOREIGN KEY (author_username) REFERENCES users(username)
 );
 
+ALTER table users 
+ALTER column username VARCHAR(50) NOT NULL;
 

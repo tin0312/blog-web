@@ -19,11 +19,12 @@ function Posts(props) {
               : "/posts"
           }`
         );
-        const data = await response.json();
-        if (response.status === 404) {
-          setInfo(data.message);
+        if (response.status === 204) {
+          setInfo("No posts found");
+        } else {
+          const data = await response.json();
+          setPosts(data);
         }
-        setPosts(data);
       } catch (error) {
         console.log("Error fetching posts: ", error);
       }
@@ -63,7 +64,7 @@ function Posts(props) {
             </Link>
           ))
         ) : (
-          <p className="info-message">Posts not available</p>
+          <p className="info-message">{info}</p>
         )}
       </div>
     </div>

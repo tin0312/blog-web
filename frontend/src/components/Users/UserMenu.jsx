@@ -15,7 +15,7 @@ function UserMenu() {
             <hr class="solid" />
             <li>
               <img
-                class="user-icon"
+                className="user-icon"
                 src="/icon/log-out.png"
                 alt="logout-icon"
                 onClick={logOut}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useAuth } from "../../hooks/AuthProvider";
 import Posts from "../Posts/Posts";
 
@@ -14,22 +14,26 @@ function UserProfile() {
   return (
     <div className="profile-wrapper">
       <div className="profile-container">
-        <div className="profile-content">
-          <img
-            className="profile-pic"
-            src={user.profile_pic_file ? profilePicFile : user.profile_pic_url}
-            alt="profile-image"
-          />
-          <div>
-            <button>Edit Profile</button>
+        {user && (
+          <div className="profile-content">
+            <img
+              className="profile-pic"
+              src={
+                user.profile_pic_file ? profilePicFile : user.profile_pic_url
+              }
+              alt="profile-image"
+            />
+            <div>
+              <button>Edit Profile</button>
+            </div>
+            <h1>{user.username}</h1>
+            <p>Bio</p>
+            <p>Join Date</p>
+            <div className="profile-posts">
+              <Posts user={user} />
+            </div>
           </div>
-          <h1>{user.username}</h1>
-          <p>Bio</p>
-          <p>Join Date</p>
-        </div>
-        <div className="profile-posts">
-          <Posts user={user} />
-        </div>
+        )}
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ const AuthContext = createContext();
 function AuthProvider({ children }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
@@ -24,16 +24,10 @@ function AuthProvider({ children }) {
         }
       } catch (error) {
         console.log("Error fetching current user");
-      } finally {
-        setLoading(false);
       }
     };
     fetchCurrentUser();
   }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   async function logIn(userData) {
     try {

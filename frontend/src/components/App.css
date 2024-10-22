@@ -839,6 +839,8 @@ hr.solid {
 }
 /* User Profile */
 .profile-container {
+  display: flex;
+  justify-content: center;
   width: 50vw;
 }
 .profile-content {

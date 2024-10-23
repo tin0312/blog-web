@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../../hooks/AuthProvider";
 import handleKeyUp from "../../../helpers/keyEvent";
+import usePasswordToggle from "../../../hooks/usePasswordToggle";
 
 function Login() {
   const { logIn, loginError } = useAuth();
-  const [passwordType, setPasswordType] = useState("password");
-  const [passwordConfirmationType, setPasswordConfirmationType] =
-    useState("password");
+  const { passwordType, passwordConfirmationType, togglePasswordVisibility } =
+    usePasswordToggle();
   const {
     register,
     handleSubmit,
@@ -17,18 +17,6 @@ function Login() {
     formState: { errors },
   } = useForm();
 
-  function showPassword(event) {
-    const dataField = event.target.getAttribute("data-field");
-    if (dataField === "password") {
-      setPasswordType(() => {
-        return passwordType === "password" ? "text" : "password";
-      });
-    } else {
-      setPasswordConfirmationType(() => {
-        return passwordConfirmationType === "password" ? "text" : "password";
-      });
-    }
-  }
   function handleLogin(loginCredentials) {
     logIn(loginCredentials);
   }
@@ -79,8 +67,7 @@ function Login() {
             />
             <img
               className="input-icon"
-              data-field="password"
-              onClick={(event) => showPassword(event)}
+              onClick={() => togglePasswordVisibility("password")}
               id="password-visibility"
               src={`/icon/eye-${
                 passwordType === "password" ? "close" : "open"
@@ -119,8 +106,7 @@ function Login() {
             />
             <img
               className="input-icon"
-              data-field="passwordConfirmation"
-              onClick={(event) => showPassword(event)}
+              onClick={() => togglePasswordVisibility("passwordConfirmation")}
               id="password-visibility"
               src={`/icon/eye-${
                 passwordConfirmationType === "password" ? "close" : "open"

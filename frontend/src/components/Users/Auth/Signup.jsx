@@ -3,26 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../../hooks/AuthProvider";
 import handleKeyUp from "../../../helpers/keyEvent";
+import usePasswordToggle from "../../../hooks/usePasswordToggle";
 
 function SignUp() {
-  const [passwordType, setPasswordType] = useState("password");
-  const [passwordConfirmationType, setPasswordConfirmationType] =
-    useState("password");
+  const { passwordType, passwordConfirmationType, togglePasswordVisibility } =
+    usePasswordToggle();
   const { setUser } = useAuth();
   const navigate = useNavigate();
 
-  function showPassword(event) {
-    const dataField = event.target.getAttribute("data-field");
-    if (dataField === "password") {
-      setPasswordType(() => {
-        return passwordType === "password" ? "text" : "password";
-      });
-    } else {
-      setPasswordConfirmationType(() => {
-        return passwordConfirmationType === "password" ? "text" : "password";
-      });
-    }
-  }
   const {
     register,
     handleSubmit,
@@ -184,7 +172,7 @@ function SignUp() {
               <img
                 className="input-icon"
                 data-field="password"
-                onClick={(event) => showPassword(event)}
+                onClick={() => togglePasswordVisibility("password")}
                 id="password-visibility"
                 src={`/icon/eye-${
                   passwordType === "password" ? "close" : "open"
@@ -223,7 +211,7 @@ function SignUp() {
               <img
                 className="input-icon"
                 data-field="passwordConfirmation"
-                onClick={(event) => showPassword(event)}
+                onClick={() => togglePasswordVisibility("passwordConfirmation")}
                 id="password-visibility"
                 src={`/icon/eye-${
                   passwordConfirmationType === "password" ? "close" : "open"

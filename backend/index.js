@@ -17,20 +17,28 @@ const corsOptions = {
   credentials: true,
 };
 app.use(cors(corsOptions));
-let redisClient = redis.createClient({
-  host: process.env.REDIS_HOST,
-  port: process.env.REDIS_PORT,
+
+// Initialize redis client.
+let redisClient = redis.createClient();
+redisClient.connect().catch(console.error);
+
+// Initialize redis store.
+let redisStore = new RedisStore({
+  client: redisClient,
+  prefix: "userauthentication:",
 });
+
+// Use session with Redis store
 app.use(
   session({
-    // store: new RedisStore({ client: redisClient }),
+    store: redisStore,
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: false,
+      secure: false, // Set to true if using HTTPS
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24,
+      maxAge: 1000 * 60 * 60 * 24, // 24 hours
     },
   })
 );

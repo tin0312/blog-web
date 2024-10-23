@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../../hooks/AuthProvider";
 import handleKeyUp from "../../../helpers/keyEvent";
 
 function Login() {
   const { logIn, loginError } = useAuth();
+  const [passwordType, setPasswordType] = useState("password");
+  const [passwordConfirmationType, setPasswordConfirmationType] =
+    useState("password");
   const {
     register,
     handleSubmit,
@@ -14,6 +17,18 @@ function Login() {
     formState: { errors },
   } = useForm();
 
+  function showPassword(event) {
+    const dataField = event.target.getAttribute("data-field");
+    if (dataField === "password") {
+      setPasswordType(() => {
+        return passwordType === "password" ? "text" : "password";
+      });
+    } else {
+      setPasswordConfirmationType(() => {
+        return passwordConfirmationType === "password" ? "text" : "password";
+      });
+    }
+  }
   function handleLogin(loginCredentials) {
     logIn(loginCredentials);
   }
@@ -38,6 +53,7 @@ function Login() {
           <input
             style={{
               border: `1px solid ${errors.username ? "red" : "transparent"}`,
+              outline: "none",
             }}
             type="text"
             id="title"
@@ -49,43 +65,69 @@ function Login() {
             <p className="error-message">{errors.username.message}</p>
           )}
           <label htmlFor="password">Password</label>
-          <input
-            style={{
-              border: `1px solid ${errors.password ? "red" : "transparent"}`,
-            }}
-            id="password"
-            type="password"
-            name="password"
-            placeholder="********"
-            {...register("password", registerOptions.password)}
-          />
+          <div className="input-container">
+            <input
+              style={{
+                border: `1px solid ${errors.password ? "red" : "transparent"}`,
+                outline: "none",
+              }}
+              type={passwordType}
+              id="password"
+              name="password"
+              {...register("password", registerOptions.password)}
+              placeholder="Password"
+            />
+            <img
+              className="input-icon"
+              data-field="password"
+              onClick={(event) => showPassword(event)}
+              id="password-visibility"
+              src={`/icon/eye-${
+                passwordType === "password" ? "close" : "open"
+              }.png`}
+              alt="eye-icon"
+            />
+          </div>
           {errors.password && (
             <p className="error-message">{errors.password.message}</p>
           )}
           <label htmlFor="password-confirmation">Password Confirmation</label>
-          <input
-            style={{
-              border: `1px solid ${
-                errors.passwordConfirmation ? "red" : "transparent"
-              }`,
-            }}
-            id="password-confirmation"
-            type="password"
-            {...register(
-              "passwordConfirmation",
-              registerOptions.passwordConfirmation
-            )}
-            name="passwordConfirmation"
-            onKeyUp={() =>
-              handleKeyUp(
-                watch("password"),
-                watch("passwordConfirmation"),
-                setError,
-                clearErrors
-              )
-            }
-            placeholder="********"
-          />
+          <div className="input-container">
+            <input
+              style={{
+                border: `1px solid ${
+                  errors.passwordConfirmation ? "red" : "transparent"
+                }`,
+                outline: "none",
+              }}
+              type={passwordConfirmationType}
+              id="passwordConfirmation"
+              name="passwordConfirmation"
+              {...register(
+                "passwordConfirmation",
+                registerOptions.passwordConfirmation
+              )}
+              placeholder="Confirm password"
+              onKeyUp={() =>
+                handleKeyUp(
+                  watch("password"),
+                  watch("passwordConfirmation"),
+                  setError,
+                  clearErrors
+                )
+              }
+            />
+            <img
+              className="input-icon"
+              data-field="passwordConfirmation"
+              onClick={(event) => showPassword(event)}
+              id="password-visibility"
+              src={`/icon/eye-${
+                passwordConfirmationType === "password" ? "close" : "open"
+              }.png`}
+              alt="eye-icon"
+            />
+          </div>
           {errors.passwordConfirmation && (
             <p className="error-message">
               {errors.passwordConfirmation.message}

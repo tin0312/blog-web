@@ -126,6 +126,7 @@ function SignUp() {
             <input
               style={{
                 border: `1px solid ${errors.name ? "red" : "transparent"}`,
+                outline: "none",
               }}
               type="text"
               id="title"
@@ -140,6 +141,7 @@ function SignUp() {
             <input
               style={{
                 border: `1px solid ${errors.username ? "red" : "transparent"}`,
+                outline: "none",
               }}
               type="text"
               id="username"
@@ -154,6 +156,7 @@ function SignUp() {
             <input
               style={{
                 border: `1px solid ${errors.email ? "red" : "transparent"}`,
+                outline: "none",
               }}
               type="email"
               id="email"
@@ -170,6 +173,7 @@ function SignUp() {
                   border: `1px solid ${
                     errors.password ? "red" : "transparent"
                   }`,
+                  outline: "none",
                 }}
                 type={passwordType}
                 id="password"
@@ -197,6 +201,7 @@ function SignUp() {
                   border: `1px solid ${
                     errors.passwordConfirmation ? "red" : "transparent"
                   }`,
+                  outline: "none",
                 }}
                 type={passwordConfirmationType}
                 id="passwordConfirmation"

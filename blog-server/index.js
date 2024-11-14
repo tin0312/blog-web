@@ -4,7 +4,6 @@ import passport from "passport";
 import "dotenv/config";
 import session from "express-session";
 import flash from "connect-flash";
-import cors from "cors";
 import postRoutes from "./routes/postRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import Redis from "ioredis";
@@ -17,17 +16,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "clientbuild")));
-app.get("*", function (req, res) {
-  res.sendFile(path.resolve(__dirname, "clientbuild", "index.html"));
-});
-app.set("trust proxy", true);
 const port = process.env.PORT;
-const corsOptions = {
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-};
-app.use(cors(corsOptions));
-
 // Initialize Redis client.
 const redisClient = new Redis(process.env.REDIS_URL);
 
@@ -52,7 +41,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      secure: true,
+      secure: false,
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
     },
@@ -67,6 +56,9 @@ app.use(flash());
 
 app.use("/posts", postRoutes);
 app.use("/users", userRoutes);
+app.get("*", function (req, res) {
+  res.sendFile(path.resolve(__dirname, "clientbuild", "index.html"));
+});
 
 app.listen(port, () => {
   console.log(`Blog Web server listening at http://localhost:${port}`);

@@ -1,9 +1,8 @@
-function isAuthenticated(req, res, next) {
-  console.log("Is user authenticated", req.isAuthenticated());
-  console.log("User data retrieved", req.user);
-  if (req.isAuthenticated()) {
-    return next();
+const isAuthenticated = (req, res, next) => {
+  if (!req.user) {
+    return res.status(102).send("User not authenticated");
   }
-}
+  next();
+};
 
 export default isAuthenticated;

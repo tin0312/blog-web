@@ -26,7 +26,7 @@ function AuthProvider({ children }) {
       }
     };
     fetchCurrentUser();
-  }, []);
+  }, [user]);
 
   async function logIn(userData) {
     let data;
@@ -43,7 +43,6 @@ function AuthProvider({ children }) {
             username: userData.username,
             password: userData.password,
           }),
-          credentials: "include",
         }
       );
       data = await response.json();
@@ -63,7 +62,6 @@ function AuthProvider({ children }) {
     try {
       await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/log-out`, {
         method: "POST",
-        credentials: "include",
       });
       setUser(null);
       navigate("/login");

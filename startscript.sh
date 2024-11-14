@@ -10,7 +10,3 @@ cd ../blog-client
 npm install # Install client dependencies
 npm run build # Build the client
 mv ./build ../blog-server/clientbuild # Move the build to blog-server/clientbuild
-
-# Go back to blog-server and start the server
-cd ../blog-server
-npm start

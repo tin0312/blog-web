@@ -19,7 +19,7 @@ function CreatePost() {
   async function handlePost(post) {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/posts/add-post`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/posts/add-post`,
         {
           method: "POST",
           headers: {

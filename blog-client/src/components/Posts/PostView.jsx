@@ -11,7 +11,7 @@ function PostView() {
     const getPost = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/posts/${id}`
+          `${process.env.REACT_APP_BACKEND_URL}/api/posts/${id}`
         );
 
         if (!response.ok) {

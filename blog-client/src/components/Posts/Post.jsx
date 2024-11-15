@@ -10,7 +10,7 @@ function Post(props) {
   async function hanldeDeletePost(id) {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/posts/delete/${id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/posts/delete/${id}`,
         {
           method: "DELETE",
         }

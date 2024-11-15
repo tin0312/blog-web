@@ -12,10 +12,7 @@ function AuthProvider({ children }) {
     const fetchCurrentUser = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/users/current-user`,
-          {
-            credentials: "include",
-          }
+          `${process.env.REACT_APP_BACKEND_URL}/api/users/current-user`
         );
         if (response.status === 200) {
           const userData = await response.json();
@@ -26,13 +23,13 @@ function AuthProvider({ children }) {
       }
     };
     fetchCurrentUser();
-  }, [user]);
+  }, []);
 
   async function logIn(userData) {
     let data;
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/users/login`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/users/login`,
 
         {
           headers: {
@@ -60,7 +57,7 @@ function AuthProvider({ children }) {
   }
   async function logOut() {
     try {
-      await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/log-out`, {
+      await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/log-out`, {
         method: "POST",
       });
       setUser(null);

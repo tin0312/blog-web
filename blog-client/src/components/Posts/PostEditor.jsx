@@ -13,7 +13,7 @@ function PostEditor() {
     event.preventDefault();
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/posts/update/${state.id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/posts/update/${state.id}`,
         {
           method: "PATCH",
           headers: {
@@ -23,7 +23,6 @@ function PostEditor() {
             title: post.title,
             content: post.content,
           }),
-          credentials: "include",
         }
       );
       const data = await response.json();

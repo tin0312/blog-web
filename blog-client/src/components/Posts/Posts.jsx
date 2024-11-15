@@ -15,8 +15,8 @@ function Posts(props) {
         let response = await fetch(
           `${serverURL}${
             props.user
-              ? `/posts/${encodeURIComponent(props.user.username)}/posts`
-              : "/posts"
+              ? `/posts/${encodeURIComponent(props.user.username)}/api/posts`
+              : "/api/posts"
           }`
         );
         if (response.status === 204) {

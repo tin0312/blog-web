@@ -54,8 +54,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(flash());
 
-app.use("/posts", postRoutes);
-app.use("/users", userRoutes);
+app.use("/api/posts", postRoutes);
+app.use("/api/users", userRoutes);
 app.get("*", function (req, res) {
   res.sendFile(path.resolve(__dirname, "clientbuild", "index.html"));
 });

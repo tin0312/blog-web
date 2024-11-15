@@ -33,5 +33,3 @@ function UserProfile() {
 }
 
 export default UserProfile;
-
-// https://lh3.googleusercontent.com/a/ACg8ocIovDm9ReJnQf-HxEbEItfoNb_kfNHxPVDs2Wz7Fr4pH79EvZd8=s96-c

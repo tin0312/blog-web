@@ -6,23 +6,17 @@ import {
   updatePost,
   getPost,
   getUserPosts,
-  addReaction,
 } from "../controllers/postControllers.js";
+import multer from "multer";
+const upload = multer({ storage: multer.memoryStorage() });
 
 const router = express.Router();
 
-router.get("/", getAllPosts);
-
-router.post("/add-post", addPost);
-
-router.patch("/:id/add-reaction", addReaction);
-
+router.get("/type/:category", getAllPosts);
+router.post("/add-post", upload.single("coverImg"), addPost);
+router.patch("/update/:id", upload.single("coverImg"), updatePost);
 router.delete("/delete/:id", deletePost);
-
-router.patch("/update/:id", updatePost);
-
 router.get("/:postID", getPost);
-
 router.get("/:username/posts", getUserPosts);
 
 export default router;

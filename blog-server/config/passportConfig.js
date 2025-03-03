@@ -4,6 +4,7 @@ import GoogleStrategy from "passport-google-oauth2";
 import db from "../db.js";
 import bcrypt from "bcrypt";
 import { getQueryForLogin } from "../controllers/userControllers.js";
+import { getProfile } from "../controllers/userControllers.js";
 
 passport.use(
   "local",

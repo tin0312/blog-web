@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import convertTimestamp from "../../helpers/convertTimestamp";
-import { useNavigate, useLocation } from "react-router-dom";
-import PostReactions from "../UI/PostReactions";
+import convertBinaryImageData from "../../helpers/convertImage";
+import { useNavigate, useLocation, matchPath } from "react-router-dom";
+import { Container, Row, Col, Button, Badge } from "react-bootstrap";
+import Markdown from 'marked-react';
 
-function Post(props) {
-  const { state } = useLocation();
+function Post({ id, title, content, author, createdAt, updatedAt, isCurrentUserPost, profileFile, profileUrl, coverImg, postCategory }) {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
-
-  async function hanldeDeletePost(id) {
+  const isAtSpecificPost = matchPath("/posts/:id", pathname) || matchPath("/:category/posts/:id", pathname);
+  async function handleDeletePost(id) {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/posts/delete/${id}`,
+        `/api/posts/delete/${id}`,
         {
           method: "DELETE",
         }
@@ -23,13 +25,14 @@ function Post(props) {
     }
   }
 
-  function hanldeEditPost(
+  function handleEditPost(
     id,
     title,
     content,
     author,
-    authenticatedUser,
-    createdAt
+    isCurrentUserPost,
+    createdAt,
+    coverImgFile
   ) {
     navigate(`/${author}/posts/${id}/edit`, {
       state: {
@@ -37,65 +40,78 @@ function Post(props) {
         title,
         content,
         author,
-        authenticatedUser,
+        isCurrentUserPost,
         createdAt,
+        coverImgFile
       },
     });
   }
 
-  const profilePicFile = props.profileFile
-    ? `data:image/png;base64,${btoa(
-        String.fromCharCode(...new Uint8Array(props.profileFile.data))
-      )}`
-    : null;
 
-  const updatedTime = convertTimestamp(props.updatedAt);
+  const profilePicFile = convertBinaryImageData(profileFile)
+  const coverImgFile = convertBinaryImageData(coverImg)
+  const updatedTime = convertTimestamp(updatedAt);
   return (
-    <div className={props.className || "post-container"}>
-      <div className="post-metadata-container">
-        <img
-          className="profile-pic"
-          src={props.profileFile ? profilePicFile : props?.profileUrl}
-          alt="profile-image"
-        />
-        <div className="post-metadata">
-          <p>{props.author}</p>
-          <p className="date">
-            {new Date(props.createdAt).toLocaleDateString()}
-          </p>
-          <p>{props.updatedAt && updatedTime}</p>
-        </div>
-      </div>
-      <div>
-        <h3>{props.title}</h3>
-        <p className="post-content">{state?.content || ""}</p>
-      </div>
-      {props.authenticatedUser && (
-        <div class="btn-container">
-          <button onClick={() => hanldeDeletePost(props.id)}>Delete</button>
-          <button
-            onClick={() =>
-              hanldeEditPost(
-                props.id,
-                props.title,
-                props.content,
-                props.author,
-                props.authenticatedUser,
-                props.createdAt
-              )
-            }
-          >
-            Edit
-          </button>
-        </div>
-      )}
-      <PostReactions
-        postId={props.id}
-        helpfulCount={props.helpfulCount}
-        likeCount={props.likeCount}
-        brilliantCount={props.brilliantCount}
-      />
-    </div>
+    <Container className={`post-container p-0 mb-2  ${isAtSpecificPost ? "w-50  post-bottom-nav" : ""}`} fluid>
+      {/* Post Cover Image */}
+      <Row>
+        {isAtSpecificPost && <Col>
+          <img className="cover-image w-100" src={coverImgFile} alt="post-cover-image" />
+        </Col>}
+      </Row>
+      {/* Post metadata starts here*/}
+      <Row className="px-4">
+        <Col xs={9} className="post-metadata-container d-flex align-items-center gap-2 p-2">
+          <img
+            className="profile-pic"
+            src={profileFile ? profilePicFile : profileUrl}
+            alt="profile-image"
+          />
+          <div className="post-metadata">
+            <p className="fw-bold">{author}</p>
+            <p className="date">
+              {new Date(createdAt).toLocaleDateString()}
+            </p>
+            <p>{updatedAt && updatedTime}</p>
+          </div>
+        </Col>
+        <Col xs={3} className="pt-2 text-end">
+          <div>
+            <Badge bg="secondary">{postCategory}</Badge>
+          </div>
+        </Col>
+      </Row>
+      {/* Post metadata ends here */}
+      <Row className="px-4">
+        <Col>
+          <h3>{title}</h3>
+          {isAtSpecificPost && <p className="post-content"><Markdown>{content}</Markdown></p>}
+        </Col>
+        {isCurrentUserPost && (
+          <Row>
+            <Col className="ps-0 py-3">
+              <Button className="me-2" variant="light" onClick={() => handleDeletePost(id)}>Delete</Button>
+              <Button
+                variant="dark"
+                onClick={() =>
+                  handleEditPost(
+                    id,
+                    title,
+                    content,
+                    author,
+                    isCurrentUserPost,
+                    createdAt,
+                    coverImgFile
+                  )
+                }
+              >
+                Edit
+              </Button>
+            </Col>
+          </Row>
+        )}
+      </Row>
+    </Container>
   );
 }
 

@@ -3,18 +3,26 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 
 async function getProfile(req, res) {
-  const authorUsername = req.user.username;
+  const { id } = req.params;
   try {
-    const result = await db.query(
-      "SELECT * FROM posts WHERE author_username = $1",
-      [authorUsername]
-    );
-    const posts = result.rows;
-    res.render("profile.ejs", { posts: posts });
+    const result = await db.query("SELECT * FROM users WHERE id = $1", [id]);
+    const user = result.rows[0];
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    req.login(user, (err) => {
+      if (err) {
+        console.error("Error re-authenticating user", err);
+        return res.status(500).json({ error: "Failed to update session" });
+      }
+      return res.json(user);
+    });
   } catch (error) {
-    console.log("Error getting user posts", error);
+    console.error("Error getting user profile", error);
+    res.status(500).json({ error: "Server error" });
   }
 }
+
 
 async function addUser(req, res) {
   const { email, password, name, username } = req.body;
@@ -56,6 +64,44 @@ async function addUser(req, res) {
       }
     }
   });
+}
+
+async function editUserProfile(req, res){
+  const profilePic = req.file?.buffer;
+  const {name, email, username, userURL, userLocation, userBio} = req.body;
+  console.log(req.body)
+  try {
+      const result = await db.query("SELECT * FROM users WHERE email =$1", [email] )
+      const user = result.rows[0];
+      const newUserData = {
+        name: name || user.name,
+        email: email || user?.email,
+        username: username || user?.username,
+        profile_url: userURL || user?.profile_url,
+        location: userLocation || user?.location,
+        profile_pic_file: profilePic || user?.profile_pic_file,
+        bio: userBio || user?.bio
+      }
+      console.log("New user data :", newUserData)
+      try{
+          await db.query("UPDATE users SET name= $1, email= $2, username=$3, profile_url=$4, location=$5, profile_pic_file=$6, bio= $7 WHERE email=$2",
+             [newUserData.name,
+              newUserData.email,
+              newUserData.username,
+              newUserData.profile_url,
+              newUserData.location,
+              newUserData.profile_pic_file,
+              newUserData.bio
+             ])    
+             res.status(200).json({message: "User Profile Updated"})    
+      } catch(error){
+        console.log("error", error)
+         res.status(500).json({message: "Error updating user information"})
+      }
+  } catch(error) {
+      res.status(500).json({message: "Error finding user"})
+      console.log(error)
+  }
 }
 
 async function getQueryForLogin(username) {
@@ -114,4 +160,4 @@ async function logOut(req, res) {
   });
 }
 
-export { getProfile, addUser, logIn, getQueryForLogin, logOut };
+export { getProfile, addUser, logIn, getQueryForLogin, logOut, editUserProfile };

@@ -10,7 +10,9 @@ import SignUp from "./components/Users/Auth/SignUp";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import dotenv from "dotenv";
 import UserProfile from "./components/Users/UserProfile";
-dotenv.config();
+import HomePosts from "./components/Posts/HomePosts";
+import ProfileEditor from "./components/Users/ProfileEditor";
+
 
 const router = createBrowserRouter([
   {
@@ -19,7 +21,17 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Posts />,
+        element: <HomePosts />,
+        children: [
+          {
+            index: true,
+            element: < Posts />
+          },
+          {
+            path: ":topic",
+            element: < Posts />
+          }
+        ]
       },
       {
         path: "/create-post",
@@ -38,17 +50,27 @@ const router = createBrowserRouter([
         element: <PostView />,
       },
       {
-        path: "/profile",
-        element: <UserProfile />,
+        path: "/:category/posts/:id",
+        element: <PostView/>
       },
       {
-        path: "/:username/posts/:id",
-        element: <PostView />,
+        path: "/profile",
+        element: <UserProfile />,
+        children: [
+          {
+            index: true,
+            element: < Posts />
+          }
+        ]
       },
       {
         path: "/:username/posts/:id/edit",
         element: <PostEditor />,
       },
+      {
+        path: "/profile/setting",
+        element: < ProfileEditor/>
+      }
     ],
   },
 ]);
@@ -56,6 +78,6 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
   </React.StrictMode>
 );

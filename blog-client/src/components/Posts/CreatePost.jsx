@@ -1,11 +1,19 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Container, Row, Col, Dropdown } from "react-bootstrap";
+import { useNavigate, useLocation, matchPath } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/AuthProvider";
+import MarkDownEditor from "../UI/MarkDownEditor";
+import UploadButton from "../UI/UploadButton";
+import ButtonsBox from "../UI/ButtonsBox";
 
-function CreatePost() {
+export default function CreatePost({ coverImage, title, content, handleEditPost }) {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, setIsNavHidden } = useAuth();
+  const [postContent, setPostContent] = useState("");
+  const [category, setCategory] = useState("Category");
+  const { pathname } = useLocation();
+  const isEditting = matchPath("/:username/posts/:id/edit", pathname)
   const {
     register,
     handleSubmit,
@@ -16,25 +24,26 @@ function CreatePost() {
     title: { required: "Post Title required" },
     content: { required: "Post Content required" },
   };
-  async function handlePost(post) {
+  async function handleAddPost(post) {
+    const formData = new FormData();
+    formData.append("title", post.title);
+    formData.append("content", postContent);
+    formData.append("username", user.username);
+    formData.append("coverImg", post.coverImg[0]);
+    formData.append("category", category === "Category" ? "software" : category)
+    console.log("Post composing content :", Array.from(formData.values()))
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/posts/add-post`,
+        "/api/posts/add-post",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8",
-          },
-          body: JSON.stringify({
-            title: post.title,
-            content: post.content,
-            username: user && user.username,
-          }),
+          body: formData,
           credentials: "include",
         }
       );
       if (response.status === 201) {
         navigate("/");
+        setIsNavHidden(false)
       } else {
         setError("serverError", {
           type: "custom",
@@ -48,48 +57,77 @@ function CreatePost() {
       console.log("Error saving post", error);
     }
   }
+
+
   return (
-    <div className="form-wrapper">
-      <div className="form-container">
-        <div>
-          <div className="form-title section-title">
-            <p>New Post</p>
-          </div>
-        </div>
-        <form className="post-edit-form" onSubmit={handleSubmit(handlePost)}>
-          <label htmlFor="title" aria-placeholder="hehe">
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            name="title"
-            placeholder="Post title"
-            {...register("title", registerOptions.title)}
-          />
-          {errors.title && (
-            <p className="error-message">{errors.title.message}</p>
-          )}
-          <label htmlFor="body" aria-placeholder="sads">
-            Body
-          </label>
-          <textarea
-            id="body"
-            name="content"
-            placeholder="Post content"
-            {...register("content", registerOptions.content)}
-          ></textarea>
-          {errors.content && (
-            <p className="error-message">{errors.content.message}</p>
-          )}
-          {errors.serverError && (
-            <p className="error-message">{errors.serverError.message}</p>
-          )}
-          <input type="submit" value="POST" />
-        </form>
-      </div>
-    </div>
+    <Container className="editor-wrapper" fluid>
+      <form onSubmit={handleSubmit((post) => isEditting ? handleEditPost(post, postContent) : handleAddPost(post))}>
+        <Row className="editor bg-white p-5">
+
+          <Col>
+
+            <Row>
+              <Col className="pb-3">
+                < UploadButton
+                  label="Add a cover"
+                  register={register}
+                  name="coverImg"
+                  existingFile={coverImage}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <input
+                  className="mb-3"
+                  type="text"
+                  name="title"
+                  defaultValue={title}
+                  placeHolder={`Post title here...`}
+                  {...register("title", registerOptions.title)}
+                  autoFocus
+                  required={!isEditting}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Dropdown onSelect={(eventKey) => setCategory(eventKey)}>
+                  <Dropdown.Toggle className= "mx-0 mb-3" variant="secondary" id="dropdown-basic">
+                {  category}
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                  
+                    <Dropdown.Item eventKey="software">Software</Dropdown.Item>
+                    <Dropdown.Item eventKey="networking">Networking</Dropdown.Item>
+                    <Dropdown.Item eventKey="penetration" >Penetration</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Col>
+            </Row>
+            <Row>
+              <Col >
+                < MarkDownEditor
+                  setPostContent={setPostContent}
+                  content={content}
+                />
+              </Col>
+            </Row>
+            <Row className="mt-3">
+              <Col className="ps-0">
+                {isEditting ?
+                  (<ButtonsBox buttonOneContent="Save" buttonTwoContent="Cancel" />) : (
+                    <ButtonsBox buttonOneContent="Publish" buttonTwoContent="Save draft" />
+                  )}
+              </Col>
+            </Row>
+
+          </Col>
+
+        </Row>
+      </form>
+    </Container>
   );
 }
 
-export default CreatePost;

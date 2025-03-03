@@ -1,34 +1,34 @@
 import React from "react";
-import { useAuth } from "../../hooks/AuthProvider";
-import Posts from "../Posts/Posts";
+import { Container, Row, Col } from "react-bootstrap";
+import UserInfo from "../Users/UserInfo"
+import { Outlet } from "react-router-dom";
 
 function UserProfile() {
-  const { user } = useAuth();
-
   return (
-    <div className="profile-wrapper">
-      <div className="profile-container">
-        {user && (
-          <div className="profile-content">
-            <img
-              className="profile-pic"
-              src={user?.profile_pic}
-              alt="profile-image"
-              referrerPolicy="no-referrer"
-            />
-            <div>
-              <button>Edit Profile</button>
-            </div>
-            <h1>{user.username}</h1>
-            <p>Bio</p>
-            <p>Join Date</p>
-            <div className="profile-posts">
-              <Posts class="profile-posts" user={user} />
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+    <Container className="user-profile-wrapper d-flex flex-column align-items-center relative p-0" fluid>
+      {/* User bg image */}
+      <Row className="position-absolute w-100">
+        <Col className="bg-secondary h-50">
+          <div className="user-bg"></div>
+        </Col>
+      </Row>
+      {/* User info */}
+      <Row className="user-profile-container bg-white align-self-center">
+        <Col>
+          <Row className="user-information-container">
+            <Col className="d-flex flex-column align-items-center px-0">
+              < UserInfo/>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+       {/* User posts */}
+       <Row className="user-posts">
+            <Col className="p-0">
+                <Outlet/> 
+            </Col>
+        </Row>
+    </Container>
   );
 }
 

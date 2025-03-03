@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../../../hooks/AuthProvider";
 import handleKeyUp from "../../../helpers/keyEvent";
 import usePasswordToggle from "../../../hooks/usePasswordToggle";
+import { Button } from "react-bootstrap";
 
 function SignUp() {
   const { passwordType, passwordConfirmationType, togglePasswordVisibility } =
@@ -80,7 +81,7 @@ function SignUp() {
 
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/users/add-user`,
+        "/api/users/add-user",
         {
           method: "POST",
           body: formData,
@@ -112,8 +113,9 @@ function SignUp() {
         <div className="signup-form">
           <form onSubmit={handleSubmit(handleSignUp)}>
             <input
+             className="focus-ring"
               style={{
-                border: `1px solid ${errors.name ? "red" : "transparent"}`,
+                border: `1px solid ${errors.name ? "red" : "#e7d7c1"}`,
                 outline: "none",
               }}
               type="text"
@@ -127,8 +129,9 @@ function SignUp() {
             )}
 
             <input
+             className="focus-ring"
               style={{
-                border: `1px solid ${errors.username ? "red" : "transparent"}`,
+                border: `1px solid ${errors.username ? "red" : "#e7d7c1"}`,
                 outline: "none",
               }}
               type="text"
@@ -142,8 +145,9 @@ function SignUp() {
             )}
 
             <input
+             className="focus-ring"
               style={{
-                border: `1px solid ${errors.email ? "red" : "transparent"}`,
+                border: `1px solid ${errors.email ? "red" : "#e7d7c1"}`,
                 outline: "none",
               }}
               type="email"
@@ -157,9 +161,10 @@ function SignUp() {
             )}
             <div className="input-container">
               <input
+               className="focus-ring"
                 style={{
                   border: `1px solid ${
-                    errors.password ? "red" : "transparent"
+                    errors.password ? "red" : "#e7d7c1"
                   }`,
                   outline: "none",
                 }}
@@ -185,9 +190,10 @@ function SignUp() {
             )}
             <div className="input-container">
               <input
+               className="focus-ring"
                 style={{
                   border: `1px solid ${
-                    errors.passwordConfirmation ? "red" : "transparent"
+                    errors.passwordConfirmation ? "red" : "#e7d7c1"
                   }`,
                   outline: "none",
                 }}
@@ -226,10 +232,11 @@ function SignUp() {
             )}
             <label htmlFor="profile-pic">Profile Picture (optional)</label>
             <input
+             className="focus-ring px-0"
               type="file"
               id="profile-pic"
               name="profilePicFile"
-              accept="image/png, image/jpeg"
+              // accept="image/png, image/jpeg"
               {...register("profilePicFile")}
             />
 
@@ -240,12 +247,11 @@ function SignUp() {
             {errors.root?.serverError && (
               <p className="error-message">{errors.root.serverError.message}</p>
             )}
-
+            <Button variant="dark" type="submit">Send</Button>
             <div className="btn-container">
-              <Link to="/login" className="login-link">
-                Already have an account? Login
+              <Link to="/login">
+                Already have an account? <span className="login-link fw-bold">Login</span>
               </Link>
-              <input type="submit" value="Sign up" />
             </div>
           </form>
         </div>

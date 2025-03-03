@@ -4,6 +4,7 @@ import {
   addUser,
   logIn,
   logOut,
+  editUserProfile
 } from "../controllers/userControllers.js";
 import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
@@ -35,15 +36,24 @@ router.post("/log-out", logOut);
 
 router.get("/current-user", isAuthenticated, (req, res) =>
   res.json({
+    name: req.user.name,
     username: req.user.username,
-    profile_pic: req.user.profile_pic_file
+    join_date: req.user.join_date, 
+    profile_pic_file: req.user.profile_pic_file
       ? `data:image/png;base64,${Buffer.from(
           req.user.profile_pic_file.data
         ).toString("base64")}`
       : req.user.profile_pic_url,
+      email: req.user.email,
+      id: req.user.id,
+      join_date: req.user.join_date,
+      bio: req.user.bio,
+      profile_url: req.user.profile_url,
+      location: req.user.location
   })
 );
 
-router.get("/profile", getProfile);
+router.get("/profile/:id", getProfile);
+router.patch("/profile/edit", upload.single("profilePicFile"), editUserProfile)
 
 export default router;

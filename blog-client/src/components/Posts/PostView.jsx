@@ -11,9 +11,9 @@ function PostView() {
     const getPost = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/api/posts/${id}`
+          `/api/posts/${id}`
         );
-
+        console.log("fetching")
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -28,21 +28,19 @@ function PostView() {
   }, [id]);
 
   return (
-    <div className="post-wrapper">
+    <div>
       <Post
         id={post?.id}
         title={post?.title}
         content={post?.content}
         author={post?.author_username}
         createdAt={post?.created_at}
-        authenticatedUser={state?.authenticatedUser || null}
+        isCurrentUserPost={state?.isCurrentUserPost || null}
         updatedAt={post?.updated_at}
         profileFile={post?.profile_pic_file}
         profileUrl={post?.profile_pic_url}
-        likeCount={post?.likecount}
-        helpfulCount={post?.helpfulcount}
-        brilliantCount={post?.brilliantcount}
-        className="post"
+        coverImg = {post?.cover_image}
+        postCategory={post?.category}
       />
     </div>
   );

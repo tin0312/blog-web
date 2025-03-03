@@ -4,20 +4,23 @@ import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
+    const [isNavHidden, setIsNavHidden] = useState(false);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loginError, setLoginError] = useState("");
+  const [category, setCategory] = useState("software")
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
       try {
         const response = await fetch(
-          `${process.env.REACT_APP_BACKEND_URL}/api/users/current-user`
+          "/api/users/current-user"
         );
         if (response.status === 200) {
           const userData = await response.json();
           setUser(userData);
         }
+        
       } catch (error) {
         console.log("Error fetching current user");
       }
@@ -29,7 +32,7 @@ function AuthProvider({ children }) {
     let data;
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/users/login`,
+        "/api/users/login",
 
         {
           headers: {
@@ -57,7 +60,7 @@ function AuthProvider({ children }) {
   }
   async function logOut() {
     try {
-      await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/log-out`, {
+      await fetch("/api/users/log-out", {
         method: "POST",
       });
       setUser(null);
@@ -67,7 +70,7 @@ function AuthProvider({ children }) {
     }
   }
   return (
-    <AuthContext.Provider value={{ user, logIn, loginError, logOut, setUser }}>
+    <AuthContext.Provider value={{ user, logIn, loginError, logOut, setUser,isNavHidden, setIsNavHidden, category, setCategory }}>
       {children}
     </AuthContext.Provider>
   );

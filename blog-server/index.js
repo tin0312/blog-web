@@ -17,6 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(express.static(path.join(__dirname, "clientbuild")));
 const port = process.env.PORT;
+
 // Initialize Redis client.
 const redisClient = new Redis(process.env.REDIS_URL);
 

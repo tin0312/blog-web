@@ -108,10 +108,11 @@ export default function CreatePost({ coverImage, title, content, handleEditPost 
             </Row>
             <Row>
               <Col >
-                < MarkDownEditor
+                {/* < MarkDownEditor
                   setPostContent={setPostContent}
                   content={content}
-                />
+                /> */}
+                <p>Currently removed Toast-UI/React-Editor due to version conflicts</p>
               </Col>
             </Row>
             <Row className="mt-3">

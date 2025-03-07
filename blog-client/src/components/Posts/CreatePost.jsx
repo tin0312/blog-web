@@ -62,7 +62,7 @@ export default function CreatePost({ coverImage, title, content, handleEditPost 
   return (
     <Container className="editor-wrapper" fluid>
       <form onSubmit={handleSubmit((post) => isEditting ? handleEditPost(post, postContent) : handleAddPost(post))}>
-        <Row className="editor bg-white p-5">
+        <Row className="editor position-relative bg-white p-5">
 
           <Col>
 
@@ -108,15 +108,14 @@ export default function CreatePost({ coverImage, title, content, handleEditPost 
             </Row>
             <Row>
               <Col >
-                {/* < MarkDownEditor
-                  setPostContent={setPostContent}
-                  content={content}
-                /> */}
-                <p>Currently removed Toast-UI/React-Editor due to version conflicts</p>
+                < MarkDownEditor
+                  // setPostContent={setPostContent}
+                  // content={content}
+                />
               </Col>
             </Row>
-            <Row className="mt-3">
-              <Col className="ps-0">
+            <Row>
+              <Col className="ps-0 mt-3">
                 {isEditting ?
                   (<ButtonsBox buttonOneContent="Save" buttonTwoContent="Cancel" />) : (
                     <ButtonsBox buttonOneContent="Publish" buttonTwoContent="Save draft" />

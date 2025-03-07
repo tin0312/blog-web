@@ -240,6 +240,7 @@ form {
   border-radius: 0.3rem;
   cursor: pointer;
 }
+
 /* Inputs and Forms ends here */
 .post {
   width: 70vw;
@@ -680,6 +681,13 @@ a {
     padding: 0;
     margin-top: 0;
   }
+  .editor{
+    margin-top: 2rem;
+    padding: 1rem !important;
+  }
+  .mdxeditor.text-editor{
+    height: 80vh;
+  }
 }
 .editor{
   border-radius: 1rem;
@@ -690,13 +698,27 @@ a {
 .editor input::placeholder{
     font-size: 1.5rem;
 }
-.toastui-editor-defaultUI{
-  border: none !important;
-}
 .opacity-50 {
   opacity: 0.5 !important;
 }
-
+.text-editor{
+  overflow: auto;
+  min-height: 60vh;
+  padding-bottom: 2rem;
+}
+.text-editor ol li{
+ list-style: decimal !important;
+}
+.text-editor ul li{
+  list-style: disc !important;
+  padding-left: 0;
+ }
+ .text-editor ul {
+  padding-left: 1.5rem !important;
+ }
+.mdxeditor-popup-container{
+  display: none;
+}
 /* Post Markdown Editor ends here */
 
 @media only screen and (max-width: 480px) {

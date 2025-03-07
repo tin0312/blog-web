@@ -31,7 +31,6 @@ export default function CreatePost({ coverImage, title, content, handleEditPost 
     formData.append("username", user.username);
     formData.append("coverImg", post.coverImg[0]);
     formData.append("category", category === "Category" ? "software" : category)
-    console.log("Post composing content :", Array.from(formData.values()))
     try {
       const response = await fetch(
         "/api/posts/add-post",
@@ -109,8 +108,8 @@ export default function CreatePost({ coverImage, title, content, handleEditPost 
             <Row>
               <Col >
                 < MarkDownEditor
-                  // setPostContent={setPostContent}
-                  // content={content}
+                  setPostContent={setPostContent}
+                  postContent={content || postContent}
                 />
               </Col>
             </Row>

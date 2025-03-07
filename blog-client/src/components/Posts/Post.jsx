@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import convertTimestamp from "../../helpers/convertTimestamp";
 import convertBinaryImageData from "../../helpers/convertImage";
 import { useNavigate, useLocation, matchPath } from "react-router-dom";
 import { Container, Row, Col, Button, Badge } from "react-bootstrap";
 import Markdown from 'marked-react';
 
+
+
 function Post({ id, title, content, author, createdAt, updatedAt, isCurrentUserPost, profileFile, profileUrl, coverImg, postCategory }) {
-  const { pathname } = useLocation();
+  const { pathname, state } = useLocation();
   const navigate = useNavigate();
   const isAtSpecificPost = matchPath("/posts/:id", pathname) || matchPath("/:category/posts/:id", pathname);
   async function handleDeletePost(id) {
@@ -87,7 +89,7 @@ function Post({ id, title, content, author, createdAt, updatedAt, isCurrentUserP
           <h3>{title}</h3>
           {isAtSpecificPost && <p className="post-content"><Markdown>{content}</Markdown></p>}
         </Col>
-        {isCurrentUserPost && (
+        {(isCurrentUserPost || state?.isCurrentUserPost) && (
           <Row>
             <Col className="ps-0 py-3">
               <Button className="me-2" variant="light" onClick={() => handleDeletePost(id)}>Delete</Button>

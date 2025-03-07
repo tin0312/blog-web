@@ -703,18 +703,21 @@ a {
 }
 .text-editor{
   overflow: auto;
-  min-height: 60vh;
-  padding-bottom: 2rem;
+  min-height: 55vh;
 }
-.text-editor ol li{
+.text-editor ol li,
+.post-content ol li
+{
  list-style: decimal !important;
 }
-.text-editor ul li{
+.text-editor ul li,
+.post-content ul li
+{
   list-style: disc !important;
-  padding-left: 0;
+  margin-left: 1rem;
  }
  .text-editor ul {
-  padding-left: 1.5rem !important;
+  margin-left:  1rem !important;
  }
 .mdxeditor-popup-container{
   display: none;

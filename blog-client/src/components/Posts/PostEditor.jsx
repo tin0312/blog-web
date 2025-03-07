@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import CreatePost from "./CreatePost";
 
 function PostEditor() {
@@ -17,7 +17,11 @@ function PostEditor() {
         credentials: "include"
       })
       if(response.status === 200){
-        navigate(`/posts/${state.id}`)
+        navigate(`/posts/${state.id}`, {
+          state: {
+            isCurrentUserPost: state.isCurrentUserPost
+          }
+        })
       } else {
         alert("Error updating post")
       }

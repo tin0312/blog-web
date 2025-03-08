@@ -4,7 +4,7 @@ async function getAllPosts(req, res) {
   const {category} = req.params;
   try {
     const result = await db.query(
-      "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.likecount, posts.helpfulcount, posts.brilliantcount, posts.category, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE category = $1", [category]
+      "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE category = $1", [category]
     );
     res.json(result.rows);
   } catch (error) {

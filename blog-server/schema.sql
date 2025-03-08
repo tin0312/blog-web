@@ -15,6 +15,7 @@ CREATE TABLE users (
 CREATE TABLE posts (
     id SERIAL PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
+    category TEXT,
     content TEXT NOT NULL,
     created_at DATE DEFAULT CURRENT_DATE,
     updated_at TIMESTAMPTZ DEFAULT NULL,

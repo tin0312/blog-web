@@ -66,6 +66,11 @@ header{
   justify-content: center;
   z-index: 2;
 }
+@media only screen and (max-width: 480px){
+  .desktop-nav{
+    padding: 1rem;
+  }
+}
 .desktop-nav li {
   padding: 1rem;
 }
@@ -634,6 +639,11 @@ a {
 .profile-wrapper {
   margin: 1rem auto;
 }
+@media only screen and (max-width: 480px){
+  .home-wrapper{
+    margin: 0
+  }
+}
 
 .home-wrapper{
   width: 70%;
@@ -663,8 +673,13 @@ a {
 .topics-nav{
   border-radius: 1rem;
   font-size: 0.8rem;
-  top: 0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+@media only screen and (max-width: 480px) {
+    .topics-nav{
+      border-radius: 0;
+    }
+    
 }
 /* Home page layout ends here */
 
@@ -805,6 +820,9 @@ a {
   height: 30px;
 }
 .icon:hover{
+  cursor: pointer;
+}
+.direction-icon:hover{
   cursor: pointer;
 }
 @media only screen and (max-width: 480px){

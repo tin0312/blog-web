@@ -50,10 +50,14 @@ body {
 html{
   position: relative;
 }
-
 h2,
 h3 {
   margin-bottom: 1rem;
+}
+@media only screen and ( max-width: 480px){
+  .logo{
+    font-size: 2rem;
+  }
 }
 /* Start of Navigation */
 header{
@@ -621,9 +625,6 @@ a {
   }
   .nav-link:hover {
     padding-right: 0.8rem;
-  }
-  .nav-link{
-    font-size: 2rem;
   }
 }
 .create-post-btn:hover {

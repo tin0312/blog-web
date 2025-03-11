@@ -50,7 +50,7 @@ function DesktopNav() {
           <Row className="w-100 align-items-center">
             <Col className="px-0" md={2}>
               <li className="fs-2 fw-bold">
-                <p className="pl-0 nav-link" onClick={() => isComposingPost ? setIsPopUpModalShown(true) : navigate("/")}>
+                <p className="pl-0 logo" onClick={() => isComposingPost ? setIsPopUpModalShown(true) : navigate("/")}>
                   Yours
                 </p>
               </li>

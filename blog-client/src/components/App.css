@@ -231,7 +231,7 @@ form {
   }
   .login-wrapper,
   .signup-wrapper {
-    gap: 4rem;
+    gap: 1rem;
     margin-top: 3rem;
     margin-bottom: 5rem;
     flex-direction: column;
@@ -328,7 +328,7 @@ hr{
 
 /* Links start here*/
 .login-link{
-  color: var(--primary-color);
+  color: black;
 }
 
 /* Links end here */
@@ -571,7 +571,7 @@ a {
 @media only screen and (max-width: 480px){
   .get-started-btn{
     letter-spacing: 0;
-    padding: 0.5rem;
+    padding: 0.8rem;
   }
 }
 .get-started-btn:hover{
@@ -620,9 +620,10 @@ a {
     border: 3px solid bisque;
   }
   .nav-link:hover {
-    border-radius: 0.5rem;
-    box-shadow: 10px 5px 5px bisque;
     padding-right: 0.8rem;
+  }
+  .nav-link{
+    font-size: 2rem;
   }
 }
 .create-post-btn:hover {
@@ -678,6 +679,10 @@ a {
 @media only screen and (max-width: 480px) {
     .topics-nav{
       border-radius: 0;
+      box-shadow:none;
+      border-top:  1px solid #f7ebeb; 
+      border-bottom: 1px solid #f7ebeb;
+      font-size: 1rem;
     }
     
 }

@@ -15,7 +15,7 @@ export default function Posts() {
     async function fetchPosts() {
       try {
         let response = await fetch(
-          `/api/posts/${isCurrentUserPosts ? `${user.username}/posts/` : `type/${category}`}`
+          `/api/posts/${isCurrentUserPosts ? `${user?.username}/posts/` : `type/${category}`}`
         );
         const data = await response.json();
         setPosts(data)
@@ -31,6 +31,7 @@ export default function Posts() {
       {posts.length > 0 ?
         posts.map((post) => (
           <Link
+            key={post.id}
             to={
               `posts/${post.id}`
             }

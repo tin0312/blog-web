@@ -1,9 +1,7 @@
 import React from "react";
-import dotenv from "dotenv";
 import { Container, Row, Col } from "react-bootstrap"
 import TopicsNav from "../UI/TopicsNav";
 import PostsEssentials from "../UI/PostsEssentials";
-dotenv.config();
 
 function HomePosts() {
   return (

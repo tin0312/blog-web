@@ -118,7 +118,7 @@ function DesktopNav() {
                       : null
                   }
                   className="icon"
-                  src={user?.profile_pic_file}
+                  src={user?.profile_pic_file || user?.profile_pic_url}
                   alt="user-icon"
                   referrerPolicy="no-referrer"
                 />

@@ -69,7 +69,6 @@ async function addUser(req, res) {
 async function editUserProfile(req, res){
   const profilePic = req.file?.buffer;
   const {name, email, username, userURL, userLocation, userBio} = req.body;
-  console.log(req.body)
   try {
       const result = await db.query("SELECT * FROM users WHERE email =$1", [email] )
       const user = result.rows[0];

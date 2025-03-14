@@ -13,6 +13,7 @@ export default function UserInfo() {
             try {
                 const response = await fetch(`/api/users/profile/${user?.id}`);
                 const userData = await response.json()
+                console.log(userData)
                 userData.profile_pic_file = convertBinaryImageData(userData.profile_pic_file)
                 setUser(userData)
             } catch(error) {
@@ -24,7 +25,7 @@ export default function UserInfo() {
         , [user?.id])
     return (
         <>
-            <img src={user?.profile_pic_file} className="profile-pic" alt="user-picture" />
+            <img src={user?.profile_pic_file || user?.profile_pic_url} className="profile-pic" alt="user-picture" />
             <h6 className="fw-bold my-4">{user?.username}</h6>
             <p>{user?.bio}</p>
             <div className="divider bg-secondary w-100 opacity-25 my-4"></div>

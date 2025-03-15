@@ -7,6 +7,7 @@ export default function PopUpModal({ isPopUpModalShown, setIsPopUpModalShown, is
     function handleNavigate() {
         setIsPopUpModalShown(false)
         setIsNavHidden(false)
+        localStorage.setItem("navState", "false")
         navigate("/")
     }
 

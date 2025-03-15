@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
-    const [isNavHidden, setIsNavHidden] = useState(false);
+  const [isNavHidden, setIsNavHidden] = useState(false);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loginError, setLoginError] = useState("");
@@ -27,7 +27,12 @@ function AuthProvider({ children }) {
     };
     fetchCurrentUser();
   }, []);
-
+  // get the current navbar display
+  useEffect(()=> {
+    const currentNavState = localStorage.getItem("navState") === "true";
+    console.log(currentNavState)
+    setIsNavHidden(currentNavState)
+  }, [])
   async function logIn(userData) {
     let data;
     try {

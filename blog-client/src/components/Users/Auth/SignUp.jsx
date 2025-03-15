@@ -108,7 +108,7 @@ function SignUp() {
 
   return (
     <div>
-      <div className="signup-wrapper">
+      <div className="signup-wrapper d-flex flex-column justify-content-center align-items-center">
         <hr className="hr-text" data-content="Sign Up" />
         <div className="signup-form">
           <form onSubmit={handleSubmit(handleSignUp)}>

@@ -9,4 +9,4 @@ rm -r ./clientbuild || true # Remove previous build if it exists
 cd ../blog-client
 npm install # Install client dependencies
 npm run build # Build the client
-mv ./build ../blog-server/clientbuild # Move the build to blog-server/clientbuild
+mv ./dist ../blog-server/clientbuild # Move the build to blog-server/clientbuild

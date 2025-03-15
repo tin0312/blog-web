@@ -7,10 +7,10 @@ function HomePosts() {
   return (
     <Container className="home-wrapper" fluid>
       <Row>
-        <Col md={3} >
+        <Col xl={3} >
           <PostsEssentials />
         </Col>
-        <Col md={9}>
+        <Col xl={9}>
           <Row>
             < TopicsNav />
           </Row>

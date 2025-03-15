@@ -44,7 +44,7 @@ function DesktopNav() {
     setIsNotificationOpen((preState) => !preState);
   }
   return (
-    <Container className={`desktop-nav px-md-5 ${isProfile ? "position-fixed top-0" : ""} ${isNavHidden ? "bg-transparent" : "bg-white"}`} fluid >
+    <Container className={`desktop-nav ${isProfile ? "position-fixed top-0" : ""} ${isNavHidden ? "bg-transparent" : "bg-white"}`} fluid >
       <Row className="w-100">
         <Col xs={2} md={6} className="desktop-nav p-0">
           <Row className="w-100 align-items-center">
@@ -127,7 +127,7 @@ function DesktopNav() {
             </>
           ) : (
             <>
-              <li className="d-none-md">
+              <li className="d-none d-xl-block">
                 <Link className="nav-link d-none d-md-block" to="/login"> Sign in</Link>
               </li>
               <li className="px-0">

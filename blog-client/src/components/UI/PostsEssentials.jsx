@@ -3,7 +3,7 @@ import React from "react";
 
 export default function PostsEssentials() {
     return (
-        <div className="d-none d-md-flex posts-essentials position-sticky bg-white">
+        <div className="d-none d-xl-flex posts-essentials position-sticky bg-white">
             <ul className="d-flex flex-column justify-content-between gap-5">
                 <li className="fw-bold p-4"><a href="/readinglist">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="icon">

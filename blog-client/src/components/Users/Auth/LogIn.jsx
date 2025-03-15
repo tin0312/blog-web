@@ -35,7 +35,7 @@ function Login() {
 
   return (
     <div>
-      <div className="login-wrapper">
+      <div className="login-wrapper d-flex flex-column flex-xl-row justify-content-center align-items-center">
       <div className="google-signin-container">
           <a
             className="login-link"

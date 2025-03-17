@@ -18,8 +18,9 @@ export default function PopUpModal({ isPopUpModalShown, setIsPopUpModalShown, is
             keyboard={false}
             centered
         >
-            <Modal.Header closeButton>
-                <Modal.Title>You have unsaved changes. Do you want to navigate to leave this page?</Modal.Title>
+            <Modal.Header>
+                <Modal.Title>You have unsaved changes. <br/>
+                Do you want to navigate to leave this page?</Modal.Title>
             </Modal.Header>
             <Modal.Footer className="d-flex justify-content-center">
                 <Button variant="secondary" onClick={handleNavigate}>

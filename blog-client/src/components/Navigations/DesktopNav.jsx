@@ -47,7 +47,7 @@ function DesktopNav() {
     <Container className={`desktop-nav ${isProfile ? "position-fixed top-0" : ""} ${isNavHidden ? "bg-transparent" : "bg-white"}`} fluid >
       <Row className="w-100">
         <Col xs={2} md={6} className="desktop-nav p-0">
-          <Row className="w-100 align-items-center">
+          <Row className="w-100 align-iteFms-center">
             <Col className="px-0" md={2}>
               <li className="fs-2 fw-bold">
                 <p className="pl-0 logo" onClick={() => isComposingPost ? setIsPopUpModalShown(true) : navigate("/")}>

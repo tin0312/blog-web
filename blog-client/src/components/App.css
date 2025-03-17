@@ -45,6 +45,9 @@ body {
   body{
     font-size:0.85rem
   }
+  .modal-title{
+    font-size: 1.2rem !important;
+  }
 }
 
 html{

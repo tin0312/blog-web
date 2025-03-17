@@ -30,7 +30,6 @@ function AuthProvider({ children }) {
   // get the current navbar display
   useEffect(()=> {
     const currentNavState = localStorage.getItem("navState") === "true";
-    console.log(currentNavState)
     setIsNavHidden(currentNavState)
   }, [])
   async function logIn(userData) {

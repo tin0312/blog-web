@@ -57,6 +57,10 @@ h2,
 h3 {
   margin-bottom: 1rem;
 }
+.logo:hover{
+  color: #e7d7c1;
+  cursor: pointer;
+}
 @media only screen and ( max-width: 1024px){
   .logo{
     font-size: 2rem;
@@ -97,7 +101,7 @@ header{
   border-radius: 0.5rem;
   top: 5.2rem;
   right: 1.5rem;
-  width: 170px;
+  width: 10rem;
   padding: 1rem 0 0;
   box-shadow: 0 0 5px var(--shadow-color);
   z-index: 10000;

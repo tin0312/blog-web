@@ -1,5 +1,31 @@
 import '@mdxeditor/editor/style.css'
-import { MDXEditor, UndoRedo, BoldItalicUnderlineToggles, toolbarPlugin, listsPlugin, ListsToggle, codeMirrorPlugin, InsertCodeBlock, codeBlockPlugin, ConditionalContents, ChangeCodeMirrorLanguage } from '@mdxeditor/editor'
+import {
+  MDXEditor,
+  UndoRedo,
+  BoldItalicUnderlineToggles,
+  toolbarPlugin,
+  CodeToggle,
+  InsertCodeBlock,
+  codeBlockPlugin,
+  headingsPlugin,
+  listsPlugin,
+  linkPlugin,
+  quotePlugin,
+  markdownShortcutPlugin,
+  ListsToggle,
+  linkDialogPlugin,
+  CreateLink,
+  InsertImage,
+  InsertTable,
+  tablePlugin,
+  imagePlugin,
+  codeMirrorPlugin,
+  ConditionalContents,
+  ChangeCodeMirrorLanguage,
+  Separator,
+  InsertThematicBreak,
+  diffSourcePlugin,
+} from "@mdxeditor/editor";
 
 function MarkDownEditor({ setPostContent, postContent }) {
   return <MDXEditor
@@ -9,30 +35,51 @@ function MarkDownEditor({ setPostContent, postContent }) {
     placeholder="Write your post here..."
     onChange={(markdown) => setPostContent(markdown)}
     plugins={[
+      // headingsPlugin(),
+      listsPlugin(),
+      linkPlugin(),
+      linkDialogPlugin(),
+      tablePlugin(),
+      imagePlugin(),
       codeBlockPlugin({
-         defaultCodeBlockLanguage: 'js', 
-    }),
-      codeMirrorPlugin({
-        codeBlockLanguages: { jsx: 'JavaScript (react)', js: 'JavaScript', css: 'CSS', tsx: 'TypeScript (react)' }
+        defaultCodeBlockLanguage: "js",
       }),
+      codeMirrorPlugin({
+        codeBlockLanguages: { jsx: "JavaScript (react)", js: "JavaScript", css: "CSS", tsx: "TypeScript (react)" },
+        autoLoadLanguageSupport: true,
+      }),
+      diffSourcePlugin({ viewMode: "rich-text", diffMarkdown: "" }),
       toolbarPlugin({
         toolbarContents: () => (
           <>
-            <UndoRedo />
-            <BoldItalicUnderlineToggles />
-            <ListsToggle />
             <ConditionalContents
               options={[
-                { when: (editor) => editor?.editorType === 'codeBlock', contents: () => <ChangeCodeMirrorLanguage /> },
+                { when: (editor) => editor?.editorType === 'codeblock', contents: () => <ChangeCodeMirrorLanguage /> },
                 {
-                  fallback: () => <InsertCodeBlock />
+                  fallback: () => (
+                    <>
+                      <UndoRedo />
+                      <Separator />
+                      <BoldItalicUnderlineToggles />
+                      <CodeToggle />
+                      <Separator />
+                      <ListsToggle />
+                      <Separator />
+                      <CreateLink />
+                      <InsertImage />
+                      <Separator />
+                      <InsertTable />
+                      <InsertThematicBreak />
+                      <Separator />
+                      <InsertCodeBlock />
+                    </>
+                  ),
                 }
               ]}
             />
           </>
         )
       }),
-      listsPlugin()
     ]}
   />
 }

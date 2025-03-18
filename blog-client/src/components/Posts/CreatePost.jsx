@@ -7,11 +7,11 @@ import MarkDownEditor from "../UI/MarkDownEditor";
 import UploadButton from "../UI/UploadButton";
 import ButtonsBox from "../UI/ButtonsBox";
 
-export default function CreatePost({ coverImage, title, content, handleEditPost }) {
+export default function CreatePost({ coverImage, title, content, handleEditPost, postCategory }) {
   const navigate = useNavigate();
   const { user, setIsNavHidden } = useAuth();
   const [postContent, setPostContent] = useState("");
-  const [category, setCategory] = useState("Category");
+  const [category, setCategory] = useState(postCategory);
   const { pathname } = useLocation();
   const isEditting = matchPath("/:username/posts/:id/edit", pathname)
   const {
@@ -60,7 +60,7 @@ export default function CreatePost({ coverImage, title, content, handleEditPost 
 
   return (
     <Container className="editor-wrapper" fluid>
-      <form onSubmit={handleSubmit((post) => isEditting ? handleEditPost(post, postContent) : handleAddPost(post))}>
+      <form onSubmit={handleSubmit((post) => isEditting ? handleEditPost(post, postContent, category) : handleAddPost(post))}>
         <Row className="editor position-relative bg-white p-5">
 
           <Col>

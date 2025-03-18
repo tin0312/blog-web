@@ -34,7 +34,8 @@ function Post({ id, title, content, author, createdAt, updatedAt, isCurrentUserP
     author,
     isCurrentUserPost,
     createdAt,
-    coverImgFile
+    coverImgFile,
+    postCategory
   ) {
     navigate(`/${author}/posts/${id}/edit`, {
       state: {
@@ -44,7 +45,8 @@ function Post({ id, title, content, author, createdAt, updatedAt, isCurrentUserP
         author,
         isCurrentUserPost,
         createdAt,
-        coverImgFile
+        coverImgFile,
+        postCategory 
       },
     });
   }
@@ -103,7 +105,8 @@ function Post({ id, title, content, author, createdAt, updatedAt, isCurrentUserP
                     author,
                     isCurrentUserPost,
                     createdAt,
-                    coverImgFile
+                    coverImgFile,
+                    postCategory
                   )
                 }
               >

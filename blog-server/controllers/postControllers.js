@@ -26,7 +26,8 @@ async function addPost(req, res) {
   }
 }
 async function updatePost(req, res) {
-  const { title, content } = req.body;
+  const { title, content, category } = req.body;
+  console.log(req.body)
   let coverImg = req.file?.buffer
   const id = req.params.id;
   try {
@@ -35,14 +36,16 @@ async function updatePost(req, res) {
     const newPostContent = {
       title: title || post.title,
       content: content || post.content,
+      category: category || post.category,
       coverImg: coverImg || post.cover_image
     };
     try {
       await db.query(
-        "UPDATE posts SET title = $1, content = $2 , cover_image = $3, updated_at = $4 WHERE id =$5",
+        "UPDATE posts SET title = $1, content = $2 , category=$3, cover_image = $4, updated_at = $5 WHERE id =$6",
         [
           newPostContent.title,
           newPostContent.content,
+          newPostContent.category,
           newPostContent.coverImg,
           new Date().toISOString(),
           id,

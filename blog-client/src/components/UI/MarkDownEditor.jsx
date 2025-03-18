@@ -35,7 +35,6 @@ function MarkDownEditor({ setPostContent, postContent }) {
     placeholder="Write your post here..."
     onChange={(markdown) => setPostContent(markdown)}
     plugins={[
-      // headingsPlugin(),
       listsPlugin(),
       linkPlugin(),
       linkDialogPlugin(),

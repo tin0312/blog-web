@@ -27,7 +27,6 @@ async function addPost(req, res) {
 }
 async function updatePost(req, res) {
   const { title, content, category } = req.body;
-  console.log(req.body)
   let coverImg = req.file?.buffer
   const id = req.params.id;
   try {

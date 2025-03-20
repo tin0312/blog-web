@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Dropdown } from "react-bootstrap";
 import { useNavigate, useLocation, matchPath } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -9,9 +9,8 @@ import ButtonsBox from "../UI/ButtonsBox";
 
 export default function CreatePost({ coverImage, title, content, handleEditPost, postCategory }) {
   const navigate = useNavigate();
-  const { user, setIsNavHidden } = useAuth();
+  const { user, setIsNavHidden, category, setCategory } = useAuth();
   const [postContent, setPostContent] = useState("");
-  const [category, setCategory] = useState(postCategory);
   const { pathname } = useLocation();
   const isEditting = matchPath("/:username/posts/:id/edit", pathname)
   const {
@@ -24,13 +23,18 @@ export default function CreatePost({ coverImage, title, content, handleEditPost,
     title: { required: "Post Title required" },
     content: { required: "Post Content required" },
   };
+ useEffect(()=>{
+  if(postCategory){
+    setCategory(postCategory)
+  }
+ }, [])
   async function handleAddPost(post) {
     const formData = new FormData();
     formData.append("title", post.title);
     formData.append("content", postContent);
     formData.append("username", user.username);
     formData.append("coverImg", post.coverImg[0]);
-    formData.append("category", category === "Category" ? "software" : category)
+    formData.append("category", category)
     try {
       const response = await fetch(
         "/api/posts/add-post",
@@ -93,7 +97,7 @@ export default function CreatePost({ coverImage, title, content, handleEditPost,
               <Col>
                 <Dropdown onSelect={(eventKey) => setCategory(eventKey)}>
                   <Dropdown.Toggle className= "mx-0 mb-3" variant="secondary" id="dropdown-basic">
-                {  category}
+                { category}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>

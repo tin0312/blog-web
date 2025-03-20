@@ -5,11 +5,10 @@ import { useAuth } from "../../hooks/AuthProvider";
 
 
 export default function Posts() {
-  const { category, user } = useAuth()
+  const { category, user, setCategory } = useAuth()
   const [posts, setPosts] = useState([]);
   const location = useLocation()
   const isCurrentUserPosts = location.pathname === "/profile";
-
 
   useEffect(() => {
     async function fetchPosts() {
@@ -26,6 +25,7 @@ export default function Posts() {
 
     fetchPosts();
   }, [category, user]);
+
   return (
     <div className="posts-wrapper">
       {posts.length > 0 ?
@@ -37,7 +37,6 @@ export default function Posts() {
             }
             state={{
               isCurrentUserPost: post.author_username === user?.username,
-              content: post.content,
             }}
           >
             <Post

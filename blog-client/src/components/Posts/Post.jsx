@@ -1,16 +1,40 @@
-import React from "react";
-import convertTimestamp from "../../helpers/convertTimestamp";
-import convertBinaryImageData from "../../helpers/convertImage";
-import { useNavigate, useLocation, matchPath } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import { useNavigate, useLocation, matchPath, useParams } from "react-router-dom";
 import { Container, Row, Col, Button, Badge } from "react-bootstrap";
 import Markdown from 'marked-react';
+import Reactions from "../UI/Reactions";
+import convertTimestamp from "../../helpers/convertTimestamp";
+import convertBinaryImageData from "../../helpers/convertImage";
 
 
 
-function Post({ id, title, content, author, createdAt, updatedAt, isCurrentUserPost, profileFile, profileUrl, coverImg, postCategory }) {
+function Post({title, content, author, createdAt, updatedAt, profileFile, profileUrl, postCategory, coverImg}) {
+  const [post, setPost] = useState();
   const { pathname, state } = useLocation();
   const navigate = useNavigate();
+  const { id } = useParams();
   const isAtSpecificPost = matchPath("/posts/:id", pathname) || matchPath("/:category/posts/:id", pathname);
+   useEffect(() => {
+      const getPost = async () => {
+        try {
+          const response = await fetch(
+            `/api/posts/${id}`
+          );
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+  
+          const postContent = await response.json();
+          setPost(postContent);
+        } catch (error) {
+          console.log("Error getting post ", error);
+        }
+      };
+      if(isAtSpecificPost){
+          getPost();
+      }
+ 
+    }, [id]);
   async function handleDeletePost(id) {
     try {
       const response = await fetch(
@@ -52,9 +76,9 @@ function Post({ id, title, content, author, createdAt, updatedAt, isCurrentUserP
   }
 
 
-  const profilePicFile = convertBinaryImageData(profileFile)
-  const coverImgFile = convertBinaryImageData(coverImg)
-  const updatedTime = convertTimestamp(updatedAt);
+  const profilePicFile = convertBinaryImageData(profileFile || post?.profile_pic_file)
+  const coverImgFile = convertBinaryImageData(coverImg || post?.cover_image)
+  const updatedTime = convertTimestamp(updatedAt || post?.updated_at);
   return (
     <Container className={`post-container p-0 mb-2  ${isAtSpecificPost ? "w-50  post-bottom-nav" : ""}`} fluid>
       {/* Post Cover Image */}
@@ -68,30 +92,30 @@ function Post({ id, title, content, author, createdAt, updatedAt, isCurrentUserP
         <Col xs={9} className="post-metadata-container d-flex align-items-center gap-2 p-2">
           <img
             className="profile-pic"
-            src={profileFile ? profilePicFile : profileUrl}
+            src={profileFile || post?.profile_pic_file ? profilePicFile : profileUrl || post?.profile_pic_url}
             alt="profile-image"
           />
           <div className="post-metadata">
-            <p className="fw-bold">{author}</p>
+            <p className="fw-bold">{author || post?.author_username}</p>
             <p className="date">
-              {new Date(createdAt).toLocaleDateString()}
+              {new Date(createdAt || post?.created_at).toLocaleDateString()}
             </p>
-            <p>{updatedAt && updatedTime}</p>
+            <p>{updatedAt || post?.updated_at && updatedTime}</p>
           </div>
         </Col>
         <Col xs={3} className="pt-2 text-end">
           <div>
-            <Badge bg="secondary">{postCategory}</Badge>
+            <Badge bg="secondary">{postCategory || post?.category}</Badge>
           </div>
         </Col>
       </Row>
       {/* Post metadata ends here */}
       <Row className="px-4">
         <Col>
-          <h3>{title}</h3>
-          {isAtSpecificPost && <p className="post-content"><Markdown>{content}</Markdown></p>}
+          <h3>{title || post?.title}</h3>
+          {isAtSpecificPost && <p className="post-content"><Markdown>{content || post?.content}</Markdown></p>}
         </Col>
-        {(isCurrentUserPost || state?.isCurrentUserPost) && (
+        {state?.isCurrentUserPost && (
           <Row>
             <Col className="ps-0 py-3">
               <Button className="me-2" variant="light" onClick={() => handleDeletePost(id)}>Delete</Button>
@@ -99,14 +123,14 @@ function Post({ id, title, content, author, createdAt, updatedAt, isCurrentUserP
                 variant="dark"
                 onClick={() =>
                   handleEditPost(
-                    id,
-                    title,
-                    content,
-                    author,
-                    isCurrentUserPost,
-                    createdAt,
+                    post.id,
+                    post.title,
+                    post.content,
+                    post.author_username,
+                    state.isCurrentUserPost,
+                    post.created_at,
                     coverImgFile,
-                    postCategory
+                    post.category
                   )
                 }
               >

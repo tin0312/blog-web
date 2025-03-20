@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import CreatePost from "./CreatePost";
 
@@ -7,7 +7,6 @@ function PostEditor() {
   const navigate = useNavigate();
   async function handleEditPost(post, postContent, category){
     const formData = new FormData();
-    console.log(category)
     formData.append("title", post.title);
     formData.append("content", postContent);
     formData.append("coverImg", post.coverImg[0]);

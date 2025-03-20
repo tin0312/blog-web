@@ -2,16 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./components/App";
 import Posts from "./components/Posts/Posts";
-import PostView from "./components/Posts/PostView";
 import PostEditor from "./components/Posts/PostEditor";
 import CreatePost from "./components/Posts/CreatePost";
 import LogIn from "./components/Users/Auth/LogIn";
 import SignUp from "./components/Users/Auth/SignUp";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import dotenv from "dotenv";
 import UserProfile from "./components/Users/UserProfile";
 import HomePosts from "./components/Posts/HomePosts";
 import ProfileEditor from "./components/Users/ProfileEditor";
+import Post from "./components/Posts/Post";
 
 
 const router = createBrowserRouter([
@@ -47,11 +46,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/posts/:id",
-        element: <PostView />,
+        element: <Post />,
       },
       {
         path: "/:category/posts/:id",
-        element: <PostView/>
+        element: <Post />
       },
       {
         path: "/profile",

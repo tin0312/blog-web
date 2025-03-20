@@ -8,7 +8,7 @@ import { Row, Col, Form, Container, Button } from "react-bootstrap";
 import PopUpModal from "../UI/PopUpModal";
 
 function DesktopNav() {
-  const { user, isNavHidden, setIsNavHidden } = useAuth();
+  const { user, isNavHidden, setIsNavHidden, setCategory } = useAuth();
   const [isUserMenu, setIsUserMenu] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isPopUpModalShown, setIsPopUpModalShown] = useState(false);
@@ -50,7 +50,7 @@ function DesktopNav() {
           <Row className="w-100 align-iteFms-center">
             <Col className="px-0" md={2}>
               <li className="fs-2 fw-bold">
-                <p className="pl-0 logo" onClick={() => isComposingPost ? setIsPopUpModalShown(true) : navigate("/")}>
+                <p className="pl-0 logo" onClick={() => isComposingPost ? setIsPopUpModalShown(true) : (navigate("/"), setCategory("software"))}>
                   Yours
                 </p>
               </li>

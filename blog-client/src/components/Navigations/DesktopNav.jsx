@@ -93,7 +93,9 @@ function DesktopNav() {
                 <Link 
                 onClick={() =>{
                     setIsNavHidden(true)
-                    localStorage.setItem("navState", "true")}
+                    localStorage.setItem("navState", "true")
+                    setCategory("software")                  
+                  }
                 } 
                 className="nav-link"
                 to="/create-post">

@@ -40,6 +40,7 @@ body {
   font-family: "Gilroy", sans-serif;
   background-color: var(--primary-color);
   font-size: 1rem;
+  height: 100%;
 }
 @media only screen and (max-width: 1024px) {
   body{
@@ -52,6 +53,7 @@ body {
 
 html{
   position: relative;
+  height: 100vh;
 }
 h2,
 h3 {
@@ -658,6 +660,9 @@ a {
        width: 100%;
     }
 }
+.post-container{
+  margin-bottom: 3rem;
+}
 .post-container,
 .user-card-container {
   box-shadow: 0 0 10px var(--shadow-color);
@@ -665,14 +670,17 @@ a {
   padding: 0 1rem;
   background-color: white;
 }
+@media only screen and (max-width: 768px){
+  .post-outer-container{
+    min-height: 100vh;
+}
+}
+
 @media only screen and (max-width: 1024px){
   .post-container{ 
     width: 100% !important;
     margin-top: 0 !important;
   }
-}
-.post-bottom-nav{
-  margin-top: 1rem;
 }
 .topics-nav{
   border-radius: 1rem;
@@ -904,3 +912,31 @@ a {
 .error-message {
   color: red;
 }
+
+@media only screen and (max-width: 768px) {
+  .interaction-buttons {
+    flex-direction: row !important;
+    position: fixed; 
+    bottom: 0;
+    left: 0; 
+    right: 0;
+    background-color: white;
+    height: 3rem;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 -2px 5px var(--shadow-color);
+}
+}
+.interaction-buttons > *:first-child:hover{
+  color: red;
+  cursor: pointer;
+}
+.interaction-buttons > *:nth-child(2):hover{
+  color: orange;
+  cursor: pointer;
+}
+.interaction-buttons > *:nth-child(3):hover{
+  color: blue;
+  cursor: pointer;
+}
+

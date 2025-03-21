@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, matchPath, useParams } from "react-router-dom";
 import { Container, Row, Col, Button, Badge } from "react-bootstrap";
 import Markdown from 'marked-react';
@@ -8,33 +8,33 @@ import convertBinaryImageData from "../../helpers/convertImage";
 
 
 
-function Post({title, content, author, createdAt, updatedAt, profileFile, profileUrl, postCategory, coverImg}) {
+function Post({ title, content, author, createdAt, updatedAt, profileFile, profileUrl, postCategory, coverImg }) {
   const [post, setPost] = useState();
   const { pathname, state } = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
   const isAtSpecificPost = matchPath("/posts/:id", pathname) || matchPath("/:category/posts/:id", pathname);
-   useEffect(() => {
-      const getPost = async () => {
-        try {
-          const response = await fetch(
-            `/api/posts/${id}`
-          );
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-  
-          const postContent = await response.json();
-          setPost(postContent);
-        } catch (error) {
-          console.log("Error getting post ", error);
+  useEffect(() => {
+    const getPost = async () => {
+      try {
+        const response = await fetch(
+          `/api/posts/${id}`
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
-      };
-      if(isAtSpecificPost){
-          getPost();
+
+        const postContent = await response.json();
+        setPost(postContent);
+      } catch (error) {
+        console.log("Error getting post ", error);
       }
- 
-    }, [id]);
+    };
+    if (isAtSpecificPost) {
+      getPost();
+    }
+
+  }, [id]);
   async function handleDeletePost(id) {
     try {
       const response = await fetch(
@@ -70,7 +70,7 @@ function Post({title, content, author, createdAt, updatedAt, profileFile, profil
         isCurrentUserPost,
         createdAt,
         coverImgFile,
-        postCategory 
+        postCategory
       },
     });
   }
@@ -80,66 +80,77 @@ function Post({title, content, author, createdAt, updatedAt, profileFile, profil
   const coverImgFile = convertBinaryImageData(coverImg || post?.cover_image)
   const updatedTime = convertTimestamp(updatedAt || post?.updated_at);
   return (
-    <Container className={`post-container p-0 mb-2  ${isAtSpecificPost ? "w-50  post-bottom-nav" : ""}`} fluid>
-      {/* Post Cover Image */}
-      <Row>
-        {isAtSpecificPost && <Col>
-          <img className="cover-image w-100" src={coverImgFile} alt="post-cover-image" />
-        </Col>}
-      </Row>
-      {/* Post metadata starts here*/}
-      <Row className="px-4">
-        <Col xs={9} className="post-metadata-container d-flex align-items-center gap-2 p-2">
-          <img
-            className="profile-pic"
-            src={profileFile || post?.profile_pic_file ? profilePicFile : profileUrl || post?.profile_pic_url}
-            alt="profile-image"
-          />
-          <div className="post-metadata">
-            <p className="fw-bold">{author || post?.author_username}</p>
-            <p className="date">
-              {new Date(createdAt || post?.created_at).toLocaleDateString()}
-            </p>
-            <p>{updatedAt || post?.updated_at && updatedTime}</p>
-          </div>
-        </Col>
-        <Col xs={3} className="pt-2 text-end">
-          <div>
-            <Badge bg="secondary">{postCategory || post?.category}</Badge>
-          </div>
-        </Col>
-      </Row>
-      {/* Post metadata ends here */}
-      <Row className="px-4">
-        <Col>
-          <h3>{title || post?.title}</h3>
-          {isAtSpecificPost && <p className="post-content"><Markdown>{content || post?.content}</Markdown></p>}
-        </Col>
-        {state?.isCurrentUserPost && (
+    <Container className={`${isAtSpecificPost ? "mt-md-5" : ""} fluid p-0`}>
+      <Row className="post-outer-container">
+        {isAtSpecificPost && (<Col md={1} className="d-none d-md-block pt-md-5">
+          <Reactions />
+        </Col>)}
+
+        <Col className="post-container px-0">
+          {/* Post Cover Image */}
           <Row>
-            <Col className="ps-0 py-3">
-              <Button className="me-2" variant="light" onClick={() => handleDeletePost(id)}>Delete</Button>
-              <Button
-                variant="dark"
-                onClick={() =>
-                  handleEditPost(
-                    post.id,
-                    post.title,
-                    post.content,
-                    post.author_username,
-                    state.isCurrentUserPost,
-                    post.created_at,
-                    coverImgFile,
-                    post.category
-                  )
-                }
-              >
-                Edit
-              </Button>
+            {isAtSpecificPost && <Col>
+              <img className="cover-image w-100" src={coverImgFile} alt="post-cover-image" />
+            </Col>}
+          </Row>
+          {/* Post metadata starts here*/}
+          <Row className="px-4">
+            <Col xs={9} className="post-metadata-container d-flex align-items-center gap-2 p-2">
+              <img
+                className="profile-pic"
+                src={profileFile || post?.profile_pic_file ? profilePicFile : profileUrl || post?.profile_pic_url}
+                alt="profile-image"
+              />
+              <div className="post-metadata">
+                <p className="fw-bold">{author || post?.author_username}</p>
+                <p className="date">
+                  {new Date(createdAt || post?.created_at).toLocaleDateString()}
+                </p>
+                <p>{updatedAt || post?.updated_at && updatedTime}</p>
+              </div>
+            </Col>
+            <Col xs={3} className="pt-2 text-end">
+              <div>
+                <Badge bg="secondary">{postCategory || post?.category}</Badge>
+              </div>
             </Col>
           </Row>
-        )}
+          {/* Post metadata ends here */}
+          <Row className="px-4">
+            <Col>
+              <h3>{title || post?.title}</h3>
+              {isAtSpecificPost && <p className="post-content"><Markdown>{content || post?.content}</Markdown></p>}
+            </Col>
+            {state?.isCurrentUserPost && (
+              <Row>
+                <Col className="ps-0 py-3">
+                  <Button className="me-2" variant="light" onClick={() => handleDeletePost(id)}>Delete</Button>
+                  <Button
+                    variant="dark"
+                    onClick={() =>
+                      handleEditPost(
+                        post.id,
+                        post.title,
+                        post.content,
+                        post.author_username,
+                        state.isCurrentUserPost,
+                        post.created_at,
+                        coverImgFile,
+                        post.category
+                      )
+                    }
+                  >
+                    Edit
+                  </Button>
+                </Col>
+              </Row>
+            )}
+          </Row>
+        </Col>
       </Row>
+      {isAtSpecificPost && (<div className="d-md-none">
+          <Reactions />
+        </div>)}
     </Container>
   );
 }

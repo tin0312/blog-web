@@ -81,12 +81,12 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
   const updatedTime = convertTimestamp(updatedAt || post?.updated_at);
   return (
     <Container className={`${isAtSpecificPost ? "mt-md-5" : ""} fluid p-0`}>
-      <Row className={`${isAtSpecificPost ? "post-outer-container" : ""}`}>
+      <Row className={`mx-0 ${isAtSpecificPost ? "post-outer-container" : ""}`}>
         {isAtSpecificPost && (<Col md={1} className="d-none d-md-block pt-md-5">
           <Reactions />
         </Col>)}
 
-        <Col className={`post-container px-0 ${isAtSpecificPost ? "mb-5" : "mb-2"}`}>
+        <Col className= "post-container px-0 mb-2">
           {/* Post Cover Image */}
           <Row>
             {isAtSpecificPost && <Col>

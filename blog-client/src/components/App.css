@@ -660,9 +660,6 @@ a {
        width: 100%;
     }
 }
-.post-container{
-  margin-bottom: 3rem;
-}
 .post-container,
 .user-card-container {
   box-shadow: 0 0 10px var(--shadow-color);
@@ -673,6 +670,7 @@ a {
 @media only screen and (max-width: 768px){
   .post-outer-container{
     min-height: 100vh;
+    padding-bottom: 8rem;
 }
 }
 
@@ -913,17 +911,18 @@ a {
   color: red;
 }
 
+/* Post Interaction starts here */
 @media only screen and (max-width: 768px) {
   .interaction-buttons {
     flex-direction: row !important;
-    position: fixed; 
+    position: fixed !important; 
     bottom: 0;
     left: 0; 
     right: 0;
     background-color: white;
     height: 3rem;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     box-shadow: 0 -2px 5px var(--shadow-color);
 }
 }
@@ -939,4 +938,25 @@ a {
   color: blue;
   cursor: pointer;
 }
+.reaction-emotions-container{
+  top: -1rem;
+  left: 2rem;
+  gap: 3rem;
+  border-radius: 2rem; 
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) 
+}
+@media only screen and (max-width: 768px){
+  .reaction-emotions-container{
+    top: -4rem;
+  }
+}
+.reaction-emotions-container > *{
+  padding: 0.1rem;
+  border-radius: 1rem;
 
+}
+.reaction-emotions-container > *:hover{
+  background-color:#c3c2c0;
+}
+
+/* Post Interaction ends here */

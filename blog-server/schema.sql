@@ -24,3 +24,14 @@ CREATE TABLE posts (
     CONSTRAINT fk_author_username FOREIGN KEY (author_username) REFERENCES users(username)
 );
 
+CREATE TABLE reactions (
+interacted_user_id INT UNIQUE NOT NULL,
+author_id INT UNIQUE NOT NULL,
+post_id INT UNIQUE NOT NULL,
+love_count INT DEFAULT 0,
+agree_count INT DEFAULT 0,
+mind_blown_count INT DEFAULT 0,
+on_fire_count INT DEFAULT 0,
+total_reaction_count INT GENERATED ALWAYS AS (love_count + agree_count + mind_blown_count + on_fire_count) STORED
+);
+

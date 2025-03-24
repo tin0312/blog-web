@@ -36,6 +36,7 @@ router.post("/log-out", logOut);
 
 router.get("/current-user", isAuthenticated, (req, res) =>
   res.json({
+    userId: req.user.id,
     name: req.user.name,
     username: req.user.username,
     join_date: req.user.join_date, 

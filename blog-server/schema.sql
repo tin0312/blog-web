@@ -21,13 +21,15 @@ CREATE TABLE posts (
     updated_at TIMESTAMPTZ DEFAULT NULL,
     cover_image BYTEA,
     author_username VARCHAR(50) NOT NULL,
+    author_id NOT NULL UNIQUE,
     CONSTRAINT fk_author_username FOREIGN KEY (author_username) REFERENCES users(username)
 );
 
 CREATE TABLE reactions (
-interacted_user_id INT UNIQUE NOT NULL,
-author_id INT UNIQUE NOT NULL,
-post_id INT UNIQUE NOT NULL,
+id SERIAL PRIMARY KEY,
+interacted_user_id INT NOT NULL,
+author_id INT NOT NULL,
+post_id INT NOT NULL,
 love_count INT DEFAULT 0,
 agree_count INT DEFAULT 0,
 mind_blown_count INT DEFAULT 0,

@@ -13,6 +13,7 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
   const { pathname, state } = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
+
   const isAtSpecificPost = matchPath("/posts/:id", pathname) || matchPath("/:category/posts/:id", pathname);
   useEffect(() => {
     const getPost = async () => {
@@ -35,6 +36,7 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
     }
 
   }, [id]);
+  
   async function handleDeletePost(id) {
     try {
       const response = await fetch(
@@ -82,11 +84,14 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
   return (
     <Container className={`${isAtSpecificPost ? "mt-md-5" : ""} fluid p-0`}>
       <Row className={`mx-0 ${isAtSpecificPost ? "post-outer-container" : ""}`}>
-        {isAtSpecificPost && (<Col md={1} className="d-none d-md-block pt-md-5">
-          <Reactions />
+        {isAtSpecificPost && post && (<Col md={1} className="d-none d-md-block pt-md-5">
+          <Reactions
+            postId={id}
+            authorId={post?.author_id}
+          />
         </Col>)}
 
-        <Col className= "post-container px-0 mb-2">
+        <Col className="post-container px-0 mb-2">
           {/* Post Cover Image */}
           <Row>
             {isAtSpecificPost && <Col>
@@ -148,9 +153,12 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
           </Row>
         </Col>
       </Row>
-      {isAtSpecificPost && (<div className="d-md-none">
-          <Reactions />
-        </div>)}
+      {isAtSpecificPost && post && (<div className="d-md-none">
+        <Reactions
+          postId={id}
+          authorId={post?.author_username}
+        />
+      </div>)}
     </Container>
   );
 }

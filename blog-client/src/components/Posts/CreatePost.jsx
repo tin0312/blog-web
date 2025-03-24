@@ -34,7 +34,8 @@ export default function CreatePost({ coverImage, title, content, handleEditPost,
     formData.append("content", postContent);
     formData.append("username", user.username);
     formData.append("coverImg", post.coverImg[0]);
-    formData.append("category", category)
+    formData.append("category", category),
+    formData.append("authorId", user.userId)
     try {
       const response = await fetch(
         "/api/posts/add-post",

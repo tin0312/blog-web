@@ -4,7 +4,7 @@ async function getAllPosts(req, res) {
   const {category} = req.params;
   try {
     const result = await db.query(
-      "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE category = $1", [category]
+      "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, posts.author_id, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE category = $1", [category]
     );
     res.json(result.rows);
   } catch (error) {
@@ -13,17 +13,57 @@ async function getAllPosts(req, res) {
 }
 
 async function addPost(req, res) {
-  const { title, content, username, category } = req.body;
+  const { title, content, username, category, authorId } = req.body;
   let coverImg = req.file?.buffer
   try {
     await db.query(
-      "INSERT INTO posts (title, content, author_username, cover_image, category) VALUES ($1, $2, $3, $4, $5)",
-      [title, content, username, coverImg, category]
+      "INSERT INTO posts (title, content, author_username, cover_image, category, author_id) VALUES ($1, $2, $3, $4, $5, $6)",
+      [title, content, username, coverImg, category, authorId]
     );
     res.status(201).json({ message: "Post saved" });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: "Error saving post" });
   }
+}
+async function addReaction(req, res){
+   const { postId, currentUserId, authorId, love, agree, mindBlown, onFire } = req.body;
+    try{
+        const result = await db.query("SELECT * FROM reactions WHERE reaction_id = $1", [postId])
+        console.log(result.rows)
+        if(result.rows.length === 0){
+          try {
+            await db.query("INSERT INTO reactions (interacted_user_id, author_id, post_id, love_count, agree_count, mind_blown_count, on_fire_count, reaction_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",[
+                  currentUserId,
+                  authorId,
+                  postId,
+                  love,
+                  agree,
+                  mindBlown,
+                  onFire,
+                  postId
+            ])
+        } catch(error){
+          console.log("Error saving reactions to posts", error)
+        } 
+        } else {
+          try {
+            await db.query("UPDATE reactions SET interacted_user_id = $1, author_id = $2, love_count=$3, agree_count= $4, mind_blown_count= $5, on_fire_count= $6 WHERE reaction_id = $7", [
+              currentUserId,
+              authorId,
+              love,
+              agree,
+              mindBlown,
+              onFire,
+              postId
+            ])
+          } catch(error){
+             console.log("Error updaing post reactions", error)
+          }
+        }
+    } catch(error){
+      console.log("Error locating reacted post", error)
+    }
 }
 async function updatePost(req, res) {
   const { title, content, category } = req.body;
@@ -74,7 +114,7 @@ async function getPost(req, res) {
   try {
     const result = await db.query(
       `SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, 
-              posts.category, posts.cover_image, users.profile_pic_file, users.profile_pic_url 
+              posts.category, posts.cover_image, posts.author_id, users.profile_pic_file, users.profile_pic_url 
        FROM posts 
        INNER JOIN users ON posts.author_username = users.username 
        WHERE posts.id = $1`,
@@ -118,4 +158,5 @@ export {
   updatePost,
   getPost,
   getUserPosts,
+  addReaction
 };

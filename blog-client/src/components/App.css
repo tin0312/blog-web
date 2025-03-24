@@ -939,11 +939,15 @@ a {
   cursor: pointer;
 }
 .reaction-emotions-container{
+  z-index: 10;
   top: -1rem;
   left: 2rem;
   gap: 3rem;
   border-radius: 2rem; 
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) 
+}
+.reaction-emotions-container >*:hover{
+  cursor: pointer;
 }
 @media only screen and (max-width: 768px){
   .reaction-emotions-container{

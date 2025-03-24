@@ -161,9 +161,14 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
       </Row>
       {isAtSpecificPost && post && (<div className="d-md-none">
         <Reactions
-          postId={id}
-          authorId={post?.author_username}
-        />
+            postId={id}
+            authorId={post.author_id}
+            loveCount={post.love_count}
+            agreeCount={post.agree_count}
+            mindBlownCount={post.mind_blown_count}
+            onFireCount={post.on_fire_count}
+            totalReactionCount={post.total_reaction_count}
+          />
       </div>)}
     </Container>
   );

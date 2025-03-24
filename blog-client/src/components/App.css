@@ -670,7 +670,7 @@ a {
 @media only screen and (max-width: 768px){
   .post-outer-container{
     min-height: 100vh;
-    padding-bottom: 8rem;
+    padding-bottom: 12rem;
 }
 }
 
@@ -920,7 +920,7 @@ a {
     left: 0; 
     right: 0;
     background-color: white;
-    height: 3rem;
+    height: 5rem;
     align-items: center;
     justify-content: space-evenly;
     box-shadow: 0 -2px 5px var(--shadow-color);
@@ -951,7 +951,7 @@ a {
 }
 @media only screen and (max-width: 768px){
   .reaction-emotions-container{
-    top: -4rem;
+    top: -5rem;
   }
 }
 .reaction-emotions-container > *{

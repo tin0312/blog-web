@@ -26,7 +26,7 @@ CREATE TABLE posts (
 );
 
 CREATE TABLE reactions (
-id SERIAL PRIMARY KEY,
+reaction_id SERIAL PRIMARY KEY,
 interacted_user_id INT NOT NULL,
 author_id INT NOT NULL,
 post_id INT NOT NULL,

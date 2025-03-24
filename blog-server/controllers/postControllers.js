@@ -1,7 +1,7 @@
 import db from "../db.js";
 
 async function getAllPosts(req, res) {
-  const {category} = req.params;
+  const { category } = req.params;
   try {
     const result = await db.query(
       "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, posts.author_id, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE category = $1", [category]
@@ -26,44 +26,44 @@ async function addPost(req, res) {
     res.status(500).json({ message: "Error saving post" });
   }
 }
-async function addReaction(req, res){
-   const { postId, currentUserId, authorId, love, agree, mindBlown, onFire } = req.body;
-    try{
-        const result = await db.query("SELECT * FROM reactions WHERE reaction_id = $1", [postId])
-        console.log(result.rows)
-        if(result.rows.length === 0){
-          try {
-            await db.query("INSERT INTO reactions (interacted_user_id, author_id, post_id, love_count, agree_count, mind_blown_count, on_fire_count, reaction_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",[
-                  currentUserId,
-                  authorId,
-                  postId,
-                  love,
-                  agree,
-                  mindBlown,
-                  onFire,
-                  postId
-            ])
-        } catch(error){
-          console.log("Error saving reactions to posts", error)
-        } 
-        } else {
-          try {
-            await db.query("UPDATE reactions SET interacted_user_id = $1, author_id = $2, love_count=$3, agree_count= $4, mind_blown_count= $5, on_fire_count= $6 WHERE reaction_id = $7", [
-              currentUserId,
-              authorId,
-              love,
-              agree,
-              mindBlown,
-              onFire,
-              postId
-            ])
-          } catch(error){
-             console.log("Error updaing post reactions", error)
-          }
-        }
-    } catch(error){
-      console.log("Error locating reacted post", error)
+async function addReaction(req, res) {
+  let existingReaction;
+  const { postId, currentUserId, authorId, love, agree, mindBlown, onFire } = req.body;
+  try {
+    existingReaction = await db.query("SELECT * FROM reactions WHERE reaction_id = $1", [postId])
+    if (existingReaction.rows.length === 0) {
+      try {
+        await db.query("INSERT INTO reactions (interacted_user_id, author_id, post_id, love_count, agree_count, mind_blown_count, on_fire_count, reaction_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", [
+          currentUserId,
+          authorId,
+          postId,
+          love,
+          agree,
+          mindBlown,
+          onFire,
+          postId
+        ])
+      } catch (error) {
+        console.log("Error saving reactions to posts", error)
+      }
+    } else {
+      try {
+        await db.query("UPDATE reactions SET interacted_user_id = $1, author_id = $2, love_count=$3, agree_count= $4, mind_blown_count= $5, on_fire_count= $6 WHERE reaction_id = $7", [
+          currentUserId,
+          authorId,
+          love,
+          agree,
+          mindBlown,
+          onFire,
+          postId
+        ])
+      } catch (error) {
+        console.log("Error updaing post reactions", error)
+      }
     }
+  } catch (error) {
+    console.log("Error locating reacted post", error)
+  }
 }
 async function updatePost(req, res) {
   const { title, content, category } = req.body;
@@ -114,13 +114,14 @@ async function getPost(req, res) {
   try {
     const result = await db.query(
       `SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, 
-              posts.category, posts.cover_image, posts.author_id, users.profile_pic_file, users.profile_pic_url 
+              posts.category, posts.cover_image, posts.author_id, users.profile_pic_file, users.profile_pic_url,
+              reactions.love_count, reactions.agree_count, reactions.mind_blown_count, reactions.on_fire_count, reactions.total_reaction_count 
        FROM posts 
-       INNER JOIN users ON posts.author_username = users.username 
+       INNER JOIN users ON posts.author_id = users.id 
+       LEFT JOIN reactions ON posts.id = reactions.post_id
        WHERE posts.id = $1`,
       [postID]
     );
-
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Post not found" });
     }

@@ -21,7 +21,7 @@ CREATE TABLE posts (
     updated_at TIMESTAMPTZ DEFAULT NULL,
     cover_image BYTEA,
     author_username VARCHAR(50) NOT NULL,
-    author_id NOT NULL UNIQUE,
+    author_id INT,
     CONSTRAINT fk_author_username FOREIGN KEY (author_username) REFERENCES users(username)
 );
 

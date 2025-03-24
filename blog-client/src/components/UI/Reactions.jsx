@@ -1,17 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../hooks/AuthProvider";
 
-export default function Reactions({ postId, authorId }) {
+export default function Reactions({ postId, authorId, loveCount, agreeCount, mindBlownCount, onFireCount, totalReactionCount }) {
     const { user } = useAuth();
     const [isReactionEmotions, setIsReactionEmotions] = useState(false);
     const [reactionEmotions, setReactionEmotions] = useState({
         postId: parseInt(postId),
         currentUserId: user?.userId,
         authorId,
-        love: 0,
-        agree: 0,
-        mindBlown: 0,
-        onFire: 0,
+        love: loveCount || 0,
+        agree: agreeCount || 0,
+        mindBlown: mindBlownCount || 0,
+        onFire: onFireCount || 0,
+        totalReactionCount: totalReactionCount || 0
     });
 
     // Avoid react state batch updates to prevent unnecessary API calls
@@ -37,6 +38,7 @@ export default function Reactions({ postId, authorId }) {
             const updatedReactEmotions = {
                 ...prev,
                 [emotion]: prev[emotion] + 1,
+                totalReactionCount: prev.totalReactionCount + 1
             };
 
             if (!hasSavedRef.current) {
@@ -54,46 +56,72 @@ export default function Reactions({ postId, authorId }) {
     return (
         <>
             <div className="interaction-buttons d-flex flex-column gap-5 position-relative">
-                <span
-                    className="material-symbols-outlined"
-                    onClick={() => setIsReactionEmotions((prevState) => !prevState)}
-                >
-                    add_reaction
-                </span>
-                <span className="material-symbols-outlined">comment</span>
-                <span className="material-symbols-outlined">bookmark</span>
+                <div className="text-center">
+                    <span
+                        title="Add reactions"
+                        className="material-symbols-outlined"
+                        onClick={() => {
+                            setIsReactionEmotions((prevState) => !prevState)}
+                        }
+                    >
+                        add_reaction
+                    </span>
+                    <p className="text-secondary">{reactionEmotions.totalReactionCount}</p>
+                </div>
+                <div className="text-center">
+                    <span className="material-symbols-outlined" title="Jump to comments">comment</span>
+                    <p className="text-secondary">0</p>
+                </div>
+                <div className="text-center">
+                    <span className="material-symbols-outlined" title="Save">bookmark</span>
+                    <p className="text-secondary">0</p>
+                </div>
+
                 <div
                     className={`${isReactionEmotions ? "d-block" : "d-none"
                         } reaction-emotions-container position-absolute bg-white p-3 d-flex`}
                 >
-                    <img
-                        onClick={() => handleReactionClick("love")}
-                        width="38"
-                        height="38"
-                        src="https://img.icons8.com/color/38/filled-like.png"
-                        alt="filled-like"
-                    />
-                    <img
-                        onClick={() => handleReactionClick("agree")}
-                        width="38"
-                        height="38"
-                        src="https://img.icons8.com/color/38/high-five--v1.png"
-                        alt="high-five--v1"
-                    />
-                    <img
-                        onClick={() => handleReactionClick("mindBlown")}
-                        width="38"
-                        height="38"
-                        src="https://img.icons8.com/3d-fluency/94/exploding-head.png"
-                        alt="exploding-head"
-                    />
-                    <img
-                        onClick={() => handleReactionClick("onFire")}
-                        width="38"
-                        height="38"
-                        src="https://img.icons8.com/emoji/38/fire.png"
-                        alt="fire"
-                    />
+                    <div className="text-center">
+                        <img
+                            onClick={() => handleReactionClick("love")}
+                            width="38"
+                            height="38"
+                            src="https://img.icons8.com/color/38/filled-like.png"
+                            alt="filled-like"
+                        />
+                        <p className="text-secondary">{reactionEmotions.love}</p>
+                    </div>
+                    <div className="text-center">
+                        <img
+                            onClick={() => handleReactionClick("agree")}
+                            width="38"
+                            height="38"
+                            src="https://img.icons8.com/color/38/high-five--v1.png"
+                            alt="high-five--v1"
+                        />
+                        <p className="text-secondary">{reactionEmotions.agree}</p>
+                    </div>
+                    <div className="text-center">
+                        <img
+                            onClick={() => handleReactionClick("mindBlown")}
+                            width="38"
+                            height="38"
+                            src="https://img.icons8.com/3d-fluency/94/exploding-head.png"
+                            alt="exploding-head"
+                        />
+                        <p className="text-secondary">{reactionEmotions.mindBlown}</p>
+                    </div>
+                    <div className="text-center">
+                        <img
+                            onClick={() => handleReactionClick("onFire")}
+                            width="38"
+                            height="38"
+                            src="https://img.icons8.com/emoji/38/fire.png"
+                            alt="fire"
+                        />
+                        <p className="text-secondary">{reactionEmotions.onFire}</p>
+                    </div>
+
                 </div>
             </div>
         </>

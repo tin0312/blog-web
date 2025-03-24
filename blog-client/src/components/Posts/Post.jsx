@@ -22,6 +22,7 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
           `/api/posts/${id}`
         );
         if (!response.ok) {
+          console.log(response)
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
@@ -87,7 +88,12 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
         {isAtSpecificPost && post && (<Col md={1} className="d-none d-md-block pt-md-5">
           <Reactions
             postId={id}
-            authorId={post?.author_id}
+            authorId={post.author_id}
+            loveCount={post.love_count}
+            agreeCount={post.agree_count}
+            mindBlownCount={post.mind_blown_count}
+            onFireCount={post.on_fire_count}
+            totalReactionCount={post.total_reaction_count}
           />
         </Col>)}
 

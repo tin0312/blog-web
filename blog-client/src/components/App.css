@@ -941,7 +941,7 @@ a {
 .reaction-emotions-container{
   z-index: 10;
   top: -1rem;
-  left: 2rem;
+  left: 4rem;
   gap: 3rem;
   border-radius: 2rem; 
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1) 

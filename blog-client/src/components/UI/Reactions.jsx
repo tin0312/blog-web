@@ -14,7 +14,15 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
         onFire: onFireCount || 0,
         totalReactionCount: totalReactionCount || 0
     });
-
+    const [emotionStates, setEmotionStates] = useState({
+        love: false,
+        agree: false,
+        mindBlown: false,
+        onFire: false
+    })
+    useEffect(() => {
+        console.log(emotionStates["love"])
+    }, [emotionStates])
     // Avoid react state batch updates to prevent unnecessary API calls
     const hasSavedRef = useRef(false);
 
@@ -34,19 +42,24 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
     }
 
     function handleReactionClick(emotion) {
-        setReactionEmotions((prev) => {
-            const updatedReactEmotions = {
-                ...prev,
-                [emotion]: prev[emotion] + 1,
-                totalReactionCount: prev.totalReactionCount + 1
-            };
+        setEmotionStates((prev) => {
+            const isAdding = !prev[emotion]
+            setReactionEmotions((prev) => {
+                const updatedReactEmotions = {
+                    ...prev,
+                    [emotion]: prev[emotion] + (isAdding ? 1 : -1),
+                    totalReactionCount: prev.totalReactionCount + (isAdding ? 1 : -1)
+                };
 
-            if (!hasSavedRef.current) {
-                handleSaveReactionEmotions(updatedReactEmotions);
-                hasSavedRef.current = true;
-            }
-            return updatedReactEmotions;
-        });
+                if (!hasSavedRef.current) {
+                    handleSaveReactionEmotions(updatedReactEmotions);
+                    hasSavedRef.current = true;
+                }
+                return updatedReactEmotions;
+            });
+
+            return { ...prev, [emotion]: isAdding }
+        })
     }
 
     useEffect(() => {
@@ -61,7 +74,8 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
                         title="Add reactions"
                         className="material-symbols-outlined"
                         onClick={() => {
-                            setIsReactionEmotions((prevState) => !prevState)}
+                            setIsReactionEmotions((prevState) => !prevState)
+                        }
                         }
                     >
                         add_reaction
@@ -81,7 +95,7 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
                     className={`${isReactionEmotions ? "d-block" : "d-none"
                         } reaction-emotions-container position-absolute bg-white p-3 d-flex`}
                 >
-                    <div className="text-center">
+                    <div className={`text-center ${emotionStates["love"] ? "bg-secondary-subtle" : ""} `} >
                         <img
                             onClick={() => handleReactionClick("love")}
                             width="38"
@@ -91,8 +105,9 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
                         />
                         <p className="text-secondary">{reactionEmotions.love}</p>
                     </div>
-                    <div className="text-center">
+                    <div className={`text-center ${emotionStates["agree"] ? "bg-secondary-subtle" : ""} `}>
                         <img
+
                             onClick={() => handleReactionClick("agree")}
                             width="38"
                             height="38"
@@ -101,7 +116,7 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
                         />
                         <p className="text-secondary">{reactionEmotions.agree}</p>
                     </div>
-                    <div className="text-center">
+                    <div className={`text-center ${emotionStates["mindBlown"] ? "bg-secondary-subtle" : ""} `}>
                         <img
                             onClick={() => handleReactionClick("mindBlown")}
                             width="38"
@@ -111,8 +126,9 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
                         />
                         <p className="text-secondary">{reactionEmotions.mindBlown}</p>
                     </div>
-                    <div className="text-center">
+                    <div className={`text-center ${emotionStates["onFire"] ? "bg-secondary-subtle" : ""} `}>
                         <img
+
                             onClick={() => handleReactionClick("onFire")}
                             width="38"
                             height="38"

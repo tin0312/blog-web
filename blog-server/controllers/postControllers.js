@@ -136,7 +136,8 @@ async function getPost(req, res) {
 
 
 async function getUserPosts(req, res) {
-  const username = decodeURIComponent(req.params.username.trim());
+  const username = Buffer.from(req.params.username, 'base64').toString('utf-8');
+
   try {
     const result = await db.query(
       "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE author_username = $1",

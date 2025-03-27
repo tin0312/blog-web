@@ -43,6 +43,7 @@ async function addReaction(req, res) {
           onFire,
           postId
         ])
+        return res.sendStatus(200);
       } catch (error) {
         console.log("Error saving reactions to posts", error)
       }
@@ -57,6 +58,7 @@ async function addReaction(req, res) {
           onFire,
           postId
         ])
+        return res.sendStatus(200)
       } catch (error) {
         console.log("Error updaing post reactions", error)
       }
@@ -124,8 +126,7 @@ async function getPost(req, res) {
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Post not found" });
-    }
-
+    } 
     const post = result.rows[0];
     res.json(post);
   } catch (error) {
@@ -140,11 +141,11 @@ async function getUserPosts(req, res) {
 
   try {
     const result = await db.query(
-      "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE author_username = $1",
+      "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, posts.author_id, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE author_username = $1",
       [username]
     );
     if (result.rows.length === 0) {
-      return res.status(204).send();
+      return res.sendStatus(204);
     }
     const posts = result.rows;
     res.json(posts);

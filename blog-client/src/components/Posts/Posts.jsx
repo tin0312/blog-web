@@ -51,7 +51,6 @@ export default function Posts() {
               profileUrl={post.profile_pic_url}
               postCategory={post.category}
               coverImg={post.cover_image}
-              currentUserId={user?.username}
             />
           </Link>
         ))

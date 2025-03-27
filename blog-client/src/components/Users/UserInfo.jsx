@@ -11,7 +11,7 @@ export default function UserInfo() {
         if(!user?.id) return; 
         async function fetchUserData(){
             try {
-                const response = await fetch(`/api/users/profile/${user?.id}`);
+                const response = await fetch(`/api/users/profile/${user?.userId}`);
                 const userData = await response.json()
                 userData.profile_pic_file = convertBinaryImageData(userData.profile_pic_file)
                 setUser(userData)

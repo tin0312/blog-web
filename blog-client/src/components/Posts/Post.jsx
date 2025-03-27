@@ -130,7 +130,7 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
           <Row className="px-4">
             <Col>
               <h3>{title || post?.title}</h3>
-              {isAtSpecificPost && <p className="post-content"><Markdown>{content || post?.content}</Markdown></p>}
+              {isAtSpecificPost && <div className="post-content"><Markdown>{content || post?.content}</Markdown></div>}
             </Col>
             {state?.isCurrentUserPost && (
               <Row>

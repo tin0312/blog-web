@@ -46,7 +46,6 @@ router.get("/current-user", isAuthenticated, (req, res) =>
         ).toString("base64")}`
       : req.user.profile_pic_url,
       email: req.user.email,
-      id: req.user.id,
       join_date: req.user.join_date,
       bio: req.user.bio,
       profile_url: req.user.profile_url,

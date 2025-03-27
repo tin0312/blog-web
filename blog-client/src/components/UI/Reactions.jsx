@@ -20,9 +20,6 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
         mindBlown: false,
         onFire: false
     })
-    useEffect(() => {
-        console.log(emotionStates["love"])
-    }, [emotionStates])
     // Avoid react state batch updates to prevent unnecessary API calls
     const hasSavedRef = useRef(false);
 

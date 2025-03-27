@@ -11,6 +11,7 @@ import UserProfile from "./components/Users/UserProfile";
 import HomePosts from "./components/Posts/HomePosts";
 import ProfileEditor from "./components/Users/ProfileEditor";
 import Post from "./components/Posts/Post";
+import AuthProvider from "./hooks/AuthProvider";
 
 
 const router = createBrowserRouter([
@@ -59,7 +60,7 @@ const router = createBrowserRouter([
           {
             index: true,
             element: < Posts />
-          }
+          },
         ]
       },
       {

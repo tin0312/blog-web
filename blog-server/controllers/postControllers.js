@@ -27,10 +27,16 @@ async function addPost(req, res) {
   }
 }
 async function addReaction(req, res) {
+  /*
+  A user reacted to a post, a post request sent (postId, userInteractedId, reaction counts)
+  API endpoint will search for the reactions that has the postId and the userInteractedId
+  If there is no such record, it will insert to the database
+  Otherwise, it will just updated the reactions counts
+  */
   let existingReaction;
   const { postId, currentUserId, authorId, love, agree, mindBlown, onFire } = req.body;
   try {
-    existingReaction = await db.query("SELECT * FROM reactions WHERE reaction_id = $1", [postId])
+    existingReaction = await db.query("SELECT * FROM reactions WHERE reaction_id = $1 AND interacted_user_id = $2", [postId, currentUserId]);
     if (existingReaction.rows.length === 0) {
       try {
         await db.query("INSERT INTO reactions (interacted_user_id, author_id, post_id, love_count, agree_count, mind_blown_count, on_fire_count, reaction_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", [
@@ -49,14 +55,12 @@ async function addReaction(req, res) {
       }
     } else {
       try {
-        await db.query("UPDATE reactions SET interacted_user_id = $1, author_id = $2, love_count=$3, agree_count= $4, mind_blown_count= $5, on_fire_count= $6 WHERE reaction_id = $7", [
-          currentUserId,
-          authorId,
+        await db.query("UPDATE reactions SET love_count=$1, agree_count= $2, mind_blown_count= $3, on_fire_count= $4 WHERE interacted_user_id = $5", [
           love,
           agree,
           mindBlown,
           onFire,
-          postId
+          currentUserId
         ])
         return res.sendStatus(200)
       } catch (error) {
@@ -113,28 +117,62 @@ async function deletePost(req, res) {
 
 async function getPost(req, res) {
   const postID = req.params.postID;
+  const currentUserId = req?.user.id;
   try {
     const result = await db.query(
-      `SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, 
-              posts.category, posts.cover_image, posts.author_id, users.profile_pic_file, users.profile_pic_url,
-              reactions.love_count, reactions.agree_count, reactions.mind_blown_count, reactions.on_fire_count, reactions.total_reaction_count 
-       FROM posts 
-       INNER JOIN users ON posts.author_id = users.id 
-       LEFT JOIN reactions ON posts.id = reactions.post_id
-       WHERE posts.id = $1`,
+      `SELECT 
+  posts.id, 
+  posts.content, 
+  posts.title, 
+  posts.created_at, 
+  posts.updated_at, 
+  posts.author_username, 
+  posts.category, 
+  posts.cover_image, 
+  posts.author_id, 
+  users.profile_pic_file, 
+  users.profile_pic_url,
+  COALESCE(ARRAY_AGG(DISTINCT reactions.interacted_user_id) FILTER (WHERE reactions.interacted_user_id IS NOT NULL), '{}') AS interacted_users,
+  COALESCE(SUM(reactions.love_count), 0)::INTEGER AS love_count, 
+  COALESCE(SUM(reactions.agree_count), 0)::INTEGER AS agree_count, 
+  COALESCE(SUM(reactions.mind_blown_count), 0)::INTEGER AS mind_blown_count, 
+  COALESCE(SUM(reactions.on_fire_count), 0)::INTEGER AS on_fire_count, 
+  COALESCE(SUM(reactions.total_reaction_count), 0)::INTEGER AS total_reaction_count 
+FROM posts 
+INNER JOIN users ON posts.author_id = users.id 
+LEFT JOIN reactions ON posts.id = reactions.post_id
+WHERE posts.id = $1
+GROUP BY posts.id, users.profile_pic_file, users.profile_pic_url
+`,
       [postID]
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Post not found" });
-    } 
-    const post = result.rows[0];
-    res.json(post);
+    }
+    const postData = result.rows[0];
+    const { interacted_users, ...post } = postData
+    const hasUserReacted = interacted_users.includes(currentUserId);
+    const emotionStates = hasUserReacted ? await findCurrentUserEmotionStates(currentUserId) : {
+      is_love: false,
+      is_agree: false,
+      is_mindblown: false,
+      is_onfire: false
+    }
+    res.json({ ...post, emotionStates });
   } catch (error) {
     console.error("Error fetching post:", error);
     res.status(500).json({ error: "An error occurred while fetching the post." });
   }
 }
 
+async function findCurrentUserEmotionStates(userId) {
+  try {
+    const result = await db.query("SELECT is_love, is_agree, is_mindblown, is_onfire FROM reactions WHERE interacted_user_id = $1", [userId]);
+    return result.rows[0]
+  } catch (error) {
+    console.log("Error finding current user emotions", error)
+  }
+}
 
 async function getUserPosts(req, res) {
   const username = Buffer.from(req.params.username, 'base64').toString('utf-8');

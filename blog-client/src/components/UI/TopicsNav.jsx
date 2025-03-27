@@ -27,7 +27,7 @@ export default function TopicsNav() {
         <div className="p-0">
 
             <ul className="position-sticky topics-nav d-flex bg-white p-3 align-items-center justify-content-between overflow-auto">
-                <span class="material-symbols-outlined direction-icon" onClick={() => scrollCategory("prev")}>
+                <span className="material-symbols-outlined direction-icon" onClick={() => scrollCategory("prev")}>
                     arrow_back_ios
                 </span>
                 <li className="px-2 d-md-none"><NavLink to={categoryPos === 0 ? "/" : `/${category}`} className={({ isActive }) => isActive  || location.pathname === `/${category}`? "fw-bold" : "text-secondary"} onClick={() => setCategory(categoryList[categoryPos])} >
@@ -37,7 +37,7 @@ export default function TopicsNav() {
                         <NavLink to={index === 0 ? "/" : `/${category}`} className={({ isActive }) => isActive || location.pathname === `/${category}` ? "fw-bold" : "text-secondary"} onClick={() => setCategory(category)}>{category}</NavLink>
                     </li>
                 ))}
-                <span class="material-symbols-outlined direction-icon" onClick={() => scrollCategory("next")}>arrow_forward_ios</span>
+                <span className="material-symbols-outlined direction-icon" onClick={() => scrollCategory("next")}>arrow_forward_ios</span>
             </ul>
             <Outlet />
         </div>

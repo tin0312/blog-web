@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../hooks/AuthProvider";
 
-export default function Reactions({ postId, authorId, loveCount, agreeCount, mindBlownCount, onFireCount, totalReactionCount }) {
+export default function Reactions({ postId, authorId, loveCount, agreeCount, mindBlownCount, onFireCount, totalReactionCount, isLove, isAgree, isMindBlown, isOnFire }) {
     const { user } = useAuth();
     const [isReactionEmotions, setIsReactionEmotions] = useState(false);
     const [reactionEmotions, setReactionEmotions] = useState({
@@ -15,10 +15,10 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
         totalReactionCount: totalReactionCount || 0
     });
     const [emotionStates, setEmotionStates] = useState({
-        love: false,
-        agree: false,
-        mindBlown: false,
-        onFire: false
+        love: isLove,
+        agree: isAgree,
+        mindBlown: isMindBlown,
+        onFire: isOnFire
     })
     // Avoid react state batch updates to prevent unnecessary API calls
     const hasSavedRef = useRef(false);
@@ -47,9 +47,17 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
                     [emotion]: prev[emotion] + (isAdding ? 1 : -1),
                     totalReactionCount: prev.totalReactionCount + (isAdding ? 1 : -1)
                 };
-
+                const userSpecificReaction = {
+                    postId: parseInt(postId),
+                    currentUserId: user?.userId,
+                    authorId,
+                    love: isAdding ? 1 : 0,
+                    agree: isAdding ? 1 : 0,
+                    mindBlown: isAdding ? 1 : 0,
+                    onFire: isAdding ? 1 : 0,
+                }
                 if (!hasSavedRef.current) {
-                    handleSaveReactionEmotions(updatedReactEmotions);
+                    handleSaveReactionEmotions(userSpecificReaction);
                     hasSavedRef.current = true;
                 }
                 return updatedReactEmotions;

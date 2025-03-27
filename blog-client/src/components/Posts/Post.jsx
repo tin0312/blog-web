@@ -22,7 +22,6 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
           `/api/posts/${id}`
         );
         if (!response.ok) {
-          console.log(response)
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
@@ -37,7 +36,7 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
     }
 
   }, [id]);
-  
+
   async function handleDeletePost(id) {
     try {
       const response = await fetch(
@@ -94,6 +93,10 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
             mindBlownCount={post.mind_blown_count}
             onFireCount={post.on_fire_count}
             totalReactionCount={post.total_reaction_count}
+            isLove={post.emotionStates.is_love}
+            isAgree={post.emotionStates.is_agree}
+            isMindBlown={post.emotionStates.is_mindblown}
+            isOnFire={post.emotionStates.is_onfire}
           />
         </Col>)}
 
@@ -161,14 +164,18 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
       </Row>
       {isAtSpecificPost && post && (<div className="d-md-none">
         <Reactions
-            postId={id}
-            authorId={post.author_id}
-            loveCount={post.love_count}
-            agreeCount={post.agree_count}
-            mindBlownCount={post.mind_blown_count}
-            onFireCount={post.on_fire_count}
-            totalReactionCount={post.total_reaction_count}
-          />
+          postId={id}
+          authorId={post.author_id}
+          loveCount={post.love_count}
+          agreeCount={post.agree_count}
+          mindBlownCount={post.mind_blown_count}
+          onFireCount={post.on_fire_count}
+          totalReactionCount={post.total_reaction_count}
+          isLove={post.emotionStates.is_love}
+          isAgree={post.emotionStates.is_agree}
+          isMindBlown={post.emotionStates.is_mindblown}
+          isOnFire={post.emotionStates.is_onfire}
+        />
       </div>)}
     </Container>
   );

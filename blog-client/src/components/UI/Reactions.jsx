@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../hooks/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export default function Reactions({ postId, authorId, loveCount, agreeCount, mindBlownCount, onFireCount, totalReactionCount, isLove, isAgree, isMindBlown, isOnFire }) {
     const { user } = useAuth();
     const [isReactionEmotions, setIsReactionEmotions] = useState(false);
+    const navigate = useNavigate();
     const [reactionEmotions, setReactionEmotions] = useState({
         postId: parseInt(postId),
         currentUserId: user?.userId,
@@ -39,6 +41,9 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
     }
 
     function handleReactionClick(emotion) {
+        if(!user){
+            navigate("/login")
+        }
         setEmotionStates((prev) => {
             const isAdding = !prev[emotion]
             setReactionEmotions((prev) => {

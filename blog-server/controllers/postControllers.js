@@ -117,7 +117,7 @@ async function deletePost(req, res) {
 
 async function getPost(req, res) {
   const postID = req.params.postID;
-  const currentUserId = req?.user.id;
+  const currentUserId = req.user ? req?.user.id : null;
   try {
     const result = await db.query(
       `SELECT 

@@ -19,6 +19,8 @@ function AuthProvider({ children }) {
         if (response.status === 200) {
           const userData = await response.json();
           setUser(userData);
+        } else if(response.status === 401){
+          setUser(null)
         }
         
       } catch (error) {

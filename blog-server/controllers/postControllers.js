@@ -33,15 +33,14 @@ async function addReaction(req, res) {
     existingReaction = await db.query("SELECT * FROM reactions WHERE post_id = $1 AND interacted_user_id = $2", [postId, currentUserId]);
     if (existingReaction.rows.length === 0) {
       try {
-        await db.query("INSERT INTO reactions (interacted_user_id, author_id, post_id, love_count, agree_count, mind_blown_count, on_fire_count, reaction_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", [
+        await db.query("INSERT INTO reactions (interacted_user_id, author_id, post_id, love_count, agree_count, mind_blown_count, on_fire_count) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", [
           currentUserId,
           authorId,
           postId,
           love,
           agree,
           mindBlown,
-          onFire,
-          postId
+          onFire
         ])
         return res.sendStatus(200);
       } catch (error) {

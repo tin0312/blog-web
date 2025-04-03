@@ -2,28 +2,17 @@ import db from "../db.js";
 import bcrypt from "bcrypt";
 import passport from "passport";
 
-async function getProfile(req, res) {
-  const { id } = req.params;
+
+async function getProfile(userId) {
   try {
-    const result = await db.query("SELECT * FROM users WHERE id = $1", [id]);
+    const result = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
     const user = result.rows[0];
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-    req.login(user, (err) => {
-      if (err) {
-        console.error("Error re-authenticating user", err);
-        return res.status(500).json({ error: "Failed to update session" });
-      }
-      return res.json(user);
-    });
+    console.log(user)
+    return user;
   } catch (error) {
-    console.error("Error getting user profile", error);
-    res.status(500).json({ error: "Server error" });
+    console.log("Error getting user details", error);
   }
 }
-
-
 async function addUser(req, res) {
   const { email, password, name, username } = req.body;
   const profilePic = req.file?.buffer;
@@ -68,9 +57,11 @@ async function addUser(req, res) {
 
 async function editUserProfile(req, res){
   const profilePic = req.file?.buffer;
+  const userId = req?.user.id;
+  console.log(userId)
   const {name, email, username, userURL, userLocation, userBio} = req.body;
   try {
-      const result = await db.query("SELECT * FROM users WHERE email =$1", [email] )
+      const result = await db.query("SELECT * FROM users WHERE id =$1", [userId] )
       const user = result.rows[0];
       const newUserData = {
         name: name || user.name,
@@ -81,18 +72,24 @@ async function editUserProfile(req, res){
         profile_pic_file: profilePic || user?.profile_pic_file,
         bio: userBio || user?.bio
       }
-      console.log("New user data :", newUserData)
       try{
-          await db.query("UPDATE users SET name= $1, email= $2, username=$3, profile_url=$4, location=$5, profile_pic_file=$6, bio= $7 WHERE email=$2",
+          const updatedUser = await db.query("UPDATE users SET name= $1, email= $2, username=$3, profile_url=$4, location=$5, profile_pic_file=$6, bio= $7 WHERE id =$8 RETURNING *",
              [newUserData.name,
               newUserData.email,
               newUserData.username,
               newUserData.profile_url,
               newUserData.location,
               newUserData.profile_pic_file,
-              newUserData.bio
-             ])    
-             res.status(200).json({message: "User Profile Updated"})    
+              newUserData.bio,
+              userId
+             ])
+             req.login(updatedUser.rows[0], (err) => {
+              if (err) {
+                console.error("Error re-authenticating user", err);
+                return res.status(500).json({ error: "Failed to update session" });
+              }
+              return res.status(200).json({ message: "User Profile Updated", user: updatedUser.rows[0] });
+            }); 
       } catch(error){
         console.log("error", error)
          res.status(500).json({message: "Error updating user information"})
@@ -159,4 +156,5 @@ async function logOut(req, res) {
   });
 }
 
-export { getProfile, addUser, logIn, getQueryForLogin, logOut, editUserProfile };
+
+export {getProfile, addUser, logIn, getQueryForLogin, logOut, editUserProfile };

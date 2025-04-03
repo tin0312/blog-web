@@ -10,8 +10,10 @@ import Redis from "ioredis";
 import RedisStore from "connect-redis";
 import path from "path";
 import { fileURLToPath } from "url";
+import http from "http";
+import { setupWebSocket } from "./setupWebSocket.js";
 
-const app = express();
+export const app = express();
 // Convert `import.meta.url` to a file path
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -61,6 +63,10 @@ app.get("*", function (req, res) {
   res.sendFile(path.resolve(__dirname, "clientbuild", "index.html"));
 });
 
-app.listen(port, () => {
+const server = http.createServer(app);
+
+setupWebSocket(server);
+
+server.listen(port, () => {
   console.log(`Blog Web server listening at http://localhost:${port}`);
 });

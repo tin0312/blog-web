@@ -1,36 +1,38 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import useWebSocket from "./webSocketHook";
 
 const AuthContext = createContext();
-
 function AuthProvider({ children }) {
   const [isNavHidden, setIsNavHidden] = useState(false);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loginError, setLoginError] = useState("");
-  const [category, setCategory] = useState("software")
-
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const response = await fetch(
-          "/api/users/current-user"
-        );
-        if (response.status === 200) {
-          const userData = await response.json();
-          setUser(userData);
-        } else if(response.status === 401){
-          setUser(null)
-        }
-        
-      } catch (error) {
-        console.log("Error fetching current user");
+  const [category, setCategory] = useState("software");
+  const fetchCurrentUser = async () => {
+    try {
+      const response = await fetch(
+        "/api/users/current-user"
+      );
+      if (response.status === 200) {
+        const userData = await response.json();
+        setUser(userData);
       }
-    };
-    fetchCurrentUser();
-  }, []);
+    } catch (error) {
+      console.log("Error fetching current user");
+    }
+  };
+  useEffect(() => {
+    fetchCurrentUser()
+  }, [])
+
+  const ws = useWebSocket({
+    socketUrl: "ws://localhost:8080",
+    userId: user?.userId
+    
+  })
   // get the current navbar display
-  useEffect(()=> {
+  useEffect(() => {
     const currentNavState = localStorage.getItem("navState") === "true";
     setIsNavHidden(currentNavState)
   }, [])
@@ -75,8 +77,9 @@ function AuthProvider({ children }) {
       console.log("Error Logging Out", error);
     }
   }
+
   return (
-    <AuthContext.Provider value={{ user, logIn, loginError, logOut, setUser,isNavHidden, setIsNavHidden, category, setCategory }}>
+    <AuthContext.Provider value={{ user, logIn, loginError, logOut, setUser, isNavHidden, setIsNavHidden, category, setCategory, fetchCurrentUser, ws }}>
       {children}
     </AuthContext.Provider>
   );

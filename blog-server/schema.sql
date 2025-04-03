@@ -28,7 +28,6 @@ CREATE TABLE
 
 CREATE TABLE
   reactions (
-    reaction_id SERIAL PRIMARY KEY,
     interacted_user_id INT NOT NULL,
     author_id INT NOT NULL,
     post_id INT NOT NULL,
@@ -66,3 +65,14 @@ CREATE TABLE
       love_count + agree_count + mind_blown_count + on_fire_count
     ) STORED
   );
+
+CREATE TABLE notifications (
+  id SERIAL PRIMARY KEY,
+  sender_id INT NOT NULL,
+  receiver_id INT NOT NULL,
+  post_id INT,
+  type VARCHAR(50) NOT NULL,
+  message TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  is_read BOOLEAN DEFAULT FALSE
+);

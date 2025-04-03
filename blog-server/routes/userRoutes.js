@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  getProfile,
   addUser,
   logIn,
   logOut,
@@ -53,7 +52,6 @@ router.get("/current-user", isAuthenticated, (req, res) =>
   })
 );
 
-router.get("/profile/:id", getProfile);
 router.patch("/profile/edit", upload.single("profilePicFile"), editUserProfile)
 
 export default router;

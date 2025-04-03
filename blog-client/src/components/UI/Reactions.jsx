@@ -34,7 +34,6 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
                 },
                 body: JSON.stringify(updatedReactionEmotions),
             });
-            console.log("Reaction saved successfully");
         } catch (error) {
             console.log("Error saving reaction emotions");
         }
@@ -71,7 +70,6 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
             return { ...prev, [emotion]: isAdding }
         })
     }
-
     useEffect(() => {
         hasSavedRef.current = false;
     }, [reactionEmotions]);

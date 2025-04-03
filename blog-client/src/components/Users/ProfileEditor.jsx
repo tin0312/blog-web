@@ -14,7 +14,7 @@ export default function ProfileEditor() {
         setError,
     } = useForm();
     const navigate = useNavigate();
-    const { user } = useAuth();
+    const { user, fetchCurrentUser } = useAuth();
     async function handleEditProfile(user) {
         const formData = new FormData();
         formData.append("name", user.name);
@@ -32,6 +32,7 @@ export default function ProfileEditor() {
                 method: "PATCH"
             })
             if(response.status === 200){
+                await fetchCurrentUser();
                 navigate("/profile")
             } else {
                 alert("Error updating user profile")

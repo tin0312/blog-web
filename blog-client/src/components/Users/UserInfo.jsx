@@ -3,25 +3,9 @@ import { useAuth } from "../../hooks/AuthProvider";
 import {Link} from "react-router-dom"
 import moment from "moment";
 import { Button } from "react-bootstrap"
-import convertBinaryImageData from "../../helpers/convertImage";
 
 export default function UserInfo() {
-    const { user, setUser } = useAuth()
-     useEffect(() =>{
-        if(!user?.id) return; 
-        async function fetchUserData(){
-            try {
-                const response = await fetch(`/api/users/profile/${user?.userId}`);
-                const userData = await response.json()
-                userData.profile_pic_file = convertBinaryImageData(userData.profile_pic_file)
-                setUser(userData)
-            } catch(error) {
-                console.log("Error retrieving user data", error)
-            }
-        }
-        fetchUserData()
-     }
-        , [user?.id])
+    const { user } = useAuth()
     return (
         <>
             <img src={user?.profile_pic_file || user?.profile_pic_url} className="profile-pic" alt="user-picture" />

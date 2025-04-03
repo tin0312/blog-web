@@ -4,7 +4,6 @@ import GoogleStrategy from "passport-google-oauth2";
 import db from "../db.js";
 import bcrypt from "bcrypt";
 import { getQueryForLogin } from "../controllers/userControllers.js";
-import { getProfile } from "../controllers/userControllers.js";
 
 passport.use(
   "local",
@@ -18,7 +17,7 @@ passport.use(
         bcrypt.compare(password, hashPassword, (error, valid) => {
           if (error) {
             console.log("Error comparing password");
-            return cb(err);
+            return cb(error);
           } else {
             if (valid) {
               return cb(null, user);

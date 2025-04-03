@@ -1,4 +1,7 @@
 import db from "../db.js";
+import { clients} from "../setupWebSocket.js";
+import { getProfile } from "./userControllers.js";
+
 
 async function getAllPosts(req, res) {
   const { category } = req.params;
@@ -32,39 +35,112 @@ async function addReaction(req, res) {
   try {
     existingReaction = await db.query("SELECT * FROM reactions WHERE post_id = $1 AND interacted_user_id = $2", [postId, currentUserId]);
     if (existingReaction.rows.length === 0) {
+      // If no previous reaction, insert new reaction
       try {
-        await db.query("INSERT INTO reactions (interacted_user_id, author_id, post_id, love_count, agree_count, mind_blown_count, on_fire_count, reaction_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", [
+        await db.query("INSERT INTO reactions (interacted_user_id, author_id, post_id, love_count, agree_count, mind_blown_count, on_fire_count) VALUES ($1, $2, $3, $4, $5, $6, $7)", [
           currentUserId,
           authorId,
           postId,
           love,
           agree,
           mindBlown,
-          onFire,
-          postId
-        ])
+          onFire
+        ]);
+        
+        // Insert the notification into the database
+        if (authorId !== currentUserId) {
+          const message = await handleReactionMessage(postId, currentUserId, authorId); // Generate the message after inserting the notification
+          await sendNotification(currentUserId, authorId, postId, "reaction", message); // Send the notification and message
+        }
+        
         return res.sendStatus(200);
       } catch (error) {
-        console.log("Error saving reactions to posts", error)
+        console.log("Error saving reactions to posts", error);
       }
     } else {
+      // Reaction exists, check if it has changed
+      const prevReaction = existingReaction.rows[0];
+      const reactionChanged =
+        prevReaction.love_count !== love ||
+        prevReaction.agree_count !== agree ||
+        prevReaction.mind_blown_count !== mindBlown ||
+        prevReaction.on_fire_count !== onFire;
+
+      if (!reactionChanged) {
+        return res.status(200).json({ message: "Reaction unchanged" });
+      }
+
       try {
-        await db.query("UPDATE reactions SET love_count=$1, agree_count= $2, mind_blown_count= $3, on_fire_count= $4 WHERE interacted_user_id = $5", [
+        // Update the reaction
+        await db.query("UPDATE reactions SET love_count=$1, agree_count=$2, mind_blown_count=$3, on_fire_count=$4 WHERE interacted_user_id = $5", [
           love,
           agree,
           mindBlown,
           onFire,
           currentUserId
-        ])
-        return res.sendStatus(200)
+        ]);
+        
+        // Insert the notification into the database
+        if (authorId !== currentUserId) {
+          const message = await handleReactionMessage(postId, currentUserId, authorId); // Generate the message after inserting the notification
+          await sendNotification(currentUserId, authorId, postId, "reaction", message); // Send the notification and message
+        }
+
+        return res.sendStatus(200);
       } catch (error) {
-        console.log("Error updaing post reactions", error)
+        console.log("Error updating post reactions", error);
       }
     }
   } catch (error) {
-    console.log("Error locating reacted post", error)
+    console.log("Error locating reacted post", error);
   }
 }
+
+async function handleReactionMessage(postId, currentUserId, authorId) {
+  // Get the username of the current user (who is reacting)
+  const { username } = await getProfile(currentUserId);
+  try {
+    // Insert the notification first
+    await db.query("INSERT INTO notifications (sender_id, receiver_id, post_id, type, message) VALUES ($1, $2, $3, $4, $5)", [
+      currentUserId, authorId, postId, "reaction", `${username} reacted to your post`
+    ]);
+
+    // Now fetch the updated notifications count for the post
+    const result = await db.query("SELECT * FROM notifications WHERE post_id = $1", [postId]);
+    const numberOfRecords = result.rowCount;
+    if (numberOfRecords > 1) {
+      // Get the first sender's username
+      const firstSenderId = result.rows[0]?.sender_id;
+      const firstSender = await getProfile(firstSenderId);
+      return `${firstSender.username} and ${numberOfRecords - 1} other people reacted to your post`;
+    } else {
+      return `${username} reacted to your post`;
+    }
+  } catch (error) {
+    console.log("Error retrieving notification records", error);
+  }
+}
+
+async function sendNotification(senderId, receiverId, postId, message) {
+  try {
+    const result = await db.query(
+      "UPDATE notifications SET message = $1 WHERE sender_id = $2 and post_id = $3 RETURNING *",
+      [message, senderId, postId]
+    );
+
+    const notification = result.rows[0];
+    if (clients.has(receiverId)) {
+      const receiverSocket = clients.get(receiverId);
+      if (receiverSocket) {
+        receiverSocket.send(JSON.stringify(notification));
+      } 
+    }
+    return notification;
+  } catch (error) {
+    console.error("Error saving notifications:", error);
+  }
+}
+
 async function updatePost(req, res) {
   const { title, content, category } = req.body;
   let coverImg = req.file?.buffer

@@ -9,7 +9,7 @@ CREATE TABLE
     join_date DATE DEFAULT CURRENT_DATE,
     bio VARCHAR(255),
     profile_url VARCHAR(2083),
-    location TEXT
+    location TEXT,
   );
 
 CREATE TABLE
@@ -23,7 +23,6 @@ CREATE TABLE
     cover_image BYTEA,
     author_username VARCHAR(50) NOT NULL,
     author_id INT,
-    CONSTRAINT fk_author_username FOREIGN KEY (author_username) REFERENCES users (username)
   );
 
 CREATE TABLE

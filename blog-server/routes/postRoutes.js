@@ -7,6 +7,7 @@ import {
   updatePost,
   getPost,
   getUserPosts,
+  getNotificationCount
 } from "../controllers/postControllers.js";
 import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
@@ -14,6 +15,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 const router = express.Router();
 
 router.get("/type/:category", getAllPosts);
+router.get("/notification-count", getNotificationCount);
 router.post("/add-post", upload.single("coverImg"), addPost);
 router.post("/add-reaction", addReaction)
 router.patch("/update/:id", upload.single("coverImg"), updatePost);

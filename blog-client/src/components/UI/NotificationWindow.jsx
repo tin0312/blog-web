@@ -1,18 +1,18 @@
-import React, {useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../hooks/AuthProvider";
 
 function NotificationWindow() {
   const [notifications, setNotifications] = useState([]);
-  const { ws } = useAuth();
+  const { ws, setBadgeCount } = useAuth();
 
-useEffect(()=>{
-  console.log(ws.data)
-  if(ws.data){
+  useEffect(() => {
+    if (ws.data) {
+      setBadgeCount(prevCount => prevCount + 1);
       const { message } = ws.data;
-      console.log(message)
+      console.log(message);
       setNotifications((prev) => [message, ...prev])
-  }
-}, [ws.data])
+    }
+  }, [ws.data])
 
   return (
     <div className="user-drop-down">
@@ -20,9 +20,9 @@ useEffect(()=>{
       <ul>
         {
           !notifications.length ? "N/A" :
-          (
-            notifications.map((notification, index )=> <li key={index}>{notification}</li>)
-          )
+            (
+              notifications.map((notification, index) => <li key={index}>{notification}</li>)
+            )
         }
       </ul>
     </div>

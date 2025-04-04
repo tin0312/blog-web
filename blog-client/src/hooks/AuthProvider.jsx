@@ -7,8 +7,13 @@ function AuthProvider({ children }) {
   const [isNavHidden, setIsNavHidden] = useState(false);
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [badgeCount, setBadgeCount] = useState(0);
   const [loginError, setLoginError] = useState("");
   const [category, setCategory] = useState("software");
+  const ws = useWebSocket({
+    socketUrl: "ws://localhost:8080",
+    userId: user?.userId
+  })
   const fetchCurrentUser = async () => {
     try {
       const response = await fetch(
@@ -23,14 +28,22 @@ function AuthProvider({ children }) {
     }
   };
   useEffect(() => {
-    fetchCurrentUser()
+    fetchCurrentUser();
   }, [])
 
-  const ws = useWebSocket({
-    socketUrl: "ws://localhost:8080",
-    userId: user?.userId
-    
-  })
+  useEffect(() => {
+    // get current notifications
+    async function getNotificationCounts() {
+      try {
+        const result = await fetch("/api/posts/notification-count");
+        const { unreadCount } = await result.json();
+        setBadgeCount(unreadCount);
+      } catch (error) {
+        console.log("Error retrieving notification count", error)
+      }
+    }
+    getNotificationCounts()
+  }, [ws.data])
   // get the current navbar display
   useEffect(() => {
     const currentNavState = localStorage.getItem("navState") === "true";
@@ -79,7 +92,7 @@ function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, logIn, loginError, logOut, setUser, isNavHidden, setIsNavHidden, category, setCategory, fetchCurrentUser, ws }}>
+    <AuthContext.Provider value={{ user, logIn, loginError, logOut, setUser, isNavHidden, setIsNavHidden, category, setCategory, fetchCurrentUser, ws, badgeCount, setBadgeCount }}>
       {children}
     </AuthContext.Provider>
   );

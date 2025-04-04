@@ -864,6 +864,10 @@ a {
     border-radius: 0;
   }
 }
+.badge{
+  top: 0;
+  right: 0;
+}
 /* Icons end here */
 
 /* User profile starts here*/

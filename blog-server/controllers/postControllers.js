@@ -1,5 +1,5 @@
 import db from "../db.js";
-import { clients} from "../setupWebSocket.js";
+import { clients } from "../setupWebSocket.js";
 import { getProfile } from "./userControllers.js";
 
 
@@ -7,13 +7,31 @@ async function getAllPosts(req, res) {
   const { category } = req.params;
   try {
     const result = await db.query(
-      "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, posts.author_id, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE category = $1", [category]
+      "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, posts.author_id, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_id = users.id WHERE category = $1", [category]
     );
     res.json(result.rows);
   } catch (error) {
     console.error(error);
   }
 }
+async function getNotificationCount(req, res) {
+  const userId = req?.user?.id;
+  if (!userId) {
+    return res.status(400).json({ error: "User ID is required" });
+  }
+  try {
+    const result = await db.query(
+      "SELECT COUNT(*) FROM notifications WHERE receiver_id = $1 AND is_read = false",
+      [userId]
+    );
+    const count = parseInt(result.rows[0]?.count, 10) || 0;
+    res.status(200).json({ unreadCount: count });
+  } catch (error) {
+    console.error("Error getting notification count", error);
+    res.status(500).json({ error: "An error occurred while fetching notification count" });
+  }
+}
+
 
 async function addPost(req, res) {
   const { title, content, username, category, authorId } = req.body;
@@ -46,13 +64,13 @@ async function addReaction(req, res) {
           mindBlown,
           onFire
         ]);
-        
+
         // Insert the notification into the database
         if (authorId !== currentUserId) {
           const message = await handleReactionMessage(postId, currentUserId, authorId); // Generate the message after inserting the notification
           await sendNotification(currentUserId, authorId, postId, "reaction", message); // Send the notification and message
         }
-        
+
         return res.sendStatus(200);
       } catch (error) {
         console.log("Error saving reactions to posts", error);
@@ -79,7 +97,7 @@ async function addReaction(req, res) {
           onFire,
           currentUserId
         ]);
-        
+
         // Insert the notification into the database
         if (authorId !== currentUserId) {
           const message = await handleReactionMessage(postId, currentUserId, authorId); // Generate the message after inserting the notification
@@ -121,7 +139,7 @@ async function handleReactionMessage(postId, currentUserId, authorId) {
   }
 }
 
-async function sendNotification(senderId, receiverId, postId, message) {
+async function sendNotification(senderId, receiverId, postId, type, message) {
   try {
     const result = await db.query(
       "UPDATE notifications SET message = $1 WHERE sender_id = $2 and post_id = $3 RETURNING *",
@@ -133,7 +151,7 @@ async function sendNotification(senderId, receiverId, postId, message) {
       const receiverSocket = clients.get(receiverId);
       if (receiverSocket) {
         receiverSocket.send(JSON.stringify(notification));
-      } 
+      }
     }
     return notification;
   } catch (error) {
@@ -269,5 +287,6 @@ export {
   updatePost,
   getPost,
   getUserPosts,
-  addReaction
+  addReaction,
+  getNotificationCount
 };

@@ -7,7 +7,6 @@ async function getProfile(userId) {
   try {
     const result = await db.query("SELECT * FROM users WHERE id = $1", [userId]);
     const user = result.rows[0];
-    console.log(user)
     return user;
   } catch (error) {
     console.log("Error getting user details", error);
@@ -58,7 +57,6 @@ async function addUser(req, res) {
 async function editUserProfile(req, res){
   const profilePic = req.file?.buffer;
   const userId = req?.user.id;
-  console.log(userId)
   const {name, email, username, userURL, userLocation, userBio} = req.body;
   try {
       const result = await db.query("SELECT * FROM users WHERE id =$1", [userId] )
@@ -91,7 +89,7 @@ async function editUserProfile(req, res){
               return res.status(200).json({ message: "User Profile Updated", user: updatedUser.rows[0] });
             }); 
       } catch(error){
-        console.log("error", error)
+        console.log("error updating user", error)
          res.status(500).json({message: "Error updating user information"})
       }
   } catch(error) {

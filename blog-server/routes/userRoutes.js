@@ -3,7 +3,7 @@ import {
   addUser,
   logIn,
   logOut,
-  editUserProfile
+  editUserProfile,
 } from "../controllers/userControllers.js";
 import multer from "multer";
 const upload = multer({ storage: multer.memoryStorage() });
@@ -52,6 +52,6 @@ router.get("/current-user", isAuthenticated, (req, res) =>
   })
 );
 
-router.patch("/profile/edit", upload.single("profilePicFile"), editUserProfile)
+router.patch("/profile/edit", upload.single("profilePicFile"), editUserProfile);
 
 export default router;

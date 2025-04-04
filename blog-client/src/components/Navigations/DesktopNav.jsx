@@ -4,11 +4,11 @@ import { useState } from "react";
 import UserMenu from "../UI/UserMenu";
 import { useAuth } from "../../hooks/AuthProvider";
 import NotificationWindow from "../UI/NotificationWindow";
-import { Row, Col, Form, Container, Button } from "react-bootstrap";
+import { Row, Col, Form, Container, Button, Badge } from "react-bootstrap";
 import PopUpModal from "../UI/PopUpModal";
 
 function DesktopNav() {
-  const { user, isNavHidden, setIsNavHidden, setCategory } = useAuth();
+  const { user, isNavHidden, setIsNavHidden, setCategory, badgeCount } = useAuth();
   const [isUserMenu, setIsUserMenu] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isPopUpModalShown, setIsPopUpModalShown] = useState(false);
@@ -111,6 +111,7 @@ function DesktopNav() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
                   </svg>
                 </li>
+                <Badge className="badge position-absolute bg-danger">{badgeCount}</Badge>
                 {isNotificationOpen && <NotificationWindow />}
               </div>
               <li className="d-block d-md-none">

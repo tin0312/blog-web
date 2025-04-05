@@ -98,17 +98,43 @@ header{
   position: relative;
 }
 .user-drop-down {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+  width: 320px;
+  max-height: 400px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   position: absolute;
-  background-color: white;
-  border-radius: 0.5rem;
-  top: 5.2rem;
-  right: 1.5rem;
-  width: 10rem;
-  padding: 1rem 0 0;
-  box-shadow: 0 0 5px var(--shadow-color);
-  z-index: 10000;
-  text-align: center;
+  right: 1rem;
+  top: 3rem;
+  z-index: 1000;
 }
+
+.user-drop-down li {
+  border-radius: 0.5rem; 
+  cursor: pointer;
+}
+
+.user-drop-down li.unread {
+  font-weight: 600;
+  background-color: #eef2ff;
+  position: relative;
+}
+
+.user-drop-down li.unread::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: #3b82f6;
+  border-radius: 50%;
+  position: absolute;
+  left: -11px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 @media only screen and (max-width: 1024px){
   .user-drop-down {
     top: 4.1rem;

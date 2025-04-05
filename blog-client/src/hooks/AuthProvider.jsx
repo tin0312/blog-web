@@ -35,7 +35,7 @@ function AuthProvider({ children }) {
     // get current notifications
     async function getNotificationCounts() {
       try {
-        const result = await fetch("/api/posts/notification-count");
+        const result = await fetch("/api/posts/notifications?badgeCount=true");
         const { unreadCount } = await result.json();
         setBadgeCount(unreadCount);
       } catch (error) {

@@ -15,17 +15,21 @@ async function getAllPosts(req, res) {
   }
 }
 async function getNotificationCount(req, res) {
+  const includeContent = req.query.content === "true";
   const userId = req?.user?.id;
   if (!userId) {
     return res.status(400).json({ error: "User ID is required" });
   }
   try {
     const result = await db.query(
-      "SELECT COUNT(*) FROM notifications WHERE receiver_id = $1 AND is_read = false",
+      "SELECT * FROM notifications WHERE receiver_id = $1 AND is_read = false",
       [userId]
     );
-    const count = parseInt(result.rows[0]?.count, 10) || 0;
-    res.status(200).json({ unreadCount: count });
+    if(includeContent){
+      res.status(200).json(result.rows);
+    } else {
+      res.status(200).json({ unreadCount: result.rows.length});
+    }
   } catch (error) {
     console.error("Error getting notification count", error);
     res.status(500).json({ error: "An error occurred while fetching notification count" });

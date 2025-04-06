@@ -18,7 +18,7 @@ function NotificationWindow() {
   }, [])
 
   return (
-    <div className="user-drop-down">
+    <div className="notifications-drop-down">
       <p className="fw-bold h5 mb-4">Notification</p>
       <ul>
         {

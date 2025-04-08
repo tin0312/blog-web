@@ -14,7 +14,7 @@ async function getAllPosts(req, res) {
     console.error(error);
   }
 }
-async function getNotificationCount(req, res) {
+async function getNotifications(req, res) {
   const includeContent = req.query.content === "true";
   const userId = req?.user?.id;
   if (!userId) {
@@ -69,12 +69,8 @@ async function addReaction(req, res) {
           onFire
         ]);
 
-        // Insert the notification into the database
-        if (authorId !== currentUserId) {
-          const message = await handleReactionMessage(postId, currentUserId, authorId); // Generate the message after inserting the notification
-          await sendNotification(currentUserId, authorId, postId, "reaction", message); // Send the notification and message
-        }
-
+        const notificationData = await handleReactionMessage(postId, currentUserId, authorId); 
+        await sendNotification(notificationData, authorId);
         return res.sendStatus(200);
       } catch (error) {
         console.log("Error saving reactions to posts", error);
@@ -102,11 +98,9 @@ async function addReaction(req, res) {
           currentUserId
         ]);
 
-        // Insert the notification into the database
-        if (authorId !== currentUserId) {
-          const message = await handleReactionMessage(postId, currentUserId, authorId); // Generate the message after inserting the notification
-          await sendNotification(currentUserId, authorId, postId, "reaction", message); // Send the notification and message
-        }
+       const notificationData=  await handleReactionMessage(postId, currentUserId, authorId); 
+        await sendNotification(notificationData, authorId);
+      
 
         return res.sendStatus(200);
       } catch (error) {
@@ -119,45 +113,59 @@ async function addReaction(req, res) {
 }
 
 async function handleReactionMessage(postId, currentUserId, authorId) {
-  // Get the username of the current user (who is reacting)
   const { username } = await getProfile(currentUserId);
   try {
-    // Insert the notification first
-    await db.query("INSERT INTO notifications (sender_id, receiver_id, post_id, type, message) VALUES ($1, $2, $3, $4, $5)", [
-      currentUserId, authorId, postId, "reaction", `${username} reacted to your post`
+    // check if notification exists for the currrent user
+    const existingNotifications = await db.query("SELECT reactors FROM notifications WHERE receiver_id = $1 AND post_id = $2", [
+      authorId,
+      postId
     ]);
-
-    // Now fetch the updated notifications count for the post
-    const result = await db.query("SELECT * FROM notifications WHERE post_id = $1", [postId]);
-    const numberOfRecords = result.rowCount;
-    if (numberOfRecords > 1) {
-      // Get the first sender's username
-      const firstSenderId = result.rows[0]?.sender_id;
-      const firstSender = await getProfile(firstSenderId);
-      return `${firstSender.username} and ${numberOfRecords - 1} other people reacted to your post`;
+    if(existingNotifications.rows.length > 0){
+        let reactors = existingNotifications.rows[0].reactors;
+        // add the current reactor to the retrieved reactors
+        if(!reactors.includes(currentUserId)){
+          reactors.push(currentUserId);
+        }
+        // pass reactors in to get message
+        const message = getMessage(reactors, username);
+        // update the existing notification record
+        try{
+         const result = await db.query("UPDATE notifications SET message = $1, reactors = $2, created_at = CURRENT_TIMESTAMP WHERE receiver_id = $3 AND post_id = $4 RETURNING *", 
+            [message, reactors, authorId, postId])
+            return result.rows[0];
+        } catch(error){
+            console.log("Error updating notifications")
+        }
     } else {
-      return `${username} reacted to your post`;
+      const message = `${username} reacted to your post`;
+      const result = await db.query("INSERT INTO notifications (sender_id, receiver_id, post_id, type, message, reactors) VALUES ($1, $2, $3, 'reaction', $4, $5) RETURNING *",[
+        currentUserId,
+        authorId,
+        postId,
+        message,
+        [currentUserId]
+      ])
+      return result.rows[0];
     }
   } catch (error) {
     console.log("Error retrieving notification records", error);
   }
 }
 
-async function sendNotification(senderId, receiverId, postId, type, message) {
-  try {
-    const result = await db.query(
-      "UPDATE notifications SET message = $1 WHERE sender_id = $2 and post_id = $3 RETURNING *",
-      [message, senderId, postId]
-    );
+function getMessage(reactors, username){
+  if(reactors.length > 1){
+      return `${username} and ${reactors.length - 1} other people reacted to your post`
+  }
+}
 
-    const notification = result.rows[0];
+async function sendNotification(notificationData, receiverId) {
+  try {
     if (clients.has(receiverId)) {
       const receiverSocket = clients.get(receiverId);
       if (receiverSocket) {
-        receiverSocket.send(JSON.stringify(notification));
+        receiverSocket.send(JSON.stringify(notificationData));
       }
     }
-    return notification;
   } catch (error) {
     console.error("Error saving notifications:", error);
   }
@@ -292,5 +300,5 @@ export {
   getPost,
   getUserPosts,
   addReaction,
-  getNotificationCount
+  getNotifications
 };

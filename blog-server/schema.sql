@@ -73,5 +73,6 @@ CREATE TABLE notifications (
   type VARCHAR(50) NOT NULL,
   message TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  is_read BOOLEAN DEFAULT FALSE
+  is_read BOOLEAN DEFAULT FALSE,
+  reactors INT[] DEFAULT '{}' --  reactors INT[] DEFAULT ARRAY[]::INT[]
 );

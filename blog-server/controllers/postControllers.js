@@ -36,6 +36,21 @@ async function getNotifications(req, res) {
   }
 }
 
+async function updateReadMessages(req, res){
+  const { notificationId } = req.params;
+  const { isRead } = req.query
+  try{
+      db.query("UPDATE notifications SET is_read = $1 WHERE id = $2",[
+       isRead === "true",
+       notificationId
+      ])
+      res.status(200).json({message: "Notification updated"})
+  } catch(error){
+    console.log("Error updating read messages")
+    res.status(500).json({message: "Cannnot update read mesages"})
+  }
+}
+
 
 async function addPost(req, res) {
   const { title, content, username, category, authorId } = req.body;
@@ -300,5 +315,6 @@ export {
   getPost,
   getUserPosts,
   addReaction,
-  getNotifications
+  getNotifications,
+  updateReadMessages
 };

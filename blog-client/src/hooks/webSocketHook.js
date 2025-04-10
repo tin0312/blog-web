@@ -19,7 +19,6 @@ function useWebSocket({ socketUrl, userId }) {
     };
 
     wsInstance.onmessage = (event) => {
-      console.log(JSON.parse(event.data));
       setData(JSON.parse(event.data));
     };
 

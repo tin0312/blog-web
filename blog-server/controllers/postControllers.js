@@ -85,7 +85,8 @@ async function addReaction(req, res) {
         ]);
 
         const notificationData = await handleReactionMessage(postId, currentUserId, authorId); 
-        await sendNotification(notificationData, authorId);
+        const isRead = notificationData.is_read;
+        await sendNotification(notificationData, authorId, isRead);
         return res.sendStatus(200);
       } catch (error) {
         console.log("Error saving reactions to posts", error);
@@ -114,7 +115,8 @@ async function addReaction(req, res) {
         ]);
 
        const notificationData=  await handleReactionMessage(postId, currentUserId, authorId); 
-        await sendNotification(notificationData, authorId);
+       const isRead = notificationData.is_read;
+        await sendNotification(notificationData, authorId, isRead);
       
 
         return res.sendStatus(200);
@@ -173,8 +175,11 @@ function getMessage(reactors, username){
   }
 }
 
-async function sendNotification(notificationData, receiverId) {
+async function sendNotification(notificationData, receiverId, isRead) {
   try {
+   if(isRead){
+    await db.query("UPDATE notifications SET is_read = $1",[false])
+   }
     if (clients.has(receiverId)) {
       const receiverSocket = clients.get(receiverId);
       if (receiverSocket) {

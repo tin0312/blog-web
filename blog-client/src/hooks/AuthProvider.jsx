@@ -37,7 +37,6 @@ function AuthProvider({ children }) {
       try {
         const result = await fetch("/api/posts/notifications?badgeCount=true");
         const { unreadCount } = await result.json();
-        console.log("Getting unread messages to notify with badgeCount", unreadCount)
         setBadgeCount(unreadCount);
       } catch (error) {
         console.log("Error retrieving notification count", error)

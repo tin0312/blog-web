@@ -44,7 +44,7 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
             navigate("/login")
         }
         setEmotionStates((prev) => {
-            const isAdding = !prev[emotion]
+            let isAdding = !prev[emotion];
             setReactionEmotions((prev) => {
                 const updatedReactEmotions = {
                     ...prev,
@@ -55,10 +55,10 @@ export default function Reactions({ postId, authorId, loveCount, agreeCount, min
                     postId: parseInt(postId),
                     currentUserId: user?.userId,
                     authorId,
-                    love: isAdding ? 1 : 0,
-                    agree: isAdding ? 1 : 0,
-                    mindBlown: isAdding ? 1 : 0,
-                    onFire: isAdding ? 1 : 0,
+                    love: emotion === "love" ? (isAdding ? 1 : 0) : emotionStates.love ? 1 : 0,
+                    agree: emotion === "agree" ? (isAdding ? 1 : 0) : emotionStates.agree ? 1 : 0,
+                    mindBlown: emotion === "mindBlown" ? (isAdding ? 1 : 0) : emotionStates.mindBlown ? 1 : 0,
+                    onFire: emotion === "onFire" ? (isAdding ? 1 : 0) : emotionStates.onFire ? 1 : 0
                 }
                 if (!hasSavedRef.current) {
                     handleSaveReactionEmotions(userSpecificReaction);

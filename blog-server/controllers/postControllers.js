@@ -1,13 +1,14 @@
 import db from "../db.js";
 import { clients } from "../setupWebSocket.js";
 import { getProfile } from "./userControllers.js";
+import { highlightMarkdown } from "../utils/highlightMarkdown.js";
 
 
 async function getAllPosts(req, res) {
   const { category } = req.params;
   try {
     const result = await db.query(
-      "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, posts.author_id, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_id = users.id WHERE category = $1", [category]
+      "SELECT posts.id, posts.processed_content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, posts.author_id, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_id = users.id WHERE category = $1", [category]
     );
     res.json(result.rows);
   } catch (error) {
@@ -25,10 +26,10 @@ async function getNotifications(req, res) {
       "SELECT * FROM notifications WHERE receiver_id = $1 AND is_read = false",
       [userId]
     );
-    if(includeContent){
+    if (includeContent) {
       res.status(200).json(result.rows);
     } else {
-      res.status(200).json({ unreadCount: result.rows.length});
+      res.status(200).json({ unreadCount: result.rows.length });
     }
   } catch (error) {
     console.error("Error getting notification count", error);
@@ -36,36 +37,44 @@ async function getNotifications(req, res) {
   }
 }
 
-async function updateReadMessages(req, res){
+async function updateReadMessages(req, res) {
   const { notificationId } = req.params;
   const { isRead } = req.query
-  try{
-      db.query("UPDATE notifications SET is_read = $1 WHERE id = $2",[
-       isRead === "true",
-       notificationId
-      ])
-      res.status(200).json({message: "Notification updated"})
-  } catch(error){
+  try {
+    db.query("UPDATE notifications SET is_read = $1 WHERE id = $2", [
+      isRead === "true",
+      notificationId
+    ])
+    res.status(200).json({ message: "Notification updated" })
+  } catch (error) {
     console.log("Error updating read messages")
-    res.status(500).json({message: "Cannnot update read mesages"})
+    res.status(500).json({ message: "Cannnot update read mesages" })
   }
 }
+
+
 
 
 async function addPost(req, res) {
   const { title, content, username, category, authorId } = req.body;
-  let coverImg = req.file?.buffer
+  const coverImg = req.file?.buffer;
+
   try {
+    const processedContent = await highlightMarkdown(content);
     await db.query(
-      "INSERT INTO posts (title, content, author_username, cover_image, category, author_id) VALUES ($1, $2, $3, $4, $5, $6)",
-      [title, content, username, coverImg, category, authorId]
+      `INSERT INTO posts 
+        (title, raw_content, processed_content, author_username, cover_image, category, author_id) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [title, content, processedContent, username, coverImg, category, authorId]
     );
+
     res.status(201).json({ message: "Post saved" });
   } catch (error) {
-    console.log(error)
+    console.error("Error saving post:", error);
     res.status(500).json({ message: "Error saving post" });
   }
 }
+
 async function addReaction(req, res) {
   let existingReaction;
   const { postId, currentUserId, authorId, love, agree, mindBlown, onFire } = req.body;
@@ -84,7 +93,7 @@ async function addReaction(req, res) {
           onFire
         ]);
 
-        const notificationData = await handleReactionMessage(postId, currentUserId, authorId); 
+        const notificationData = await handleReactionMessage(postId, currentUserId, authorId);
         const isRead = notificationData.is_read;
         await sendNotification(notificationData, authorId, isRead);
         return res.sendStatus(200);
@@ -114,10 +123,10 @@ async function addReaction(req, res) {
           currentUserId
         ]);
 
-       const notificationData=  await handleReactionMessage(postId, currentUserId, authorId); 
-       const isRead = notificationData.is_read;
+        const notificationData = await handleReactionMessage(postId, currentUserId, authorId);
+        const isRead = notificationData.is_read;
         await sendNotification(notificationData, authorId, isRead);
-      
+
 
         return res.sendStatus(200);
       } catch (error) {
@@ -137,25 +146,25 @@ async function handleReactionMessage(postId, currentUserId, authorId) {
       authorId,
       postId
     ]);
-    if(existingNotifications.rows.length > 0){
-        let reactors = existingNotifications.rows[0].reactors;
-        // add the current reactor to the retrieved reactors
-        if(!reactors.includes(currentUserId)){
-          reactors.push(currentUserId);
-        }
-        // pass reactors in to get message
-        const message = getMessage(reactors, username);
-        // update the existing notification record
-        try{
-         const result = await db.query("UPDATE notifications SET message = $1, reactors = $2, created_at = CURRENT_TIMESTAMP WHERE receiver_id = $3 AND post_id = $4 RETURNING *", 
-            [message, reactors, authorId, postId])
-            return result.rows[0];
-        } catch(error){
-            console.log("Error updating notifications")
-        }
+    if (existingNotifications.rows.length > 0) {
+      let reactors = existingNotifications.rows[0].reactors;
+      // add the current reactor to the retrieved reactors
+      if (!reactors.includes(currentUserId)) {
+        reactors.push(currentUserId);
+      }
+      // pass reactors in to get message
+      const message = getMessage(reactors, username);
+      // update the existing notification record
+      try {
+        const result = await db.query("UPDATE notifications SET message = $1, reactors = $2, created_at = CURRENT_TIMESTAMP WHERE receiver_id = $3 AND post_id = $4 RETURNING *",
+          [message, reactors, authorId, postId])
+        return result.rows[0];
+      } catch (error) {
+        console.log("Error updating notifications")
+      }
     } else {
       const message = `${username} reacted to your post`;
-      const result = await db.query("INSERT INTO notifications (sender_id, receiver_id, post_id, type, message, reactors) VALUES ($1, $2, $3, 'reaction', $4, $5) RETURNING *",[
+      const result = await db.query("INSERT INTO notifications (sender_id, receiver_id, post_id, type, message, reactors) VALUES ($1, $2, $3, 'reaction', $4, $5) RETURNING *", [
         currentUserId,
         authorId,
         postId,
@@ -169,17 +178,17 @@ async function handleReactionMessage(postId, currentUserId, authorId) {
   }
 }
 
-function getMessage(reactors, username){
-  if(reactors.length > 1){
-      return `${username} and ${reactors.length - 1} other people reacted to your post`
+function getMessage(reactors, username) {
+  if (reactors.length > 1) {
+    return `${username} and ${reactors.length - 1} other people reacted to your post`
   }
 }
 
 async function sendNotification(notificationData, receiverId, isRead) {
   try {
-   if(isRead){
-    await db.query("UPDATE notifications SET is_read = $1",[false])
-   }
+    if (isRead) {
+      await db.query("UPDATE notifications SET is_read = $1", [false])
+    }
     if (clients.has(receiverId)) {
       const receiverSocket = clients.get(receiverId);
       if (receiverSocket) {
@@ -195,21 +204,24 @@ async function updatePost(req, res) {
   const { title, content, category } = req.body;
   let coverImg = req.file?.buffer
   const id = req.params.id;
+  const processedContent = await highlightMarkdown(content);
   try {
     const result = await db.query("SELECT * FROM posts WHERE id = $1", [id]);
     const post = result.rows[0];
     const newPostContent = {
       title: title || post.title,
-      content: content || post.content,
+      content: processedContent || post.processed_content,
       category: category || post.category,
-      coverImg: coverImg || post.cover_image
+      coverImg: coverImg || post.cover_image,
+      rawContent: content || post.raw_content
     };
     try {
       await db.query(
-        "UPDATE posts SET title = $1, content = $2 , category=$3, cover_image = $4, updated_at = $5 WHERE id =$6",
+        "UPDATE posts SET title = $1, processed_content = $2, raw_content=$3, category=$4, cover_image = $5, updated_at = $6 WHERE id =$7",
         [
           newPostContent.title,
           newPostContent.content,
+          newPostContent.rawContent,
           newPostContent.category,
           newPostContent.coverImg,
           new Date().toISOString(),
@@ -218,6 +230,7 @@ async function updatePost(req, res) {
       );
       res.status(200).json({ message: "Post updated", post: newPostContent });
     } catch (error) {
+      console.log(error)
       res.status(500).json({ message: "Error updating post" });
     }
   } catch (error) {
@@ -242,7 +255,8 @@ async function getPost(req, res) {
     const result = await db.query(
       `SELECT 
   posts.id, 
-  posts.content, 
+  posts.processed_content, 
+  posts.raw_content,
   posts.title, 
   posts.created_at, 
   posts.updated_at, 

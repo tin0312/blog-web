@@ -22,6 +22,10 @@ export default function TopicsNav() {
             return newPos
         })
     }
+    useEffect(()=>{
+        navigate("/")
+        setCategory("software")
+    },[])
 
     return (
         <div className="p-0">

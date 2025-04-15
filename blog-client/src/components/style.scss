@@ -1,0 +1,15 @@
+// 1. Import required Bootstrap utilities
+@import "../../node_modules/bootstrap/scss/functions";
+
+// 2. Your custom overrides (MUST be before variables)
+// $red: #198754; 
+
+// 3. Now import the rest of Bootstrap
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/variables-dark";
+@import "../../node_modules/bootstrap/scss/maps";
+@import "../../node_modules/bootstrap/scss/mixins";
+@import "../../node_modules/bootstrap/scss/root";
+
+// Optional: Full Bootstrap styles (includes all components)
+@import "../../node_modules/bootstrap/scss/bootstrap";

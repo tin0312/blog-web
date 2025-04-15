@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation, matchPath, useParams } from "react-router-dom";
 import { Container, Row, Col, Button, Badge } from "react-bootstrap";
-import Markdown from 'marked-react';
 import Reactions from "../UI/Reactions";
 import convertTimestamp from "../../helpers/convertTimestamp";
 import convertBinaryImageData from "../../helpers/convertImage";
-
-
 
 function Post({ title, content, author, createdAt, updatedAt, profileFile, profileUrl, postCategory, coverImg }) {
   const [post, setPost] = useState();
@@ -133,7 +130,8 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
           <Row className="px-4">
             <Col>
               <h3>{title || post?.title}</h3>
-              {isAtSpecificPost && <div className="post-content"><Markdown>{content || post?.content}</Markdown></div>}
+              {isAtSpecificPost && <div className="post-content" dangerouslySetInnerHTML={{ __html: post?.processed_content || content }} />
+              }
             </Col>
             {state?.isCurrentUserPost && (
               <Row>
@@ -145,7 +143,7 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
                       handleEditPost(
                         post.id,
                         post.title,
-                        post.content,
+                        post.raw_content,
                         post.author_username,
                         state.isCurrentUserPost,
                         post.created_at,

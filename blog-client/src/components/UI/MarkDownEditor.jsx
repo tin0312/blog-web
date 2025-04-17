@@ -26,6 +26,7 @@ import {
   InsertThematicBreak,
   diffSourcePlugin,
 } from "@mdxeditor/editor";
+// import ImageInputDialog from "../UI/ImageInputDialog";
 
 function MarkDownEditor({ setPostContent, postContent }) {
   return <MDXEditor
@@ -39,7 +40,18 @@ function MarkDownEditor({ setPostContent, postContent }) {
       linkPlugin(),
       linkDialogPlugin(),
       tablePlugin(),
-      imagePlugin(),
+      imagePlugin({
+        imageUploadHandler: async (file) => {
+          const formData = new FormData();
+          formData.append("image", file);
+          const res = await fetch("/upload", {
+            method: "POST",
+            body: formData,
+          });
+          const json = await res.json();
+          return json.url;
+        },
+      }),
       codeBlockPlugin({
         defaultCodeBlockLanguage: "js",
       }),

@@ -17,7 +17,8 @@ CREATE TABLE
     id SERIAL PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
     category TEXT,
-    content TEXT NOT NULL,
+    raw_content TEXT NOT NULL,
+    processed_content TEXT NOT NULL
     created_at DATE DEFAULT CURRENT_DATE,
     updated_at TIMESTAMPTZ DEFAULT NULL,
     cover_image BYTEA,

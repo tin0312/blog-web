@@ -1,7 +1,7 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import useWebSocket from "./webSocketHook";
-
+ 
 const AuthContext = createContext();
 function AuthProvider({ children }) {
   const [isNavHidden, setIsNavHidden] = useState(false);
@@ -44,11 +44,17 @@ function AuthProvider({ children }) {
     }
     getNotificationCounts()
   }, [ws.data])
+
   // get the current navbar display
   useEffect(() => {
-    const currentNavState = localStorage.getItem("navState") === "true";
-    setIsNavHidden(currentNavState)
-  }, [])
+    let currentNavState = localStorage.getItem("navState") === "true";
+    if(location.pathname === "/create-post"){
+      setIsNavHidden(currentNavState);
+    } else {
+      localStorage.setItem("navState", "false");
+    }
+  }, []);
+
   async function logIn(userData) {
     let data;
     try {

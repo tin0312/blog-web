@@ -313,7 +313,7 @@ async function getUserPosts(req, res) {
 
   try {
     const result = await db.query(
-      "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, posts.author_id, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE author_username = $1",
+      "SELECT posts.id, posts.processed_content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, posts.author_id, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE author_username = $1",
       [username]
     );
     if (result.rows.length === 0) {

@@ -12,6 +12,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import http from "http";
 import { setupWebSocket } from "./setupWebSocket.js";
+import { createRouteHandler  } from "uploadthing/express";
+import { fileRouter } from "./uploadthing/router.js";
 
 export const app = express();
 // Convert `import.meta.url` to a file path
@@ -57,6 +59,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(flash());
 
+app.use("/api/uploadthing", createRouteHandler({ router: fileRouter }));
 app.use("/api/posts", postRoutes);
 app.use("/api/users", userRoutes);
 app.get("*", function (req, res) {

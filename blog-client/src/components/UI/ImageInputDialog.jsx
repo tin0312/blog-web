@@ -40,7 +40,7 @@ export default function ImageInputDialog() {
     return (
         <>
             <Button className="bg-transparent border-0" onClick={() => setIsImageDialogOpen(true)}>
-                <Image />
+                <Image/>
             </Button>
             <Modal show={isImageDialogOpen} onHide={()=> setIsImageDialogOpen(false)}>
                 <Modal.Header>

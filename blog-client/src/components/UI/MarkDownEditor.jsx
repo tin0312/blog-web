@@ -41,21 +41,8 @@ function MarkDownEditor({ setPostContent, postContent }) {
       linkDialogPlugin(),
       tablePlugin(),
       imagePlugin({
-        imageUploadHandler: async (file) => {
-          const formData = new FormData();
-          formData.append("image", file);
-      
-          const res = await fetch("/uploads/new", {
-            method: "POST",
-            body: formData,
-          });
-      
-          if (!res.ok) throw new Error("Failed to upload image");
-      
-          const { url } = await res.json();
-          return url;
-        },
-      }),      
+        disableImageSettingsButton: true,
+    }),     
       codeBlockPlugin({
         defaultCodeBlockLanguage: "js",
       }),

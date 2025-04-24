@@ -59,7 +59,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(flash());
 
-app.use("/api/uploadthing", createRouteHandler({ router: fileRouter }));
+app.use("/api/uploadthing", createRouteHandler({ router: fileRouter, config:{
+  token: process.env.UPLOADTHING_TOKEN
+} }));
 app.use("/api/posts", postRoutes);
 app.use("/api/users", userRoutes);
 app.get("*", function (req, res) {

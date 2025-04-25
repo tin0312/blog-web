@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { generateUploadDropzone } from "@uploadthing/react";
 import { Button, Modal, Form, Spinner, Row, Col, Alert } from "react-bootstrap";
-import { insertImage$, usePublisher  } from "@mdxeditor/editor";
+import { insertImage$, usePublisher } from "@mdxeditor/editor";
 import { Image } from "react-bootstrap-icons";
 
 export default function ImageInputDialog() {
@@ -17,22 +17,22 @@ export default function ImageInputDialog() {
     });
     const insertImage = usePublisher(insertImage$);
     const [loading, setLoading] = useState(false);
-    
-    async function handleInsertImage(){
-        if(!imgUrl.src || !imgUrl.alt) return;
-        try{
+
+    async function handleInsertImage() {
+        if (!imgUrl.src || !imgUrl.alt) return;
+        try {
             setLoading(true);
             await insertImage({
                 src: imgUrl.src,
                 altText: imgUrl.alt,
                 title: imgUrl.alt,
             })
-            setAlert({type: "suceess", message: "Image inserted successfully!"})
+            setAlert({ type: "suceess", message: "Image inserted successfully!" })
             setLoading(false);
             setIsImageDialogOpen(false);
-        } catch(error){
+        } catch (error) {
             setLoading(false);
-            setAlert({type: "danger", message: "Can't add your image. Please try again."})
+            setAlert({ type: "danger", message: "Can't add your image. Please try again." })
         }
     }
 
@@ -41,13 +41,13 @@ export default function ImageInputDialog() {
     return (
         <>
             <Button className="bg-transparent border-0" onClick={() => setIsImageDialogOpen(true)}>
-                <Image/>
+                <Image />
             </Button>
-            <Modal show={isImageDialogOpen} onHide={()=> setIsImageDialogOpen(false)}>
+            <Modal show={isImageDialogOpen} onHide={() => setIsImageDialogOpen(false)} centered>
                 <Modal.Header>
                     <Modal.Title>Add Image</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className="d-flex flex-column align-items-center" >
                     {
                         alert && (
                             <Alert
@@ -68,19 +68,23 @@ export default function ImageInputDialog() {
                                     title: file.title
                                 })
                             })
-                            setAlert({ type: "success", message: "Upload complete!" });
                             setIsImageDialogOpen(false);
                         }}
                         onUploadError={(error) => {
                             setAlert({ type: "danger", message: `ERROR: ${error.message}` });
                         }}
                         appearance={{
-                            button: "btn btn-warning my-2",
+                            button: "btn btn-dark my-2",
                             allowedContent: "text-muted small",
+                            uploadIcon: "w-50",
+                            container: "w-75"
+
                         }}
                         className="border rounded p-3 mb-4"
                     />
-                    <Form.Group>
+
+
+                    <Form.Group className="w-100">
                         <Form.Label>
                             Source link:
                         </Form.Label>
@@ -91,7 +95,7 @@ export default function ImageInputDialog() {
                             onChange={(e) => setImgUrl({ ...imgUrl, src: e.target.value })}
                         />
                     </Form.Group>
-                    <Form.Group>
+                    <Form.Group className="w-100">
                         <Form.Label>
                             Image title:
                         </Form.Label>
@@ -102,6 +106,9 @@ export default function ImageInputDialog() {
                             onChange={(e) => setImgUrl({ ...imgUrl, alt: e.target.value })}
                         />
                     </Form.Group>
+
+
+
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={() => setIsImageDialogOpen(false)}>
@@ -110,7 +117,7 @@ export default function ImageInputDialog() {
                     <Button
                         variant="success"
                         onClick={handleInsertImage}
-                        disabled={loading }
+                        disabled={loading}
                     >
                         {loading ? (
                             <>

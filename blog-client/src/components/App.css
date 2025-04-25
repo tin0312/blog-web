@@ -910,9 +910,6 @@ a {
     margin-top: 2rem;
     padding: 1rem !important;
   }
-  .mdxeditor.text-editor{
-    height: 80vh;
-  }
 }
 .editor{
   border-radius: 1rem;
@@ -927,7 +924,6 @@ a {
   opacity: 0.5 !important;
 }
 .text-editor{
-  overflow: auto;
   min-height: 55vh;
 }
 .text-editor ol li,

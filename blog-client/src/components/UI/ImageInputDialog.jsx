@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { UploadDropzone } from "@uploadthing/react";
+import { generateUploadDropzone } from "@uploadthing/react";
 import { Button, Modal, Form, Spinner, Row, Col, Alert } from "react-bootstrap";
 import { insertImage$, usePublisher  } from "@mdxeditor/editor";
 import { Image } from "react-bootstrap-icons";
 
 export default function ImageInputDialog() {
+    const UploadDropzone = generateUploadDropzone();
     const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
     const [alert, setAlert] = useState({
         type: "",

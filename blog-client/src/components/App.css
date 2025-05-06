@@ -1160,3 +1160,8 @@ a {
 }
 
 /* Post Interaction ends here */
+
+.drag-zone-container{
+   border: 0.2rem dotted gray;
+   cursor: pointer;
+}

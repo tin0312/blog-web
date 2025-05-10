@@ -1165,3 +1165,6 @@ a {
    border: 0.2rem dotted gray;
    cursor: pointer;
 }
+.drag-zone-container:hover{
+  border-color: lightblue;
+}

@@ -23,64 +23,89 @@ export default function CustomAutoUploadDropzone({
         },
     });
 
-    // Fixed 16:9 dimensions
     const isMobile = window.innerWidth <= 768;
-    const TARGET_WIDTH = isMobile ? 378 : 512;
-    const TARGET_HEIGHT = isMobile ? 196 : 268;
 
-    const resizeToFixed16by9 = (file) =>
+    const resizeToFixedAspect = (file) =>
         new Promise((resolve) => {
-            // create a memory-based image element
             const img = new Image();
             const reader = new FileReader();
-            // read the file as base64 encoded string
+
             reader.onload = (e) => {
                 img.src = e.target.result;
-
             };
 
             img.onload = () => {
+                // Determine orientation
+                const isPortrait = img.height > img.width;
+
+                // Choose target dimensions and aspect ratio
+                const targetAspect = isPortrait ? 9 / 16 : 16 / 9;
+                const TARGET_WIDTH = isPortrait
+                    ? (isMobile ? 196 : 268)  // narrower width for portrait
+                    : (isMobile ? 378 : 512);
+                const TARGET_HEIGHT = Math.round(TARGET_WIDTH / targetAspect);
+
+                // Create canvas with fixed output dimensions
                 const canvas = document.createElement("canvas");
                 canvas.width = TARGET_WIDTH;
                 canvas.height = TARGET_HEIGHT;
 
                 const ctx = canvas.getContext("2d");
 
-                // Draw the image centered/cropped into 16:9 frame
+                // Original image aspect ratio
                 const srcAspect = img.width / img.height;
-                const targetAspect = TARGET_WIDTH / TARGET_HEIGHT;
 
-                let srcX = 0, srcY = 0, srcW = img.width, srcH = img.height;
+                // Crop image to match target aspect ratio
+                let srcX = 0,
+                    srcY = 0,
+                    srcW = img.width,
+                    srcH = img.height;
 
                 if (srcAspect > targetAspect) {
-                    // Image is wider than 16:9 → crop width
+                    // Image is too wide — crop sides
                     srcW = img.height * targetAspect;
                     srcX = (img.width - srcW) / 2;
                 } else {
-                    // Image is taller than 16:9 → crop height
+                    // Image is too tall — crop top and bottom
                     srcH = img.width / targetAspect;
                     srcY = (img.height - srcH) / 2;
                 }
 
-                ctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, TARGET_WIDTH, TARGET_HEIGHT);
+                // Draw and resize
+                ctx.drawImage(
+                    img,
+                    srcX,
+                    srcY,
+                    srcW,
+                    srcH,
+                    0,
+                    0,
+                    TARGET_WIDTH,
+                    TARGET_HEIGHT
+                );
 
-                canvas.toBlob((blob) => {
-                    const resizedFile = new File([blob], file.name, {
-                        type: file.type,
-                        lastModified: Date.now(),
-                    });
-                    resolve(resizedFile);
-                }, file.type);
+                // Convert canvas to blob
+                canvas.toBlob(
+                    (blob) => {
+                        const resizedFile = new File([blob], file.name, {
+                            type: file.type,
+                            lastModified: Date.now(),
+                        });
+                        resolve(resizedFile);
+                    },
+                    file.type
+                );
             };
             reader.readAsDataURL(file);
         });
+
 
     const onDrop = async (acceptedFiles) => {
         if (acceptedFiles.length === 0) return;
 
         setIsImgInput(false);
         const originalFile = acceptedFiles[0];
-        const resizedFile = await resizeToFixed16by9(originalFile);
+        const resizedFile = await resizeToFixedAspect(originalFile);
         setImgFile([resizedFile]); // still use array for startUpload
     };
 

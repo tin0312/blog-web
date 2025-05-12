@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import Post from "./Post";
 import { useAuth } from "../../hooks/AuthProvider";
+import slugifyText from "../../helpers/slugifyTexts";
+
 
 
 export default function Posts() {
@@ -14,7 +16,7 @@ export default function Posts() {
     async function fetchPosts() {
       try {
         let response = await fetch(
-          `/api/posts/${isCurrentUserPosts && user?.username ? `${btoa(user.username)}/posts/` : `type/${category}`}`
+          `/api/posts/${isCurrentUserPosts && user?.username ? `${slugifyText(user.username)}/posts/` : `type/${category}`}`
         );
         const data = await response.json();
         setPosts(data)

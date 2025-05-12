@@ -309,11 +309,10 @@ async function findCurrentUserEmotionStates(userId) {
 }
 
 async function getUserPosts(req, res) {
-  const username = Buffer.from(req.params.username, 'base64').toString('utf-8');
-
+  const username = req.user.username;
   try {
     const result = await db.query(
-      "SELECT posts.id, posts.content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, posts.author_id, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE author_username = $1",
+      "SELECT posts.id, posts.raw_content, posts.title, posts.created_at, posts.updated_at, posts.author_username, posts.category, posts.author_id, users.profile_pic_file, users.profile_pic_url FROM posts INNER JOIN users ON posts.author_username = users.username WHERE author_username = $1",
       [username]
     );
     if (result.rows.length === 0) {
@@ -322,7 +321,8 @@ async function getUserPosts(req, res) {
     const posts = result.rows;
     res.json(posts);
   } catch (error) {
-    res.status(500).json({ message: "Internal Server Error" });
+    console.log(error)
+    res.status(500).json({ message: error.message});
   }
 }
 

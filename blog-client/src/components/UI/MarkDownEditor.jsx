@@ -25,6 +25,7 @@ import {
   Separator,
   InsertThematicBreak,
   diffSourcePlugin,
+  DiffSourceToggleWrapper,
 } from "@mdxeditor/editor";
 import ImageInputDialog from "../UI/ImageInputDialog";
 
@@ -50,7 +51,7 @@ function MarkDownEditor({ setPostContent, postContent }) {
         codeBlockLanguages: { jsx: "JavaScript (react)", js: "JavaScript", css: "CSS", tsx: "TypeScript (react)" },
         autoLoadLanguageSupport: true,
       }),
-      diffSourcePlugin({ viewMode: "rich-text", diffMarkdown: "" }),
+      diffSourcePlugin({ viewMode: "rich-text"}),
       toolbarPlugin({
         toolbarContents: () => (
           <>
@@ -60,7 +61,8 @@ function MarkDownEditor({ setPostContent, postContent }) {
                 {
                   fallback: () => (
                     <>
-                      <UndoRedo />
+                    <DiffSourceToggleWrapper>
+                       <UndoRedo />
                       <Separator />
                       <BoldItalicUnderlineToggles />
                       <CodeToggle />
@@ -74,6 +76,8 @@ function MarkDownEditor({ setPostContent, postContent }) {
                       <InsertThematicBreak />
                       <Separator />
                       <InsertCodeBlock />
+                    </DiffSourceToggleWrapper>
+                     
                     </>
                   ),
                 }

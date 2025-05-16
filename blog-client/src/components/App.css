@@ -368,9 +368,6 @@ input[type="submit"]:hover {
 
 .post-content {
   max-width: 100%;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: pre-line;
 }
 .section-title {
   width: 90%;

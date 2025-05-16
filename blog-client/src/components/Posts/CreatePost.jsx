@@ -23,11 +23,11 @@ export default function CreatePost({ coverImage, title, content, handleEditPost,
     title: { required: "Post Title required" },
     content: { required: "Post Content required" },
   };
- useEffect(()=>{
-  if(postCategory){
-    setCategory(postCategory)
-  }
- }, [])
+  useEffect(() => {
+    if (postCategory) {
+      setCategory(postCategory)
+    }
+  }, [])
   async function handleAddPost(post) {
     const formData = new FormData();
     formData.append("title", post.title);
@@ -35,7 +35,7 @@ export default function CreatePost({ coverImage, title, content, handleEditPost,
     formData.append("username", user.username);
     formData.append("coverImg", post.coverImg[0]);
     formData.append("category", category),
-    formData.append("authorId", user.userId)
+      formData.append("authorId", user.userId)
     try {
       const response = await fetch(
         "/api/posts/add-post",
@@ -97,12 +97,12 @@ export default function CreatePost({ coverImage, title, content, handleEditPost,
             <Row>
               <Col>
                 <Dropdown onSelect={(eventKey) => setCategory(eventKey)}>
-                  <Dropdown.Toggle className= "mx-0 mb-3" variant="secondary" id="dropdown-basic">
-                { category}
+                  <Dropdown.Toggle className="mx-0 mb-3" variant="secondary" id="dropdown-basic">
+                    {category}
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>
-                  
+
                     <Dropdown.Item eventKey="software">Software</Dropdown.Item>
                     <Dropdown.Item eventKey="networking">Networking</Dropdown.Item>
                     <Dropdown.Item eventKey="penetration" >Penetration</Dropdown.Item>
@@ -111,11 +111,14 @@ export default function CreatePost({ coverImage, title, content, handleEditPost,
               </Col>
             </Row>
             <Row>
-              <Col >
-                < MarkDownEditor
-                  setPostContent={setPostContent}
-                  postContent={content || postContent}
-                />
+              <Col>
+                <div style={{ whiteSpace: 'pre-wrap' }}>
+                  < MarkDownEditor
+                    setPostContent={setPostContent}
+                    postContent={content || postContent}
+                  />
+                </div>
+
               </Col>
             </Row>
             <Row>

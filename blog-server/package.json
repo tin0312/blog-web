@@ -37,6 +37,7 @@
     "sharp": "^0.33.5",
     "to-vfile": "^8.0.0",
     "unified": "^11.0.5",
+    "unist-builder": "^4.0.0",
     "uploadthing": "^7.6.0",
     "ws": "^8.18.1"
   }

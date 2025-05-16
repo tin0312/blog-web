@@ -5,12 +5,14 @@ import remarkRehype from 'remark-rehype';
 import { VFile } from 'vfile';
 import { unified } from 'unified';
 import rehypeRaw from 'rehype-raw';
+import { remarkEmptyLinesToBreaks } from './remarkConvertNewlinesToBreaks.js';
 
 export async function highlightMarkdown(markdown) {
   try {
     const file = new VFile({ value: markdown });
     const result = await unified()
-      .use(remarkParse)           
+      .use(remarkParse)    
+      .use(remarkEmptyLinesToBreaks)    
       .use(remarkRehype,  { allowDangerousHtml: true })             
       .use(rehypeRaw)   
       .use(rehypeStarryNight)      

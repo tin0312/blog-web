@@ -97,7 +97,7 @@ function Post({ title, content, author, createdAt, updatedAt, profileFile, profi
           />
         </Col>)}
 
-        <Col className={`post-container px-0 ${ isAtSpecificPost ? "mb-lg-5" : "mb-2"}`}>
+        <Col md={`${isAtSpecificPost ? "11" : ""}`} className={`post-container px-0 ${ isAtSpecificPost ? "mb-lg-5" : "mb-2"}`}>
           {/* Post Cover Image */}
           <Row>
             {isAtSpecificPost && <Col>

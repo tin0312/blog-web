@@ -204,9 +204,7 @@ async function updatePost(req, res) {
   const { title, content, category } = req.body;
   let coverImg = req.file?.buffer
   const id = req.params.id;
-  console.log("Markdown content", content);
   const processedContent = await highlightMarkdown(content);
-   console.log("Parsed content", processedContent)
   try {
     const result = await db.query("SELECT * FROM posts WHERE id = $1", [id]);
     const post = result.rows[0];

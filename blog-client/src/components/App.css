@@ -941,7 +941,9 @@ a {
   display: none;
 }
 /* Post Markdown Editor ends here */
-
+.posts-wrapper{
+  margin-bottom: 2rem;
+}
 @media only screen and (max-width: 1024px) {
   .posts-wrapper,
   .form-wrapper,
@@ -1164,4 +1166,20 @@ a {
 }
 .drag-zone-container:hover{
   border-color: lightblue;
+}
+.mdxeditor img {
+  object-fit: cover;
+  border-radius: 0.5rem;
+  max-width: 100%;
+  height: auto;
+}
+
+.mdxeditor img.portrait {
+  max-height: 348px;
+  max-width: 196px;
+}
+
+.mdxeditor img.landscape {
+  max-height: 288px;
+  max-width: 512px;
 }

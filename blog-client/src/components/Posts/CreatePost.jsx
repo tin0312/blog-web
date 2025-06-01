@@ -62,6 +62,29 @@ export default function CreatePost({ coverImage, title, content, handleEditPost,
     }
   }
 
+  function detectImgSize() {
+    const images = document.querySelectorAll(".mdxeditor img");
+    images.forEach((img) => {
+      const handleLoad = () => {
+        const { naturalWidth, naturalHeight } = img;
+        const isPortrait = naturalHeight > naturalWidth;
+        img.classList.remove("portrait", "landscape");
+        img.classList.add(isPortrait ? "portrait" : "landscape");
+      };
+
+
+      if (img.complete) {
+        handleLoad();
+      } else {
+        img.onload = handleLoad;
+      }
+    });
+  }
+
+  useEffect(() => {
+    detectImgSize();
+  }, [coverImage]);
+
 
   return (
     <Container className="editor-wrapper" fluid>
@@ -112,7 +135,7 @@ export default function CreatePost({ coverImage, title, content, handleEditPost,
             </Row>
             <Row>
               <Col>
-                <div style={{ whiteSpace: 'pre-wrap' }}>
+                <div>
                   < MarkDownEditor
                     setPostContent={setPostContent}
                     postContent={content || postContent}

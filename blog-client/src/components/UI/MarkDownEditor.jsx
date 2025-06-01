@@ -31,7 +31,7 @@ import ImageInputDialog from "../UI/ImageInputDialog";
 
 function MarkDownEditor({ setPostContent, postContent }) {
   return <MDXEditor
-    contentEditableClassName="prose"
+    // contentEditableClassName="prose"
     className="text-editor"
     markdown={postContent}
     placeholder="Write your post here..."
